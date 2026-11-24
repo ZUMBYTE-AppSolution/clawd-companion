@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Claw’d Companion
-Comment=Pixel companion for Claude
-Exec=/opt/clawd-companion/ClawdCompanion
-Icon=clawd-companion
-Terminal=false
-Categories=Utility;
