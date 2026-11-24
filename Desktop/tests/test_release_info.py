@@ -45,7 +45,7 @@ class ReleaseTests(unittest.TestCase):
         def options(osname, arch, distro=""):
             return package_options("0.10.0", names.values(), osname, arch, distro)
         self.assertEqual(options("Windows","AMD64"), [names["exe"], names["winzip"]])
-        self.assertEqual(options("Darwin","arm64"), [names["pkg"], names["maczip"]])
+        self.assertEqual(options("Darwin","arm64"), [names["pkg"], names["dmg"], names["maczip"]])
         self.assertEqual(options("Linux","x86_64","ubuntu debian")[0], names["deb"])
         self.assertEqual(options("Linux","x86_64","fedora")[0], names["rpm"])
         self.assertEqual(options("Linux","x86_64","arch")[0], names["tar"])

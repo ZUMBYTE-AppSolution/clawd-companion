@@ -1,32 +1,56 @@
-# macOS distribution
+# Sign and publish a macOS release
 
-The macOS release job signs the application and its Safari extension with Developer ID Application and the installer with Developer ID Installer from the same Apple developer team. It submits the ZIP and the installer to Apple, staples the tickets, checks Gatekeeper and validates the packaged files before uploading them.
+## Sign with Xcode on your Mac
 
-## From Xcode on a Mac
+Open `ClawdCompanion.xcodeproj` in Xcode 16 or later. In **Xcode → Settings → Accounts**, select the account with access to Zumbyte’s developer team (`J97L2NDXQR`). The shared `ClawdCompanion` scheme builds the app and its Safari extension for Apple silicon and Intel. Both targets use automatic signing.
 
-In Xcode Settings → Accounts, select the developer team and open **Manage Certificates**. Check that both Developer ID identities have their private keys on the signing Mac. Configure a notarytool Keychain profile using the Apple account or App Store Connect credentials for that team. Run from the checkout:
+Choose **Product → Archive**. In Organizer select the archive, then **Distribute App → Direct Distribution** to sign with Developer ID and submit for notarization. Export the app after Apple accepts it. The account needs permission to use the team’s cloud-managed Developer ID certificate. [Apple’s cloud signing guide](https://developer.apple.com/help/account/certificates/cloud-managed-certificates/)
+
+Package the app you exported in Organizer into a Homebrew ZIP and a drag-to-install DMG. Run this command from the source checkout, with the full path to your export.
 
 ```sh
-export CLAWD_NOTARY_PROFILE='your-existing-profile'
-bash Scripts/package-mac.sh dist --distribution
+CLAWD_EXPORTED_APP="/path/to/Clawd Companion.app" bash Scripts/package-mac.sh dist --distribution
 ```
 
-The script selects the identities automatically when there is one valid match of each type. To choose among several, set `CLAWD_SIGN_IDENTITY` and `CLAWD_INSTALLER_IDENTITY` to the appropriate certificate fingerprints. The resulting PKG installs into Applications. Quit the running older copy and reopen the updated app from Applications after installation.
+To archive, sign, notarize and package in one terminal command, run `bash Scripts/package-mac.sh dist --distribution` in a session where Xcode can access the team account.
 
-## GitHub Actions
+The packaging script verifies the Developer ID team, both architectures, Gatekeeper acceptance and the notarization ticket on the app. A locally configured notarytool profile (`CLAWD_NOTARY_PROFILE`) can also notarize the outer DMG. When that authentication and a matching **Developer ID Installer** identity are available, the script produces a signed, notarized PKG as well.
 
-Configure the following **repository Actions secrets**. The signing job imports them into a temporary keychain on the hosted Mac. Keep exports and private keys outside the checkout.
+## Publish a locally signed build
 
-| Secret | Contents |
+From the exact `main` commit you built, stage its signed packages in a GitHub release draft. The following commands use the GitHub CLI from an authenticated maintainer checkout.
+
+```sh
+version=$(cat VERSION)
+tag="v$version"
+base="dist/Clawd-Companion-$version-macOS-universal"
+gh release create "$tag" --draft --target "$(git rev-parse HEAD)" --title "Claw’d Companion $version" --notes-file "docs/releases/$version.md"
+gh release upload "$tag" "$base.zip" "$base.dmg"
+if test -f "$base.pkg"; then gh release upload "$tag" "$base.pkg"; fi
+gh workflow run release.yml --ref main -f use_signed_draft=true
+```
+
+The workflow matches the draft to the selected commit, verifies the Mac artifacts, builds and tests the other platforms, publishes the release and updates the Homebrew cask. This route uses the Apple account on the signing Mac and GitHub’s repository token on the runner.
+
+## Sign on GitHub Actions
+
+The hosted Mac starts with its own Xcode installation. To let this runner sign for the team, configure these repository Actions secrets with an App Store Connect team key authorized for cloud signing and notarization.
+
+| Secret | Value |
 | --- | --- |
-| MACOS_CERTIFICATES_P12 | A base64-encoded PKCS#12 export containing both identities and their private keys |
-| MACOS_CERTIFICATES_PASSWORD | Password for the PKCS#12 export |
-| MACOS_NOTARY_P8 | The PEM contents of the App Store Connect team API private key |
-| MACOS_NOTARY_KEY_ID | App Store Connect API key ID |
-| MACOS_NOTARY_ISSUER | Team API issuer UUID |
+| `MACOS_NOTARY_P8` | PEM contents of the App Store Connect private key |
+| `MACOS_NOTARY_KEY_ID` | Key ID |
+| `MACOS_NOTARY_ISSUER` | Team issuer ID |
 
-Pull requests use the local test build. Distribution builds require signing credentials. After configuring secrets, rerun failed jobs for the release commit.
+For an additional flat PKG from the hosted runner, supply the optional `MACOS_CERTIFICATES_P12` (base64-encoded Developer ID Installer identity) and `MACOS_CERTIFICATES_PASSWORD` secrets. Keep private keys out of the repository.
 
-## Updating an existing installation
+## Upgrade an installation
 
-Earlier ad-hoc builds open the package download in the browser. Install the first Developer ID release manually from the project release page. Signed builds offer **Install update**, check the installer against their own team and ask macOS Installer to open it. Homebrew installations can also use `brew upgrade --cask clawd-companion`.
+Homebrew users can get the latest published release as follows.
+
+```sh
+brew update
+brew upgrade --cask zumbyte/clawd/clawd-companion
+```
+
+For an older ad-hoc installation, quit Claw’d, open the first Developer ID release’s DMG and drag the app into Applications. Future signed versions can check the publisher and version of a downloaded DMG before showing the app in Finder. If the release includes a signed PKG, the updater verifies its publisher and opens macOS Installer.

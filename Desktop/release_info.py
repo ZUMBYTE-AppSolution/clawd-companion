@@ -45,6 +45,7 @@ def package_names(version: str) -> dict[str, str]:
     prefix = f"Clawd-Companion-{version}-"
     return {
         "pkg": prefix + "macOS-universal.pkg", "maczip": prefix + "macOS-universal.zip",
+        "dmg": prefix + "macOS-universal.dmg",
         "exe": prefix + "Windows-x64-Setup.exe", "winzip": prefix + "Windows-x64-Portable.zip",
         "deb": f"clawd-companion_{version}_amd64.deb", "rpm": f"clawd-companion-{version}-1.x86_64.rpm",
         "tar": prefix + "Linux-x86_64.tar.gz",
@@ -54,7 +55,7 @@ def package_names(version: str) -> dict[str, str]:
 def package_options(version: str, assets, system: str, machine: str, distro: str = "") -> list[str]:
     arch = machine.lower()
     if system == "Darwin" and arch in {"arm64", "aarch64", "amd64", "x86_64"}:
-        order = ["pkg", "maczip"]
+        order = ["pkg", "dmg", "maczip"]
     elif arch not in {"x86_64", "amd64"}:
         return []
     elif system == "Windows":

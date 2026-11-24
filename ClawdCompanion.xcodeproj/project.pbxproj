@@ -1,0 +1,469 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXFileReference section */
+		9FE817A0FD5252A3490B227D /* Clawd Companion.app */ = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.application;
+			includeInIndex = 0;
+			path = "Clawd Companion.app";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B6788BFD532C3C421A019065 /* ClawdSafari.appex */ = {
+			isa = PBXFileReference;
+			explicitFileType = "wrapper.app-extension";
+			includeInIndex = 0;
+			path = "ClawdSafari.appex";
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		98222FF2030A29222D567A8D /* BrowserExtension */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			path = "BrowserExtension";
+			sourceTree = "<group>";
+		};
+		9E692C4051D4F22FAC3228A1 /* BrowserExtension/_locales */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = folder;
+			path = "_locales";
+			sourceTree = "<group>";
+		};
+		D09D57E0F62AB2347004D77D /* BrowserExtension/background.js */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
+			path = "background.js";
+			sourceTree = "<group>";
+		};
+		09CC2758D8F7A173EC48EA4A /* BrowserExtension/icon128.png */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.png;
+			path = "icon128.png";
+			sourceTree = "<group>";
+		};
+		68B420D7A3B40CC9178458C0 /* BrowserExtension/icon32.png */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.png;
+			path = "icon32.png";
+			sourceTree = "<group>";
+		};
+		BF74836C0172394117241550 /* BrowserExtension/notices.js */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
+			path = "notices.js";
+			sourceTree = "<group>";
+		};
+		B23506410D8DD4D99677C80F /* BrowserExtension/observer.js */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
+			path = "observer.js";
+			sourceTree = "<group>";
+		};
+		2DA06B57E14D9AF41BF1BAAC /* BrowserExtension/popup-locale.js */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
+			path = "popup-locale.js";
+			sourceTree = "<group>";
+		};
+		E7244224B7871990300B0087 /* BrowserExtension/popup.css */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.css;
+			path = "popup.css";
+			sourceTree = "<group>";
+		};
+		8B4D8F2A6B12DB344E5BDAE5 /* BrowserExtension/popup.html */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.html;
+			path = "popup.html";
+			sourceTree = "<group>";
+		};
+		C2FD7DF62A5EF1BB8D330390 /* BrowserExtension/popup.js */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
+			path = "popup.js";
+			sourceTree = "<group>";
+		};
+		CF22EFD3D1BB50C9CF249794 /* BrowserExtension/signals.js */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
+			path = "signals.js";
+			sourceTree = "<group>";
+		};
+		364CE71614A4A9D7ABA6558A /* BrowserExtension/webpush.js */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.javascript;
+			path = "webpush.js";
+			sourceTree = "<group>";
+		};
+		AD548AE5FE2229F50EE0B2E9 /* SafariExtension/ClawdSafariHandler.m */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
+			path = "ClawdSafariHandler.m";
+			sourceTree = "<group>";
+		};
+		449B208156F273B36E650E12 /* SafariExtension/Info.plist */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			path = "Info.plist";
+			sourceTree = "<group>";
+		};
+		93B6F8401DC8BE09B2BEB93D /* SafariExtension/ClawdSafari.entitlements */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.entitlements;
+			path = "ClawdSafari.entitlements";
+			sourceTree = "<group>";
+		};
+		D08E95DF7EDE58598AD349D1 /* SafariExtension/manifest.json */ = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.json;
+			path = "manifest.json";
+			sourceTree = "<group>";
+		};
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3E341F7CA880763A74058147 /* Companion */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Sources/ClawdCompanion";
+			sourceTree = "<group>";
+		};
+		E48309EEE32D3A5EB2D75188 /* Resources */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = ( 2BD5B3064EF1936AB699FA68 /* app resources */, );
+			explicitFolders = ( EndlessArena, Languages, );
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXBuildFile section */
+		F645DBC42F1724BCAAACF7B3 /* BrowserExtension */ = {
+			isa = PBXBuildFile;
+			fileRef = 98222FF2030A29222D567A8D /* BrowserExtension */;
+		};
+		4C027A73FB01323A093A2C23 /* _locales */ = {
+			isa = PBXBuildFile;
+			fileRef = 9E692C4051D4F22FAC3228A1 /* BrowserExtension/_locales */;
+		};
+		9AF0EA1FDCC31A8B4A5133C5 /* background.js */ = {
+			isa = PBXBuildFile;
+			fileRef = D09D57E0F62AB2347004D77D /* BrowserExtension/background.js */;
+		};
+		71714B94036E0A7DD2C6E56E /* icon128.png */ = {
+			isa = PBXBuildFile;
+			fileRef = 09CC2758D8F7A173EC48EA4A /* BrowserExtension/icon128.png */;
+		};
+		EF7D0790FD5840D4AEBA7D22 /* icon32.png */ = {
+			isa = PBXBuildFile;
+			fileRef = 68B420D7A3B40CC9178458C0 /* BrowserExtension/icon32.png */;
+		};
+		9CD4C3589BDDE2E96C3F105B /* notices.js */ = {
+			isa = PBXBuildFile;
+			fileRef = BF74836C0172394117241550 /* BrowserExtension/notices.js */;
+		};
+		CF625654D96F6F7E1F9E567F /* observer.js */ = {
+			isa = PBXBuildFile;
+			fileRef = B23506410D8DD4D99677C80F /* BrowserExtension/observer.js */;
+		};
+		5F96AD4F75351729CF7C4026 /* popup-locale.js */ = {
+			isa = PBXBuildFile;
+			fileRef = 2DA06B57E14D9AF41BF1BAAC /* BrowserExtension/popup-locale.js */;
+		};
+		73145730BC5104B4DE328EB8 /* popup.css */ = {
+			isa = PBXBuildFile;
+			fileRef = E7244224B7871990300B0087 /* BrowserExtension/popup.css */;
+		};
+		AEBB7FB9EAEA1AF6C367D9A8 /* popup.html */ = {
+			isa = PBXBuildFile;
+			fileRef = 8B4D8F2A6B12DB344E5BDAE5 /* BrowserExtension/popup.html */;
+		};
+		9C6DAD878922D8AB9E7C9E7C /* popup.js */ = {
+			isa = PBXBuildFile;
+			fileRef = C2FD7DF62A5EF1BB8D330390 /* BrowserExtension/popup.js */;
+		};
+		57E745B351CF41887258FD90 /* signals.js */ = {
+			isa = PBXBuildFile;
+			fileRef = CF22EFD3D1BB50C9CF249794 /* BrowserExtension/signals.js */;
+		};
+		60E6498890402EAE7AF3626F /* webpush.js */ = {
+			isa = PBXBuildFile;
+			fileRef = 364CE71614A4A9D7ABA6558A /* BrowserExtension/webpush.js */;
+		};
+		F07160FE0456DF5395259955 /* manifest.json */ = {
+			isa = PBXBuildFile;
+			fileRef = D08E95DF7EDE58598AD349D1 /* SafariExtension/manifest.json */;
+		};
+		645BC47A25B717A7C33EEBDB /* extension source */ = {
+			isa = PBXBuildFile;
+			fileRef = AD548AE5FE2229F50EE0B2E9 /* SafariExtension/ClawdSafariHandler.m */;
+		};
+		EFE3B096BA72659603C37E01 /* ClawdSafari */ = {
+			isa = PBXBuildFile;
+			fileRef = B6788BFD532C3C421A019065 /* ClawdSafari.appex */;
+			settings = { ATTRIBUTES = (RemoveHeadersOnCopy, ); };
+		};
+/* End PBXBuildFile section */
+
+/* Begin PBXGroup section */
+		AE7805B56D1DCAFAA071416F /* Products */ = {
+			isa = PBXGroup;
+			children = ( 9FE817A0FD5252A3490B227D /* Clawd Companion.app */, B6788BFD532C3C421A019065 /* ClawdSafari.appex */, );
+			path = "Products";
+			sourceTree = "<group>";
+		};
+		40C02D1BD4DC5019B7AD5402 /* Web Files */ = {
+			isa = PBXGroup;
+			children = ( 9E692C4051D4F22FAC3228A1 /* BrowserExtension/_locales */, D09D57E0F62AB2347004D77D /* BrowserExtension/background.js */, 09CC2758D8F7A173EC48EA4A /* BrowserExtension/icon128.png */, 68B420D7A3B40CC9178458C0 /* BrowserExtension/icon32.png */, BF74836C0172394117241550 /* BrowserExtension/notices.js */, B23506410D8DD4D99677C80F /* BrowserExtension/observer.js */, 2DA06B57E14D9AF41BF1BAAC /* BrowserExtension/popup-locale.js */, E7244224B7871990300B0087 /* BrowserExtension/popup.css */, 8B4D8F2A6B12DB344E5BDAE5 /* BrowserExtension/popup.html */, C2FD7DF62A5EF1BB8D330390 /* BrowserExtension/popup.js */, CF22EFD3D1BB50C9CF249794 /* BrowserExtension/signals.js */, 364CE71614A4A9D7ABA6558A /* BrowserExtension/webpush.js */, );
+			path = "BrowserExtension";
+			sourceTree = "<group>";
+		};
+		CF05664E00D4F0BAA35CA123 /* SafariExtension */ = {
+			isa = PBXGroup;
+			children = ( AD548AE5FE2229F50EE0B2E9 /* SafariExtension/ClawdSafariHandler.m */, 449B208156F273B36E650E12 /* SafariExtension/Info.plist */, 93B6F8401DC8BE09B2BEB93D /* SafariExtension/ClawdSafari.entitlements */, D08E95DF7EDE58598AD349D1 /* SafariExtension/manifest.json */, );
+			path = "SafariExtension";
+			sourceTree = "<group>";
+		};
+		60EB5AC69302A5F5CE60854D /* Root */ = {
+			isa = PBXGroup;
+			children = ( 3E341F7CA880763A74058147 /* Companion */, E48309EEE32D3A5EB2D75188 /* Resources */, 98222FF2030A29222D567A8D /* BrowserExtension */, 40C02D1BD4DC5019B7AD5402 /* Web Files */, CF05664E00D4F0BAA35CA123 /* SafariExtension */, AE7805B56D1DCAFAA071416F /* Products */, );
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2BD5B3064EF1936AB699FA68 /* app resources */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = ( "Info.plist", "LanguageResources.swift", );
+			target = A5BFCB59D37241DB6A578C6C /* ClawdCompanion */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DF1AAE060A68C9E4793C8A01 /* Safari Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ( 645BC47A25B717A7C33EEBDB /* extension source */, );
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		108CC57129693C80D5FB5E83 /* App Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ();
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C9C7B0355B097BA2E9767C6C /* Safari Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ( 4C027A73FB01323A093A2C23 /* _locales */, 9AF0EA1FDCC31A8B4A5133C5 /* background.js */, 71714B94036E0A7DD2C6E56E /* icon128.png */, EF7D0790FD5840D4AEBA7D22 /* icon32.png */, 9CD4C3589BDDE2E96C3F105B /* notices.js */, CF625654D96F6F7E1F9E567F /* observer.js */, 5F96AD4F75351729CF7C4026 /* popup-locale.js */, 73145730BC5104B4DE328EB8 /* popup.css */, AEBB7FB9EAEA1AF6C367D9A8 /* popup.html */, 9C6DAD878922D8AB9E7C9E7C /* popup.js */, 57E745B351CF41887258FD90 /* signals.js */, 60E6498890402EAE7AF3626F /* webpush.js */, F07160FE0456DF5395259955 /* manifest.json */, );
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2CC73A9DD5512A0F6A1D96D /* App Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ( F645DBC42F1724BCAAACF7B3 /* BrowserExtension */, );
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		9FFBC68855B00D0BD9B57A07 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = SafariExtension/ClawdSafari.entitlements;
+				INFOPLIST_FILE = "SafariExtension/Info.plist";
+				OTHER_LDFLAGS = ("-framework", SafariServices, "-framework", Foundation,);
+				PRODUCT_BUNDLE_IDENTIFIER = de.zumbyte.clawdcompanion.Safari;
+				PRODUCT_NAME = ClawdSafari;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		06B12C2ECC07937D9B935126 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = SafariExtension/ClawdSafari.entitlements;
+				INFOPLIST_FILE = "SafariExtension/Info.plist";
+				OTHER_LDFLAGS = ("-framework", SafariServices, "-framework", Foundation,);
+				PRODUCT_BUNDLE_IDENTIFIER = de.zumbyte.clawdcompanion.Safari;
+				PRODUCT_NAME = ClawdSafari;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		1CE6F7C4EB5E72AD008EDD8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_NAME = ClawdCompanion;
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				PRODUCT_BUNDLE_IDENTIFIER = de.zumbyte.clawdcompanion;
+				PRODUCT_MODULE_NAME = ClawdCompanion;
+				PRODUCT_NAME = "Clawd Companion";
+				SKIP_INSTALL = NO;
+			};
+			name = Debug;
+		};
+		13FE17463898FC3B625791E1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_NAME = ClawdCompanion;
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				PRODUCT_BUNDLE_IDENTIFIER = de.zumbyte.clawdcompanion;
+				PRODUCT_MODULE_NAME = ClawdCompanion;
+				PRODUCT_NAME = "Clawd Companion";
+				SKIP_INSTALL = NO;
+			};
+			name = Release;
+		};
+		184B519F8E1416CCE38CFFD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 11;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = J97L2NDXQR;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = "0.7.3";
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A824290273A346217D9BE6F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 11;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = J97L2NDXQR;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = "0.7.3";
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7D24C8CE1D5B74FD8D4BB980 /* Extension */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = ( 9FFBC68855B00D0BD9B57A07 /* Debug */, 06B12C2ECC07937D9B935126 /* Release */, );
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EF226DC710F1DC4501CD6205 /* App */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = ( 1CE6F7C4EB5E72AD008EDD8D /* Debug */, 13FE17463898FC3B625791E1 /* Release */, );
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9F6B1A7BCFF26D263B843F95 /* project */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = ( 184B519F8E1416CCE38CFFD7 /* Debug */, A824290273A346217D9BE6F4 /* Release */, );
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin PBXNativeTarget section */
+		B0155E064FBF39C7C246525F /* ClawdSafari */ = {
+			isa = PBXNativeTarget;
+			name = ClawdSafari;
+			productName = ClawdSafari;
+			productReference = B6788BFD532C3C421A019065 /* ClawdSafari.appex */;
+			productType = "com.apple.product-type.app-extension";
+			buildConfigurationList = 7D24C8CE1D5B74FD8D4BB980 /* Extension */;
+			buildPhases = ( DF1AAE060A68C9E4793C8A01 /* Safari Sources */, C9C7B0355B097BA2E9767C6C /* Safari Resources */, );
+			buildRules = ();
+			dependencies = ();
+		};
+		A5BFCB59D37241DB6A578C6C /* ClawdCompanion */ = {
+			isa = PBXNativeTarget;
+			name = ClawdCompanion;
+			productName = "Clawd Companion";
+			productReference = 9FE817A0FD5252A3490B227D /* Clawd Companion.app */;
+			productType = "com.apple.product-type.application";
+			buildConfigurationList = EF226DC710F1DC4501CD6205 /* App */;
+			buildPhases = ( 108CC57129693C80D5FB5E83 /* App Sources */, F2CC73A9DD5512A0F6A1D96D /* App Resources */, 473B25BD658CA2C66564803B /* Embed Safari Extension */, );
+			fileSystemSynchronizedGroups = ( 3E341F7CA880763A74058147 /* Companion */, E48309EEE32D3A5EB2D75188 /* Resources */, );
+			buildRules = ();
+			dependencies = ( 917D6085B82680B3642298C2 /* Safari */, );
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXContainerItemProxy section */
+		C92CD4569843E37A3583918C /* Safari */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 509F1908315A6E7471D5C9D5 /* ClawdCompanion */;
+			proxyType = 1;
+			remoteGlobalIDString = B0155E064FBF39C7C246525F;
+			remoteInfo = ClawdSafari;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		917D6085B82680B3642298C2 /* Safari */ = {
+			isa = PBXTargetDependency;
+			target = B0155E064FBF39C7C246525F /* ClawdSafari */;
+			targetProxy = C92CD4569843E37A3583918C /* Safari */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		473B25BD658CA2C66564803B /* Embed Safari Extension */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			files = ( EFE3B096BA72659603C37E01 /* ClawdSafari */, );
+			runOnlyForDeploymentPostprocessing = 0;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			name = "Embed Safari Extension";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXProject section */
+		509F1908315A6E7471D5C9D5 /* ClawdCompanion */ = {
+			isa = PBXProject;
+			attributes = { BuildIndependentTargetsInParallel = YES; LastUpgradeCheck = 1600; };
+			buildConfigurationList = 9F6B1A7BCFF26D263B843F95 /* project */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (en, Base, );
+			mainGroup = 60EB5AC69302A5F5CE60854D /* Root */;
+			productRefGroup = AE7805B56D1DCAFAA071416F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			preferredProjectObjectVersion = 77;
+			targets = ( A5BFCB59D37241DB6A578C6C /* ClawdCompanion */, B0155E064FBF39C7C246525F /* ClawdSafari */, );
+		};
+/* End PBXProject section */
+
+	};
+	rootObject = 509F1908315A6E7471D5C9D5 /* ClawdCompanion */;
+}

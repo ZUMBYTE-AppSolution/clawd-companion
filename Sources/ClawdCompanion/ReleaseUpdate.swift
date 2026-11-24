@@ -76,7 +76,7 @@ struct CompanionRelease {
             localized[language.lowercased()] = body
         }
         translations = localized
-        macPackage = ["pkg", "zip"].map { "Clawd-Companion-\(parsed.raw)-macOS-universal.\($0)" }
+        macPackage = ["pkg", "dmg", "zip"].map { "Clawd-Companion-\(parsed.raw)-macOS-universal.\($0)" }
             .first { payload.assets.contains($0) }
     }
 

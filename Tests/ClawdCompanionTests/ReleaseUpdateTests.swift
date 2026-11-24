@@ -7,7 +7,7 @@ final class ReleaseUpdateTests: XCTestCase {
             throw XCTSkip("Enabled for the macOS distribution build")
         }
         let release = try await CompanionRelease.latest()
-        XCTAssertEqual(release.download?.pathExtension, "pkg")
+        XCTAssertTrue(["pkg", "dmg"].contains(release.download?.pathExtension ?? ""))
     }
 
     private func data(_ version: String = "0.10.0", assets: [String]? = nil) throws -> Data {
@@ -38,6 +38,9 @@ final class ReleaseUpdateTests: XCTestCase {
                        "https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.10.0/Clawd-Companion-0.10.0-macOS-universal.pkg")
         XCTAssertNil(try CompanionRelease(data: data(assets: ["malware.pkg", "file:///tmp/other"])).download)
         XCTAssertNotNil(try CompanionRelease(data: data(assets: ["Clawd-Companion-0.10.0-macOS-universal.zip"])).download)
+        let prefix = "Clawd-Companion-0.10.0-macOS-universal"
+        XCTAssertEqual(try CompanionRelease(data: data(assets: [prefix+".zip", prefix+".dmg"])).download?.pathExtension, "dmg")
+        XCTAssertEqual(try CompanionRelease(data: data(assets: [prefix+".dmg", prefix+".pkg"])).download?.pathExtension, "pkg")
         XCTAssertThrowsError(try CompanionRelease(data: data(assets: [])))
         XCTAssertThrowsError(try CompanionRelease(data: Data(count: CompanionRelease.limit + 1)))
         XCTAssertTrue(CompanionRelease.trustedMetadataURL(release.page))

@@ -5,13 +5,35 @@ on:
     tags: ['v*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      use_signed_draft:
+        description: Use macOS assets signed with local Xcode from the matching GitHub release draft
+        type: boolean
+        required: false
+        default: false
 permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  read-signed-draft:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && inputs.use_signed_draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # GitHub restricts unpublished release drafts to push-level repository access.
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0, persist-credentials: false}
+      - name: Fetch macOS draft matching this exact main commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash Scripts/check-draft-mac.sh fetch draft-input
+      - uses: actions/upload-artifact@v4
+        with: {name: mac-draft-input, path: 'draft-input/*', if-no-files-found: error, retention-days: 1}
   macos:
+    needs: read-signed-draft
+    if: ${{ !cancelled() && (needs.read-signed-draft.result == 'success' || needs.read-signed-draft.result == 'skipped') }}
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
@@ -23,11 +45,14 @@ jobs:
       - name: Check the published feed with the actual macOS updater
         if: github.event_name != 'pull_request'
         run: CLAWD_LIVE_UPDATE_CHECK=1 swift test --filter ReleaseUpdateTests/testPublishedManifestThroughMacUpdater
+      - name: Require main for a locally signed draft
+        if: github.event_name == 'workflow_dispatch' && inputs.use_signed_draft
+        run: test "$GITHUB_REF" = refs/heads/main
       - name: Build test package
         if: github.event_name == 'pull_request' || (github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/v'))
         run: bash Scripts/package-mac.sh dist
-      - name: Sign and notarize distribution packages
-        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+      - name: Sign with Xcode and notarize distribution packages
+        if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) && !(github.event_name == 'workflow_dispatch' && inputs.use_signed_draft)
         env:
           MACOS_CERTIFICATES_P12: ${{ secrets.MACOS_CERTIFICATES_P12 }}
           MACOS_CERTIFICATES_PASSWORD: ${{ secrets.MACOS_CERTIFICATES_PASSWORD }}
@@ -35,6 +60,12 @@ jobs:
           CLAWD_NOTARY_KEY_ID: ${{ secrets.MACOS_NOTARY_KEY_ID }}
           CLAWD_NOTARY_ISSUER: ${{ secrets.MACOS_NOTARY_ISSUER }}
         run: bash Scripts/package-mac-ci.sh dist
+      - uses: actions/download-artifact@v4
+        if: needs.read-signed-draft.result == 'success'
+        with: {name: mac-draft-input, path: draft-input}
+      - name: Verify signed and notarized draft artifacts on macOS
+        if: needs.read-signed-draft.result == 'success'
+        run: bash Scripts/check-draft-mac.sh verify draft-input dist
       - uses: actions/upload-artifact@v4
         with: {name: macos, path: 'dist/*', if-no-files-found: error}
   windows:
@@ -94,7 +125,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with: {name: linux, path: 'dist/*', if-no-files-found: error}
   release:
-    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    if: ${{ !cancelled() && needs.macos.result == 'success' && needs.linux.result == 'success' && needs.windows.result == 'success' && github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
     needs: [macos, windows, linux]
     runs-on: ubuntu-latest
     permissions:
@@ -103,7 +134,7 @@ jobs:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}
       - uses: actions/download-artifact@v4
-        with: {path: release-assets, merge-multiple: true}
+        with: {pattern: '{macos,linux,windows}', path: release-assets, merge-multiple: true}
       - name: Publish verified packages and update the tap
         env:
           GH_TOKEN: ${{ github.token }}

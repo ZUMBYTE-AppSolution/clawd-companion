@@ -22,9 +22,13 @@ private struct ReleaseNotes: View {
     }
 }
 
+private final class ReleaseInstallState: ObservableObject {
+    @Published var installing = false
+    @Published var message: String?
+}
+
 struct ReleaseInfoView: View {
-    @State private var installing = false
-    @State private var installMessage: String?
+    @StateObject private var install = ReleaseInstallState()
     @ObservedObject var updates: ReleaseUpdateCenter
 
     var body: some View {
@@ -42,23 +46,28 @@ struct ReleaseInfoView: View {
             }.font(.system(size: 12))
             if let release = updates.release {
                 if release.version > updates.installed, let url = release.download {
-                    if let team = SignedUpdateInstaller.currentTeam(), url.pathExtension == "pkg" {
+                    if let team = SignedUpdateInstaller.currentTeam(), ["pkg", "dmg"].contains(url.pathExtension) {
                         Button {
-                            installing = true
-                            installMessage = nil
+                            install.installing = true
+                            install.message = nil
                             Task {
-                                defer { installing = false }
+                                defer { install.installing = false }
                                 do {
                                     let file = try await SignedUpdateInstaller.prepare(release, team: team)
-                                    guard NSWorkspace.shared.open(file) else { throw UpdateInstallError.launch }
+                                    if url.pathExtension == "dmg" {
+                                        NSWorkspace.shared.activateFileViewerSelecting([file])
+                                        install.message = "Ziehe Claw’d im Finder auf Programme, um das Update zu installieren."
+                                    } else if !NSWorkspace.shared.open(file) {
+                                        throw UpdateInstallError.launch
+                                    }
                                 } catch {
-                                    installMessage = "Update konnte nicht geprüft oder geöffnet werden."
+                                    install.message = "Update konnte nicht geprüft oder geöffnet werden."
                                 }
                             }
                         } label: { Label(L("Update installieren"), systemImage: "arrow.down.circle") }
-                        .disabled(installing)
-                        if installing { ProgressView().controlSize(.small) }
-                        if let installMessage { Text(L(installMessage)).font(.caption) }
+                        .disabled(install.installing)
+                        if install.installing { ProgressView().controlSize(.small) }
+                        if let message = install.message { Text(L(message)).font(.caption) }
                     } else {
                         Link(destination: url) { Label(L("Paket herunterladen"), systemImage: "arrow.down.circle") }
                             .font(.system(size: 13, weight: .semibold))
