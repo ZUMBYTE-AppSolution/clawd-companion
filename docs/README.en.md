@@ -10,7 +10,7 @@ A pixel crab for your desktop. Claw’d looks up from his notebook when Claude n
 
 ## Endless arena
 
-**0.7.2 · main** — Claw’d now prefers a free title bar for idle breaks lasting 45 to 100 seconds. Move the window and Claw’d moves with it. On Wayland, the companion window has its own pixel ledge.
+Claw’d prefers a free title bar for idle breaks lasting 45 to 100 seconds. Move the window and Claw’d moves with it. On Wayland, the companion window has its own pixel ledge.
 
 Choose Light, Dark or Follow system under **Overlay → Appearance**. Changes take effect immediately and persist after restart. On Linux, the Wayland companion window, tabs, menus and form fields now use matching colors.
 
@@ -39,7 +39,7 @@ The screenshots show the Mac interface in English with sample quota readings. Th
 
 ## Install
 
-On macOS 13 or later, open the universal PKG or unzip the app and move it to Applications. On Windows x64, run Setup or extract the portable ZIP before opening the executable. Linux x86-64 users can install a DEB or RPM, or extract the tarball. The release page lists the files uploaded for your platform.
+On macOS 13 or later, open the DMG or extract the ZIP, then drag Clawd Companion into Applications. Both downloads contain the same Developer ID–signed app notarized by Apple. On Windows x64, run Setup or extract the portable ZIP before opening the executable. Linux x86-64 users can install a DEB or RPM, or extract the tarball. The release page lists the files uploaded for your platform.
 
 macOS supports Apple Silicon and Intel. The illustrated window, permission and Claude Code workflows below refer to the native Mac app. On Linux, desktop integration also depends on the window system.
 
@@ -47,7 +47,7 @@ Windows and Linux use Qt. On Windows and X11, Claw’d can read foreground windo
 
 | OS | Install |
 | --- | --- |
-| macOS | PKG · ZIP |
+| macOS | DMG · ZIP |
 | Windows x64 | Setup · Portable ZIP |
 | Linux x86-64 | DEB · RPM · tar.gz |
 

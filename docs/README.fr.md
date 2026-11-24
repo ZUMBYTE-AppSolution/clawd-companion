@@ -10,7 +10,7 @@ Un petit crabe en pixels sur votre bureau. Claw’d lève les yeux de son portab
 
 ## Arène sans fin
 
-**0.7.2 · main** — Claw’d préfère désormais se poser sur une barre de titre libre pendant 45 à 100 secondes. Il suit la fenêtre lorsque vous la déplacez. Sous Wayland, sa propre fenêtre comporte un rebord en pixels.
+Claw’d préfère se poser sur une barre de titre libre pendant 45 à 100 secondes. Il suit la fenêtre lorsque vous la déplacez. Sous Wayland, sa propre fenêtre comporte un rebord en pixels.
 
 Choisissez Clair, Sombre ou Suivre le système sous **Overlay → Apparence**. Le changement est immédiat et conservé au redémarrage. Sous Linux, la fenêtre Wayland, les onglets, les menus et les champs utilisent des couleurs assorties.
 
@@ -39,7 +39,7 @@ Les captures montrent l’interface Mac en anglais et des quotas fictifs. La con
 
 ## Installation
 
-Sous macOS 13 ou ultérieur, ouvrez le PKG universel ou décompressez l’application et placez-la dans Applications. Sous Windows x64, lancez le programme d’installation ou extrayez le ZIP portable avant d’ouvrir l’exécutable. Sous Linux x86-64, utilisez le DEB, le RPM ou l’archive tar. La page de la version répertorie les fichiers publiés pour chaque système.
+Sous macOS 13 ou ultérieur, ouvrez le DMG ou décompressez le ZIP, puis glissez Clawd Companion dans le dossier Applications. Les deux fichiers contiennent la même application, signée avec un certificat Developer ID et notariée par Apple. Sous Windows x64, lancez le programme d’installation ou extrayez le ZIP portable avant d’ouvrir l’exécutable. Sous Linux x86-64, utilisez le DEB, le RPM ou l’archive tar. La page de la version répertorie les fichiers publiés pour chaque système.
 
 La version Mac prend en charge les puces Apple et Intel. Les exemples de fenêtres, d’autorisations et d’intégration avec Claude Code concernent l’application Mac native. Sous Linux, l’intégration dépend aussi du système de fenêtrage.
 
@@ -47,7 +47,7 @@ Windows et Linux utilisent Qt. Sous Windows et X11, Claw’d peut lire la positi
 
 | OS | Installation |
 | --- | --- |
-| macOS | PKG · ZIP |
+| macOS | DMG · ZIP |
 | Windows x64 | Setup · Portable ZIP |
 | Linux x86-64 | DEB · RPM · tar.gz |
 

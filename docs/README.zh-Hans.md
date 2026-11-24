@@ -10,7 +10,7 @@
 
 ## 无尽竞技场
 
-**0.7.2 · main** — Claw’d 空闲时优先坐在可用的标题栏上，每次停留 45 至 100 秒。移动窗口时，它也会跟着移动。在 Wayland 上，它会坐在伙伴窗口内的像素窗沿上。
+Claw’d 空闲时优先坐在可用的标题栏上，每次停留 45 至 100 秒。移动窗口时，它也会跟着移动。在 Wayland 上，它会坐在伙伴窗口内的像素窗沿上。
 
 在 **叠加层 → 外观** 中选择浅色、深色或跟随系统。更改立即生效，重启后仍然保留。在 Linux 上，Wayland 窗口、标签页、菜单和输入框使用协调的颜色。
 
@@ -39,7 +39,7 @@
 
 ## 安装
 
-macOS 13 或更高版本可以打开通用 PKG 安装包，也可以解压应用并拖入“应用程序”。在 Windows x64 上运行安装程序，或先解压便携 ZIP 再打开 EXE。Linux x86-64 可选择 DEB、RPM 或 tar 压缩包。发行页面列出了各平台已上传的文件。
+在 macOS 13 或更高版本上，打开 DMG 或解压 ZIP，然后将 Clawd Companion 拖到“应用程序”文件夹。两个下载包都包含同一款使用 Developer ID 签名并经 Apple 公证的应用。在 Windows x64 上运行安装程序，或先解压便携 ZIP 再打开 EXE。Linux x86-64 可选择 DEB、RPM 或 tar 压缩包。发行页面列出了各平台已上传的文件。
 
 Mac 版支持 Apple 芯片和 Intel 芯片。下文演示的窗口操作、权限设置和 Claude Code 连接方式以原生 Mac 应用为准。Linux 下的桌面功能也取决于窗口系统。
 
@@ -47,7 +47,7 @@ Windows 和 Linux 版使用 Qt。在 Windows 和 X11 下，Claw’d 能读取活
 
 | OS | 安装 |
 | --- | --- |
-| macOS | PKG · ZIP |
+| macOS | DMG · ZIP |
 | Windows x64 | Setup · Portable ZIP |
 | Linux x86-64 | DEB · RPM · tar.gz |
 

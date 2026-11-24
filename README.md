@@ -10,7 +10,7 @@ Ein Pixelkrebs für deinen Schreibtisch. Claw’d schaut vom Notebook auf, wenn 
 
 ## Endlos-Arena
 
-**0.7.2 · main** — Claw’d sucht sich im Leerlauf bevorzugt eine freie Titelleiste und sitzt dort 45 bis 100 Sekunden. Verschiebst du sein Fenster, nimmt es ihn mit. Unter Wayland sitzt er auf einer gezeichneten Fensterkante im eigenen Begleiterfenster.
+Claw’d sucht sich im Leerlauf bevorzugt eine freie Titelleiste und sitzt dort 45 bis 100 Sekunden. Verschiebst du sein Fenster, nimmt es ihn mit. Unter Wayland sitzt er auf einer gezeichneten Fensterkante im eigenen Begleiterfenster.
 
 Unter **Overlay → Darstellung** stehen Hell, Dunkel und Wie das System zur Wahl. Die Einstellung gilt sofort und bleibt beim Neustart erhalten. Unter Linux haben auch das Wayland-Fenster, Tabs, Menüs und Eingabefelder aufeinander abgestimmte Farben.
 
@@ -39,7 +39,7 @@ Die Screenshots zeigen die englische Mac-Oberfläche mit Beispieldaten zum Konti
 
 ## Installation
 
-Ab macOS 13 öffnest du das universelle PKG oder entpackst die App und ziehst sie nach Programme. Unter Windows x64 startest du das Setup oder entpackst die portable ZIP vor dem Öffnen der EXE. Für Linux x86-64 stehen DEB, RPM und ein tar-Archiv zur Auswahl. Die Release-Seite führt die für dein System hochgeladenen Dateien auf.
+Ab macOS 13 öffnest du das DMG oder entpackst die ZIP-Datei. Ziehe „Clawd Companion“ in den Ordner „Programme“. Beide Downloads enthalten dieselbe mit Developer ID signierte und von Apple notarisierte App. Unter Windows x64 startest du das Setup oder entpackst die portable ZIP vor dem Öffnen der EXE. Für Linux x86-64 stehen DEB, RPM und ein tar-Archiv zur Auswahl. Die Release-Seite führt die für dein System hochgeladenen Dateien auf.
 
 macOS unterstützt Apple Silicon und Intel. Die gezeigten Fensteraktionen, Berechtigungen und Claude-Code-Anbindungen beziehen sich auf die native Mac-App. Unter Linux hängt die Desktop-Integration auch vom Fenstersystem ab.
 
@@ -47,7 +47,7 @@ Windows und Linux verwenden Qt. Unter Windows und X11 kann Claw’d die Position
 
 | OS | Installation |
 | --- | --- |
-| macOS | PKG · ZIP |
+| macOS | DMG · ZIP |
 | Windows x64 | Setup · Portable ZIP |
 | Linux x86-64 | DEB · RPM · tar.gz |
 

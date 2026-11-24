@@ -10,7 +10,7 @@ Um caranguejinho de píxeis no seu ambiente de trabalho. Claw’d levanta os olh
 
 ## Arena sem fim
 
-**0.7.2 · main** — Claw’d prefere descansar numa barra de título livre durante 45 a 100 segundos. Ao mover a janela, ele acompanha-a. No Wayland, a janela do companheiro tem o seu próprio parapeito em píxeis.
+Claw’d prefere descansar numa barra de título livre durante 45 a 100 segundos. Ao mover a janela, ele acompanha-a. No Wayland, a janela do companheiro tem o seu próprio parapeito em píxeis.
 
 Escolha Claro, Escuro ou Seguir o sistema em **Overlay → Aparência**. A alteração é imediata e mantém-se após reiniciar. No Linux, a janela Wayland, os separadores, os menus e os campos usam cores coordenadas.
 
@@ -39,7 +39,7 @@ As imagens mostram a interface do Mac em inglês com leituras de quota de exempl
 
 ## Instalação
 
-No macOS 13 ou posterior, abra o PKG universal ou descomprima a aplicação e coloque-a em Aplicações. No Windows x64, execute o instalador ou extraia o ZIP portátil antes de abrir o executável. Em Linux x86-64 pode usar o DEB, o RPM ou o arquivo tar. A página da versão apresenta os ficheiros publicados para cada plataforma.
+No macOS 13 ou posterior, abra o DMG ou descomprima o ZIP e arraste o Clawd Companion para a pasta Aplicações. Ambos os ficheiros contêm a mesma aplicação, assinada com um certificado Developer ID e autenticada pela Apple. No Windows x64, execute o instalador ou extraia o ZIP portátil antes de abrir o executável. Em Linux x86-64 pode usar o DEB, o RPM ou o arquivo tar. A página da versão apresenta os ficheiros publicados para cada plataforma.
 
 A versão para Mac suporta Apple Silicon e Intel. Os exemplos de janelas, permissões e integração com o Claude Code referem-se à aplicação nativa para Mac. Em Linux, a integração também depende do sistema de janelas.
 
@@ -47,7 +47,7 @@ Os clientes Windows e Linux usam Qt. Em Windows e X11, o Claw’d consegue ler a
 
 | OS | Instalação |
 | --- | --- |
-| macOS | PKG · ZIP |
+| macOS | DMG · ZIP |
 | Windows x64 | Setup · Portable ZIP |
 | Linux x86-64 | DEB · RPM · tar.gz |
 

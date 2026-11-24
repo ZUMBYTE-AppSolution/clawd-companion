@@ -10,7 +10,7 @@ Un cangrejo de píxeles para tu escritorio. Claw’d levanta la vista del portá
 
 ## Arena sin fin
 
-**0.7.2 · main** — Claw’d prefiere descansar entre 45 y 100 segundos en una barra de título libre. Si mueves la ventana, se mueve con ella. En Wayland dispone de una repisa en su propia ventana.
+Claw’d prefiere descansar entre 45 y 100 segundos en una barra de título libre. Si mueves la ventana, se mueve con ella. En Wayland dispone de una repisa en su propia ventana.
 
 Elige Claro, Oscuro o Seguir el sistema en **Overlay → Apariencia**. El cambio se aplica al instante y se conserva al reiniciar. En Linux, la ventana de Wayland, las pestañas, los menús y los campos usan colores coordinados.
 
@@ -39,7 +39,7 @@ Las capturas muestran la interfaz del Mac en inglés con datos de cuota de ejemp
 
 ## Instalación
 
-En macOS 13 o posterior, abre el PKG universal o descomprime la aplicación y arrástrala a Aplicaciones. En Windows x64, ejecuta el instalador o extrae el ZIP portátil antes de abrir el ejecutable. En Linux x86-64 puedes usar un DEB, un RPM o el archivo tar. La página de la versión muestra los archivos publicados para cada plataforma.
+En macOS 13 o posterior, abre el DMG o descomprime el ZIP y arrastra Clawd Companion a Aplicaciones. Ambas descargas contienen la misma aplicación, firmada con Developer ID y notarizada por Apple. En Windows x64, ejecuta el instalador o extrae el ZIP portátil antes de abrir el ejecutable. En Linux x86-64 puedes usar un DEB, un RPM o el archivo tar. La página de la versión muestra los archivos publicados para cada plataforma.
 
 La versión para Mac admite chips de Apple e Intel. Los ejemplos de ventanas, permisos y conexiones con Claude Code corresponden a la aplicación nativa para Mac. En Linux, la integración también depende del sistema de ventanas.
 
@@ -47,7 +47,7 @@ Windows y Linux usan Qt. En Windows y X11, Claw’d puede leer la posición de l
 
 | OS | Instalación |
 | --- | --- |
-| macOS | PKG · ZIP |
+| macOS | DMG · ZIP |
 | Windows x64 | Setup · Portable ZIP |
 | Linux x86-64 | DEB · RPM · tar.gz |
 

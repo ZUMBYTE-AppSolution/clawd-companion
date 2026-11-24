@@ -10,7 +10,7 @@ Seekor kepiting piksel kecil untuk desktop Anda. Claw’d mengangkat kepala dari
 
 ## Arena tanpa akhir
 
-**0.7.2 · main** — Saat senggang, Claw’d lebih suka duduk di bilah judul yang kosong selama 45 hingga 100 detik. Saat jendela digeser, ia ikut bergerak. Di Wayland, ia memiliki tepian piksel di jendelanya sendiri.
+Saat senggang, Claw’d lebih suka duduk di bilah judul yang kosong selama 45 hingga 100 detik. Saat jendela digeser, ia ikut bergerak. Di Wayland, ia memiliki tepian piksel di jendelanya sendiri.
 
 Pilih Terang, Gelap, atau Ikuti sistem di **Overlay → Tampilan**. Perubahan langsung berlaku dan tetap tersimpan setelah aplikasi dimulai ulang. Di Linux, jendela Wayland, tab, menu, dan bidang isian memakai warna yang selaras.
 
@@ -39,7 +39,7 @@ Tangkapan layar menunjukkan antarmuka Mac berbahasa Inggris dengan contoh data k
 
 ## Instalasi
 
-Di macOS 13 atau lebih baru, buka PKG universal atau ekstrak aplikasinya dan pindahkan ke Applications. Di Windows x64, jalankan program pemasangan atau ekstrak ZIP portabel sebelum membuka berkas EXE. Untuk Linux x86-64, pilih DEB, RPM, atau arsip tar. Halaman rilis mencantumkan berkas yang telah diunggah untuk tiap platform.
+Di macOS 13 atau lebih baru, buka DMG atau ekstrak ZIP, lalu seret Clawd Companion ke folder Applications. Kedua berkas berisi aplikasi yang sama, dengan tanda tangan Developer ID dan notarisasi dari Apple. Di Windows x64, jalankan program pemasangan atau ekstrak ZIP portabel sebelum membuka berkas EXE. Untuk Linux x86-64, pilih DEB, RPM, atau arsip tar. Halaman rilis mencantumkan berkas yang telah diunggah untuk tiap platform.
 
 Aplikasi Mac mendukung Apple Silicon dan Intel. Contoh jendela, izin, dan integrasi Claude Code di bawah ini mengacu pada aplikasi native Mac. Di Linux, integrasi desktop juga bergantung pada sistem jendela.
 
@@ -47,7 +47,7 @@ Windows dan Linux menggunakan Qt. Pada Windows dan X11, Claw’d dapat membaca p
 
 | OS | Instalasi |
 | --- | --- |
-| macOS | PKG · ZIP |
+| macOS | DMG · ZIP |
 | Windows x64 | Setup · Portable ZIP |
 | Linux x86-64 | DEB · RPM · tar.gz |
 
