@@ -63,13 +63,6 @@ verify_app() {
     xcrun stapler validate "$app"
     spctl --assess --type execute "$app"
 }
-identity_hashes() {
-    local arch app="$1"
-    for arch in arm64 x86_64; do
-        codesign -d --arch "$arch" -vv "$app" 2>&1 | awk -F= '/^CDHash=/{print $2; n++} END{exit n!=1}'
-    done
-}
-
 # Inspect ZIP paths before unpacking. This app's bundle does not use framework symlinks.
 python3 - "$input/$name.zip" "$app_name" <<'PY'
 import stat, sys, zipfile
@@ -84,7 +77,6 @@ with zipfile.ZipFile(sys.argv[1]) as archive:
 PY
 ditto -x -k "$input/$name.zip" "$stage/zip"
 verify_app "$stage/zip/$app_name"
-expected="$(identity_hashes "$stage/zip/$app_name")"
 mkdir "$mount"
 hdiutil verify "$input/$name.dmg"
 hdiutil attach -readonly -nobrowse -noautoopen -mountpoint "$mount" "$input/$name.dmg" >/dev/null
@@ -100,7 +92,7 @@ for item in Path(sys.argv[1]).iterdir():
 PYDMG
 [[ -L "$mount/Applications" && "$(readlink "$mount/Applications")" == /Applications ]]
 verify_app "$mount/$app_name"
-[[ "$(identity_hashes "$mount/$app_name")" == "$expected" ]]
+diff -qr "$stage/zip/$app_name" "$mount/$app_name"
 hdiutil detach "$mount" -quiet
 mounted=0
 packages=("$input/$name.zip" "$input/$name.dmg")
@@ -119,7 +111,7 @@ if (info.get("identifier"), info.get("version"), info.get("install-location")) !
     raise SystemExit("Unexpected installer identifier, version or location")
 PYPKG
     verify_app "$stage/pkg/Payload/$app_name"
-    [[ "$(identity_hashes "$stage/pkg/Payload/$app_name")" == "$expected" ]]
+    diff -qr "$stage/zip/$app_name" "$stage/pkg/Payload/$app_name"
     packages+=("$pkg")
 fi
 cp "${packages[@]}" "$out/"
