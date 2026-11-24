@@ -1,0 +1,12 @@
+/.build/
+/work/
+/outputs/
+/dist/
+/build/
+/.venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.xcuserstate
+xcuserdata/
+.env
