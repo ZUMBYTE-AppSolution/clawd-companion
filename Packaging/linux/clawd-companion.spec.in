@@ -7,6 +7,8 @@ URL: https://github.com/ZUMBYTE-AppSolution/clawd-companion
 Source0: payload.tar.gz
 BuildArch: x86_64
 AutoReqProv: no
+Requires: libwayland-server, libwayland-client, libwayland-cursor, libwayland-egl, cups-libs
+@WEBENGINE_REQUIRES@
 Requires: nss, alsa-lib, libXcomposite, libXdamage, libXrandr, libXtst, libdrm, mesa-libgbm
 Requires: glibc >= 2.35
 Requires: pulseaudio-libs, speech-dispatcher-libs

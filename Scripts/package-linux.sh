@@ -11,6 +11,8 @@ trap 'rm -rf "$build"' EXIT
 python3 "$root/Scripts/freeze-desktop.py" --out "$build/frozen"
 frozen="$build/frozen/ClawdCompanion"
 test -x "$frozen/ClawdCompanion"
+# Read the host font configuration with the distribution's matching Fontconfig ABI.
+find "$frozen/_internal" -name 'libfontconfig.so*' -delete
 echo linux-portable > "$frozen/clawd-package.txt"
 tar -C "$build/frozen" -czf "$out/Clawd-Companion-$version-Linux-x86_64.tar.gz" ClawdCompanion
 payload="$build/payload"
@@ -22,7 +24,7 @@ cp "$root/BrowserExtension/icon128.png" "$payload/usr/share/icons/hicolor/128x12
 mkdir -p "$build/rpm"/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
 echo linux-rpm > "$payload/opt/clawd-companion/clawd-package.txt"
 tar -C "$payload" -czf "$build/rpm/SOURCES/payload.tar.gz" .
-sed "s/@VERSION@/$version/g" "$root/Packaging/linux/clawd-companion.spec.in" > "$build/rpm/SPECS/clawd-companion.spec"
+python3 "$root/Scripts/render-rpm-spec.py" "$frozen/_internal" "$root/Packaging/linux/clawd-companion.spec.in"     "$version" > "$build/rpm/SPECS/clawd-companion.spec"
 rpmbuild --define "_topdir $build/rpm" --define '_binary_payload w9.gzdio' -bb "$build/rpm/SPECS/clawd-companion.spec"
 rpmfile="clawd-companion-$version-1.x86_64.rpm"
 rpm -qpl "$build/rpm/RPMS/x86_64/$rpmfile" > "$build/rpm-files"
