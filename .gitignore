@@ -10,3 +10,9 @@ __pycache__/
 *.xcuserstate
 xcuserdata/
 .env
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm

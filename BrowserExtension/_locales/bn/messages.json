@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "Claude.ai-এর জন্য Claw’d"
+  },
+  "description": {
+    "message": "Mac-এ Claw’d-এর মাধ্যমে Claude-এর কার্যকলাপ, অনুমতির অনুরোধ ও ব্যবহারের সীমা দেখুন।"
+  },
+  "title": {
+    "message": "Claw’d সংযুক্ত করুন"
+  }
+}

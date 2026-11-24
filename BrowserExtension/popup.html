@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title>Connect Claw’d</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header><img src="icon32.png" width="32" height="32" alt=""><h1>Claw’d</h1></header>
+  <p id="status" role="status" data-message="checking">Checking connection…</p>
+  <form id="pair">
+    <label for="code" data-message="code">Pairing code from the Mac app</label>
+    <input id="code" type="password" dir="ltr" maxlength="256" autocomplete="off" spellcheck="false" required>
+    <button type="submit" data-message="connect">Connect to Mac</button>
+  </form>
+  <div id="connected" hidden>
+    <button id="usage" type="button"><span data-message="usage">Open Claude usage</span> <span class="external" aria-hidden="true">↗</span></button>
+  </div>
+  <button id="forget" class="secondary" type="button" data-message="forget" hidden>Remove saved pairing</button>
+  <p class="note" data-message="note">Claw’d follows Claude.ai in this browser. Open your account’s usage page to refresh your limits.</p>
+  <script src="popup-locale.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

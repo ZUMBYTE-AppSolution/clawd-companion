@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "适用于 Claude.ai 的 Claw’d"
+  },
+  "description": {
+    "message": "在 Mac 上通过 Claw’d 查看 Claude 的活动、授权请求和使用额度。"
+  },
+  "title": {
+    "message": "连接 Claw’d"
+  }
+}

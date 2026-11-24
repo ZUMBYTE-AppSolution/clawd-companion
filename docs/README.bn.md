@@ -1,0 +1,168 @@
+<p align="center"><img src="media/app-icon.png" width="104" height="104" alt="Claw’d Companion"></p>
+
+# Claw’d Companion
+
+[Deutsch](../README.md) · [English](README.en.md) · [简体中文](README.zh-Hans.md) · [हिन्दी](README.hi.md) · [Español](README.es.md) · [العربية](README.ar.md) · [Français](README.fr.md) · **বাংলা** · [Português](README.pt.md) · [Bahasa Indonesia](README.id.md) · [اردو](README.ur.md)
+
+ডেস্কটপে ঘুরে বেড়ানো ছোট্ট এক পিক্সেল কাঁকড়া। Claude আপনার মনোযোগ চাইলে Claw’d ল্যাপটপ থেকে মুখ তোলে। বাকি সময় মাউসের দিকে তাকিয়ে থাকে, আর দুই উত্তরের ফাঁকে জানালার কার্নিশে বসে জিরিয়ে নেয়।
+
+[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+
+## সংস্করণ 0.6.0-এ নতুন যা আছে
+
+Mac অ্যাপের পাশাপাশি এখন Windows আর Linux-এর জন্যও ডেস্কটপ প্যাকেজ রয়েছে। পরিচিতি ও আপডেট থেকে নতুন সংস্করণ খুঁজে তার পরিবর্তনগুলি পড়ুন এবং প্যাকেজ বেছে নিন।
+
+[সংস্করণ 0.6.0-এ নতুন যা আছে](releases/0.6.0/bn.md)
+
+## অ্যাপের ভেতর
+
+![সঙ্গী](media/app-overview.png)
+
+| ওভারলে সেটিংস | সংযোগ |
+| --- | --- |
+| ![ওভারলে সেটিংস](media/app-settings.png) | ![সংযোগ](media/app-claude.png) |
+
+| পরিচিতি ও আপডেট | সেরা স্কোর ও অ্যারেনা অ্যাকাউন্ট |
+| --- | --- |
+| ![পরিচিতি ও আপডেট](media/app-updates.png) | ![সেরা স্কোর ও অ্যারেনা অ্যাকাউন্ট](media/app-highscores.png) |
+
+আপডেট প্যানেলের ছবি নেওয়ার সময় কোনো নেটওয়ার্ক অনুরোধ করা হয়নি। সেরা স্কোরের ছবিতে নেটিভ র‌্যাঙ্কিংয়ের সঙ্গে স্থানীয় পরীক্ষামূলক সেশন ও নমুনা স্কোর দেখা যাচ্ছে।
+
+স্ক্রিনশটগুলিতে Mac-এর ইংরেজি ইন্টারফেস ও কোটার নমুনা হিসাব দেখানো হয়েছে। ব্রাউজার কনসোলটি স্থানীয় পুনর্নির্মাণ। [↗](media/CAPTURES.md)
+
+## ইনস্টল করুন
+
+macOS 13 বা তার পরের সংস্করণে ইউনিভার্সাল PKG খুলুন, অথবা অ্যাপটি আনজিপ করে Applications ফোল্ডারে রাখুন। Windows x64-এ সেটআপ চালান, অথবা পোর্টেবল ZIP খুলে ভেতরের EXE চালান। Linux x86-64-এ DEB, RPM বা tar আর্কাইভ ব্যবহার করুন। কোন প্ল্যাটফর্মের জন্য কোন ফাইল প্রকাশিত হয়েছে, রিলিজের পাতায় দেখতে পাবেন।
+
+Mac অ্যাপ Apple Silicon ও Intel দুটিই সমর্থন করে। নিচের জানালা, অনুমতি ও Claude Code সংযোগের উদাহরণগুলি নেটিভ Mac অ্যাপের জন্য। Linux-এ ডেস্কটপের কিছু সুবিধা উইন্ডো সিস্টেমের ওপরও নির্ভর করে।
+
+Windows ও Linux সংস্করণ Qt ব্যবহার করে। Windows ও X11-এ Claw’d সক্রিয় জানালার অবস্থান ও আকার পড়ে তাতে আটকে থাকতে পারে। Wayland-এ জানালায় পিন করার সুবিধা নেই। সেখানে সুযোগ থাকলে GNOME IdleMonitor দিয়ে নিষ্ক্রিয়তা বোঝা হয়। সংকেত না পেলে ব্যবহারের সময় খেলার স্পষ্ট অনুমতি ছাড়া অ্যারেনা শুরু হয় না।
+
+| OS | ইনস্টল করুন |
+| --- | --- |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+
+**macOS · Homebrew**
+
+```sh
+brew tap zumbyte/clawd https://github.com/ZUMBYTE-AppSolution/clawd-companion
+brew install --cask zumbyte/clawd/clawd-companion
+```
+
+**Debian / Ubuntu**
+
+```sh
+sudo apt install ./clawd-companion_0.6.0_amd64.deb
+```
+
+**Fedora / RHEL**
+
+```sh
+sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+```
+
+## Claude যখন কাজ করে
+
+| পর্দায় যা দেখা যায় | Claw’d যা করে |
+| --- | --- |
+| Claude লেখে বা সম্পাদনা করে | ছোট ল্যাপটপের কিবোর্ডে টাইপ করে। |
+| পরিকল্পনা, অনুসন্ধান বা পড়াশোনা | ফ্লিপচার্টে পরিকল্পনা আঁকে, আতশকাচ দিয়ে সূত্র খোঁজে অথবা ফোল্ডার খোলে। |
+| কোড চালানো বা আর্টিফ্যাক্ট তৈরি | ছোট টার্মিনালে কাজ করে অথবা ইজেলে ছবি আঁকে। |
+| কোনো টুল অনুমতি চায় | সিদ্ধান্ত না হওয়া পর্যন্ত “OK?” লেখা ফলক মেলে ধরে। উত্তর দিন Claude-এ। |
+| Claude Code সাব-এজেন্টের খবর দেয় | এজেন্টের পুতুল নিয়ে জাগলিং করে। প্রকৃত সংখ্যা স্ট্যাটাসে দেখায়। |
+| উত্তর শেষ হয় বা সতর্কতা আসে | দড়ি বেয়ে নেমে আনন্দ করে, অথবা পিক্সেল বুদ্‌বুদে সতর্কবার্তার লেখা দেখায়। |
+
+## Claude.ai সংযুক্ত করুন
+
+সংযোগ থেকে ব্রাউজার সংযোগ চালু করুন। Chrome, Edge বা Brave-এ ডেভেলপার মোড চালু করে Load unpacked বেছে নিন এবং সঙ্গে দেওয়া BrowserExtension ফোল্ডারটি দেখিয়ে দিন। অ্যাপের পেয়ারিং কোড এক্সটেনশনের পপআপে বসিয়ে Claude.ai ট্যাবটি রিলোড করুন। Mac অ্যাপে Safari এক্সটেনশনও আছে। সেটি চালু করে claude.ai ব্যবহারের অনুমতি দিন।
+
+সংযুক্ত ব্রাউজারে ব্যবহারের হিসাবের পাতাটি খুলুন। Claude সেশন বা সাপ্তাহিক কোটা দেখালে Claw’d অবশিষ্ট শতাংশ, রিসেটের সময় ও সর্বশেষ মাপার সময় দেখাতে পারে। আপেক্ষিক সময়গুলি আনুমানিক। অনুপস্থিত বা মেয়াদোত্তীর্ণ হিসাব ফাঁকা থাকে। খোলা ট্যাবে দৃশ্যমান কাজ আর বিজ্ঞপ্তি স্থানীয় সংযোগে পাঠানো হয়।
+
+[Claude.ai](https://claude.ai/settings/usage) · [Safari](https://developer.apple.com/documentation/safariservices/running-your-safari-web-extension)
+
+### ব্রাউজার কনসোলে কথার বুদ্‌বুদ পরীক্ষা করুন
+
+সংযুক্ত Claude.ai ট্যাবে নিচের উদাহরণটি সাময়িক দৃশ্যমান বিজ্ঞপ্তি তৈরি করে। এক্সটেনশন লেখাটি Claw’d-এর কাছে পাঠায়। এটি একটি স্থানীয় ডেমো। ব্রাউজারের চিত্রায়িত ধাপগুলিতেও উদাহরণের জন্য তৈরি ঘটনা দেখানো হয়েছে।
+
+```js
+(() => {
+  const notice = document.createElement("div");
+  notice.setAttribute("role", "alert");
+  notice.textContent = "Claw’d pixel bubble test";
+  Object.assign(notice.style, {
+    position: "fixed", top: "1rem", right: "1rem", zIndex: "2147483647",
+    background: "#fff", color: "#222", padding: "0.75rem"
+  });
+  document.body.append(notice);
+  setTimeout(() => notice.remove(), 4000);
+})();
+```
+
+![ব্রাউজার কনসোলে কথার বুদ্‌বুদ পরীক্ষা করুন](media/browser-bridge-demo.gif)
+
+**Claude.ai → Claw’d · JSON**
+
+```jsonl
+{"type":"activity","state":"planning"}
+{"type":"activity","state":"executing"}
+{"type":"activity","state":"done"}
+```
+
+## জানালায় ঘোরাঘুরি, কার্সারের খেলা আর ভাইরাস অ্যারেনা
+
+Mac-এ Claw’d-কে জানালায় টেনে নিয়ে রাইট-ক্লিক করে Pin to Window বেছে নিন। জানালা সরালেও সে একই জায়গায় থাকবে, সেখান থেকে দড়ি বেয়ে নামতেও পারবে। হাঁটার সময় টাইটেল বারে ওঠে, এদিক-ওদিক তাকায়, চোখের পলক ফেলে আর নিচে লাফ দেয়। তার চোখ কার্সার অনুসরণ করে। অক্ষর ছোড়ার যন্ত্র প্রতি দফায় এলোমেলোভাবে ৩ থেকে ৪২টি শট ছোড়ে এবং প্রতিবার নতুন করে নিশানা করে। দৃশ্যমান গুলি কার্সার ছুঁলেই তা হিট হিসেবে গোনা হয়।
+
+Mac-এ অন্তত ৯০ সেকেন্ড কোনো ইনপুট না পেলে অ্যারেনা শুরু হতে পারে। Claw’d-এর স্বাস্থ্য ১০০। এলোমেলো দুটি শত্রুদলের পর আসে শেষ বস। শত্রুদের স্বাস্থ্যবার দেখুন, নিরাময়, ঢাল ও দ্রুত গুলির পাওয়ার-আপ নিন। ইনপুট দিলে খেলা থামে। কম্পিউটার ব্যবহারের সময় খেলার অনুমতি দিলে ক্লিক করেও সাহায্য করতে পারেন। হেরে গেলে GIT লেখা সমাধিফলক থাকে ঠিক পাঁচ মিনিট, তারপর সে মাটি খুঁড়ে বেরিয়ে আসে। সঙ্গীত আর শব্দগুলি আলাদা করে চালু বা বন্ধ করা যায়।
+
+ওভারলে সেটিংসে ভাষা, কম নড়াচড়া এবং শব্দের মাত্রা বেছে নিন। প্রতিটি শব্দ আলাদা করে বন্ধ করা যায়। Claude.ai-এর বিজ্ঞপ্তি মূল ভাষাতেই থাকে।
+
+## সেরা স্কোর ও অ্যারেনা অ্যাকাউন্ট
+
+সেরা স্কোরে এই ডিভাইসের পয়েন্ট, পরাজিত শত্রু, মৃত্যু, কিল/ডেথ অনুপাত ও জয় দেখা যায়। রাউন্ড শেষে আপনি নিজে শত্রুকে আঘাত করলে বা কার্যকর পাওয়ার-আপ নিলে সেটি গণনা হয়। অনলাইন র‌্যাঙ্কিংয়ে যোগ দিতে ব্যবহারকারীর নাম, ইমেইল ও পাসওয়ার্ড দিয়ে আলাদা অ্যারেনা অ্যাকাউন্ট খুলে অ্যাপে সাইন ইন করুন। র‌্যাঙ্কড রাউন্ড আপনিই শুরু করেন। সার্ভার আপনার কাজ নিশ্চিত করে ফলাফল হিসাব করে। তালিকায় আপনার নাম ও খেলার পরিসংখ্যান দেখায়। ইমেইল গোপন থাকে। অনলাইনে খেলতে গেম সার্ভারে সংযোগ প্রয়োজন।
+
+## অ্যানিমেশন গ্যালারি
+
+| মুখভঙ্গি ও খেলা | জানালায় চলাফেরা |
+| --- | --- |
+| ![মুখভঙ্গি ও খেলা](media/poses-idle.gif) | ![জানালায় চলাফেরা](media/poses-movement.gif) |
+
+| Claude-এর টুল ও অনুমতি | লড়াই, কবর ও ফিরে আসা |
+| --- | --- |
+| ![Claude-এর টুল ও অনুমতি](media/poses-work.gif) | ![লড়াই, কবর ও ফিরে আসা](media/poses-arcade.gif) |
+
+![জানালায় ঘোরাঘুরি, কার্সারের খেলা আর ভাইরাস অ্যারেনা](media/virus-arena.gif)
+
+▶ [শব্দসহ অ্যারেনা দেখুন। ভিডিওতে কবরের পাশের পাঁচ মিনিটের অপেক্ষা সংক্ষিপ্ত করা হয়েছে।](media/virus-arena.mp4)
+
+## আপডেট ও স্থানীয় ডেভেলপমেন্ট
+
+অ্যাপ শুরু হলে এবং তারপর প্রতিদিন GitHub-এ নতুন রিলিজ খোঁজা হয়। নতুন সংস্করণের বিজ্ঞপ্তি থেকে পরিবর্তনগুলি পড়ুন এবং আপনার সিস্টেমের জন্য প্যাকেজ ডাউনলোড করুন।
+
+পরিচিতি ও আপডেট থেকে নতুন সংস্করণ খুঁজে প্যাকেজ বেছে নিন। ডাউনলোডের পর আগের নিয়মেই ইনস্টল করুন। Mac-এ সংযোগ থেকে Claude Code-এর কার্যকলাপ ও কোটার হিসাব আলাদা করে চালু করা যায়। সেটআপের পরে নতুন Claude Code সেশন শুরু করুন। ব্রাউজার ও টার্মিনাল আলাদা হিসাব রাখে।
+
+Mac অ্যাপটি Swift ও AppKit দিয়ে তৈরি। Xcode ইনস্টল করে রিপোজিটরির মূল ডিরেক্টরি থেকে বিল্ড করুন। JavaScript পরীক্ষাগুলি স্থানীয় ব্রাউজার ডেটা ব্যবহার করে। পোর্টেবল ডেস্কটপ ক্লায়েন্টটি রয়েছে Desktop ফোল্ডারে।
+
+```sh
+./Scripts/build-mac.sh
+swift test
+node --test BrowserTests/*.test.js
+python3 Scripts/test-hooks.py
+```
+
+[Swift](../Package.swift) · [Desktop](../Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
+
+[Arena API](../Server/README.md) · [Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
+
+## স্টুডিও ও কমিউনিটি
+
+Andreas Zumbansen জার্মানির কামেনে Zumbyte · AppSolution পরিচালনা করেন। এই স্বাধীন স্টুডিও মোবাইল ও ডেস্কটপ অ্যাপ এবং বিভিন্ন প্রতিষ্ঠান ও দলের প্রয়োজনমতো সফটওয়্যার তৈরি করে।
+
+Zumbyte · AppSolution · Kastanienallee 16a · 59174 Kamen · DE · +49 177 4149667
+
+[Zumbyte](https://zumbyte.de/) · [আইনি তথ্য](https://zumbyte.de/impressum/) · [info@zumbyte.de](mailto:info@zumbyte.de)
+
+এআই দিয়ে কোড লেখেন এমন সবাইকে অনেক শুভেচ্ছা। নতুন কিছু বানানো, ভাগ করে নেওয়া আর একে অপরের পাশে থাকার জন্য ধন্যবাদ!

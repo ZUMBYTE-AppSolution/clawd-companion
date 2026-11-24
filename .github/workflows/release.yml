@@ -1,0 +1,96 @@
+name: Build and publish
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: clawd-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  macos:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - run: swift test && node --test BrowserTests/*.test.js
+      - run: bash Scripts/package-mac.sh dist
+      - uses: actions/upload-artifact@v4
+        with: {name: macos, path: 'dist/*', if-no-files-found: error}
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12', architecture: x64}
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install -r Packaging/desktop-requirements.txt
+          if (!(Test-Path "${env:ProgramFiles(x86)}\NSIS\makensis.exe")) { choco install nsis --yes --no-progress }
+      - run: python -m unittest discover -s Desktop/tests -p "test_*.py"
+      - shell: pwsh
+        run: ./Scripts/package-windows.ps1 -OutDir dist
+      - name: Smoke test portable and installed executables
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Expand-Archive (Get-ChildItem dist/*Portable.zip).FullName "$env:RUNNER_TEMP/portable"
+          function Test-Companion($exe) {
+            $process = Start-Process $exe -ArgumentList '--self-test' -PassThru
+            if (!$process.WaitForExit(60000)) { $process.Kill(); throw 'Application self-test timed out' }
+            if ($process.ExitCode -ne 0) { throw "Smoke test failed: $($process.ExitCode)" }
+          }
+          Test-Companion "$env:RUNNER_TEMP/portable/ClawdCompanion/ClawdCompanion.exe"
+          $setup = Start-Process (Get-ChildItem dist/*Setup.exe).FullName -ArgumentList '/S' -Wait -PassThru
+          if ($setup.ExitCode -ne 0) { throw 'Setup failed' }
+          $version = (Get-Content VERSION -Raw).Trim()
+          Test-Companion "$env:LOCALAPPDATA/Programs/Clawd Companion/versions/$version/ClawdCompanion.exe"
+      - uses: actions/upload-artifact@v4
+        with: {name: windows, path: 'dist/*', if-no-files-found: error}
+  linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install packaging and Qt dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y rpm xvfb libgl1 libegl1 libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-shape0 libx11-xcb1
+          python -m pip install -r Packaging/desktop-requirements.txt
+      - run: python -m unittest discover -s Server/tests -p 'test_*.py'
+      - run: CLAWD_ISOLATED_X11=1 xvfb-run -a python -m unittest discover -s Desktop/tests -p 'test_*.py'
+      - run: bash Scripts/package-linux.sh dist
+      - name: Smoke test Linux distributions
+        run: |
+          version="$(cat VERSION)"
+          mkdir -p "$RUNNER_TEMP/portable"
+          tar -C "$RUNNER_TEMP/portable" -xzf "dist/Clawd-Companion-$version-Linux-x86_64.tar.gz"
+          xvfb-run -a timeout 60 "$RUNNER_TEMP/portable/ClawdCompanion/ClawdCompanion" --self-test
+          sudo apt-get install -y ./dist/*.deb
+          xvfb-run -a timeout 60 clawd-companion --self-test
+          docker run --rm -v "$PWD/dist:/packages:ro" fedora:latest bash -ec 'dnf install -y /packages/*.rpm xorg-x11-server-Xvfb; Xvfb :99 -screen 0 1024x768x24 & p=$!; trap "kill $p" EXIT; export DISPLAY=:99; sleep 2; timeout 60 clawd-companion --self-test'
+      - uses: actions/upload-artifact@v4
+        with: {name: linux, path: 'dist/*', if-no-files-found: error}
+  release:
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    needs: [macos, windows, linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/download-artifact@v4
+        with: {path: release-assets, merge-multiple: true}
+      - name: Publish verified packages and update the tap
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash Scripts/publish-release.sh release-assets

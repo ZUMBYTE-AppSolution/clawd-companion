@@ -1,0 +1,11 @@
+{
+  "extensionName": {
+    "message": "Claw’d für Claude.ai"
+  },
+  "description": {
+    "message": "Zeigt Claude-Aktivität, Freigabeanfragen und Kontingente mit Claw’d auf deinem Mac an."
+  },
+  "title": {
+    "message": "Claw’d verbinden"
+  }
+}
