@@ -12,12 +12,23 @@ bash "$root/Scripts/build-mac.sh" "$build/apps"
 app="$build/apps/Clawd Companion.app"
 test "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$app/Contents/Info.plist")" = "$version"
 codesign --verify --deep --strict "$app"
-lipo "$app/Contents/MacOS/ClawdCompanion" -verify_arch arm64 x86_64
-lipo "$app/Contents/PlugIns/ClawdSafari.appex/Contents/MacOS/ClawdSafari" -verify_arch arm64 x86_64
+for executable in "$app/Contents/MacOS/ClawdCompanion" "$app/Contents/PlugIns/ClawdSafari.appex/Contents/MacOS/ClawdSafari"; do
+    architectures=" $(lipo -archs "$executable") "
+    [[ "$architectures" == *" arm64 "* && "$architectures" == *" x86_64 "* ]]
+done
 name="Clawd-Companion-$version-macOS-universal"
 ditto -c -k --keepParent --norsrc --noextattr --noqtn "$app" "$build/$name.zip"
 pkgbuild --analyze --root "$build/apps" "$build/components.plist"
-/usr/libexec/PlistBuddy -c 'Set :0:BundleIsRelocatable false' "$build/components.plist"
+python3 - "$build/components.plist" <<'PY'
+import plistlib
+import sys
+from pathlib import Path
+path = Path(sys.argv[1])
+components = plistlib.loads(path.read_bytes())
+companion = next(component for component in components if component["RootRelativeBundlePath"] == "Clawd Companion.app")
+companion["BundleIsRelocatable"] = False
+path.write_bytes(plistlib.dumps(components))
+PY
 set --
 if [[ -n "${CLAWD_INSTALLER_IDENTITY:-}" ]]; then set -- --sign "$CLAWD_INSTALLER_IDENTITY"; fi
 pkgbuild --root "$build/apps" --component-plist "$build/components.plist" --install-location /Applications \

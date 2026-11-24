@@ -2,6 +2,19 @@
 
 The desktop apps use the JSON API at `https://zumbyte.de/api/clawd/v1`. Signed-in players can open a ranked round from the app. Local or idle rounds have no route for uploading a score.
 
+## SSH deployment from the source checkout
+
+Run the operator script from a workstation with Bash, Python 3, tar and OpenSSH. The target needs Python 3.11+, SQLite 3.35+, Gunicorn at `/usr/bin/gunicorn`, systemd and a running nginx TLS virtual host for `zumbyte.de`. Use your existing authorized SSH alias with a verified host key in known_hosts, and a root account or noninteractive sudo for deployment.
+
+```sh
+Scripts/deploy-arena.sh --archive ./Clawd-Arena-API-0.6.0.tar.gz --check-local
+Scripts/deploy-arena.sh --host YOUR_SSH_ALIAS --archive ./Clawd-Arena-API-0.6.0.tar.gz
+```
+
+`--port PORT` and `--identity FILE` override SSH settings. Use `--sha256 HEX` with the archive's entry from the release's SHA256SUMS file. The helper also compares the archive digest across the SSH transfer. `--check-local` inspects the archive without opening a connection. If several active files contain a matching TLS virtual host, pass `--nginx-site /etc/nginx/sites-available/YOUR_SITE`. The chosen file must appear in nginx's active configuration and contain a single direct `server_name zumbyte.de` and TLS listener on port 443. A previously configured matching inline location requires manual reconciliation.
+
+On the server, the script stages a root-owned, versioned release under `/opt/clawd-arena/releases`. It preserves `/etc/clawd-arena.env` and the state database. It inserts one dedicated location include in the matching server block and backs up changed configuration in `/var/backups/clawd-arena/`. It validates nginx, checks the backend on loopback and checks the public HTTPS endpoint for the exact unauthorized JSON response. On a failed cutover it restores the previous configuration and service state. Running it again for the same archive repeats the health checks and leaves a healthy service running. The operator script lives in the source checkout; the release tar also supports the following manual installation.
+
 ## Production deployment
 
 Use Python 3.11+ with SQLite 3.35+ and Gunicorn on a single Linux host with persistent local storage. The WSGI entry point is `Server.wsgi:application`. Deploy `Server/`, `Desktop/arcade.py` and its parent directory together under `/opt/clawd-companion`. The Python game engine uses the standard library. GUI packages are only imported when drawing a desktop surface.
