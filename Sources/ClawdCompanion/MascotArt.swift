@@ -497,12 +497,15 @@ enum MascotPixels {
         }
 
         func codeBow(frame: Int, gaze: CGVector) {
-            let slope = -gaze.dy * 0.45
+            let slope = -Double(gaze.dy) * 0.45
             let rotation = atan(slope)
+            let cosine = cos(rotation)
+            let sine = sin(rotation)
             func point(_ x: Int, _ y: Int) -> (Int, Int) {
                 let xx = Double(x), yy = Double(y)
-                return (47 + Int((xx * cos(rotation) - yy * sin(rotation)).rounded()),
-                        26 + Int((xx * sin(rotation) + yy * cos(rotation)).rounded()))
+                let rotatedX = xx * cosine - yy * sine
+                let rotatedY = xx * sine + yy * cosine
+                return (47 + Int(rotatedX.rounded()), 26 + Int(rotatedY.rounded()))
             }
             let tips = [(0, -10), (3, -8), (4, -5), (4, -2), (5, 0),
                         (4, 2), (4, 5), (3, 8), (0, 10)]

@@ -146,7 +146,12 @@ class ArenaTests(unittest.TestCase):
         self.assertIn(frame["phase"],("dead","victory"))
         self.assertFalse(frame["ranked"])
         self.assertEqual(self.req("GET","/leaderboard",token=token)[1],{"players":[]})
-        _,frame=self.req("POST","/runs",{},token)
+        if frame["phase"] == "dead":
+            status, reply = self.req("POST", "/runs", {}, token)
+            self.assertEqual((status, reply), (409, {"error": "reviving"}))
+            self.now += 300
+        status,frame=self.req("POST","/runs",{},token)
+        self.assertEqual(status, 200, frame)
         path="/runs/"+frame["id"]
         # Deterministic fixture with the boss one real, pixel-tested tap from defeat.
         arena=Arcade(seed=42)

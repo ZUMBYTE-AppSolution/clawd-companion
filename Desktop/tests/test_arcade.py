@@ -188,8 +188,9 @@ class ArcadeTests(unittest.TestCase):
     def test_real_qpainter_draws_ink_on_a_transparent_image(self):
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
         from PySide6.QtCore import Qt
-        from PySide6.QtGui import QGuiApplication, QImage, QPainter
-        app = QGuiApplication.instance() or QGuiApplication([])
+        from PySide6.QtGui import QImage, QPainter
+        from PySide6.QtWidgets import QApplication
+        app = QApplication.instance() or QApplication([])
         game = Arcade(0)
         image = QImage(300, 160, QImage.Format.Format_ARGB32_Premultiplied)
         image.fill(Qt.GlobalColor.transparent)
