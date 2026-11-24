@@ -6,9 +6,11 @@
 
 Ein Pixelkrebs für deinen Schreibtisch. Claw’d schaut vom Notebook auf, wenn Claude deine Aufmerksamkeit braucht, folgt deinem Mauszeiger mit den Augen und sucht sich zwischen zwei Antworten eine Fensterkante zum Ausruhen.
 
-[**v0.7.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.7.2**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.2) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## Endlos-Arena · 0.7.1
+## Endlos-Arena · 0.7.2
+
+Claw’d sucht sich im Leerlauf bevorzugt eine freie Titelleiste und sitzt dort 45 bis 100 Sekunden. Verschiebst du sein Fenster, nimmt es ihn mit. Unter Wayland sitzt er auf einer gezeichneten Fensterkante im eigenen Begleiterfenster.
 
 Unter **Overlay → Darstellung** stehen Hell, Dunkel und Wie das System zur Wahl. Die Einstellung gilt sofort und bleibt beim Neustart erhalten. Unter Linux haben auch das Wayland-Fenster, Tabs, Menüs und Eingabefelder aufeinander abgestimmte Farben.
 
@@ -16,7 +18,7 @@ Unter Highscores öffnet sich die Arena im maximierten Fenster. Bewege Claw’d 
 
 Du startest mit drei Leben. Jedes zweite abgeschlossene Level gibt ein Herz. Durchschuss, Mehrfachschuss und Flächenschaden lassen sich kombinieren. Level und Welle deiner Bestleistung werden auf dem Gerät gespeichert.
 
-<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Linux-dark.png"></p>
+<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-dark.png"></p>
 
 ## Einblicke
 
@@ -45,11 +47,11 @@ Windows und Linux verwenden Qt. Unter Windows und X11 kann Claw’d die Position
 
 | OS | Installation |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/clawd-companion_0.7.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/clawd-companion-0.7.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion_0.7.2_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion-0.7.2-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -61,13 +63,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.7.1_amd64.deb
+sudo apt install ./clawd-companion_0.7.2_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.7.1-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.7.2-1.x86_64.rpm
 ```
 
 ## Wenn Claude arbeitet

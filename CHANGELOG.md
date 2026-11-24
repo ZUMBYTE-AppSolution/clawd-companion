@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.2
+
+Claw’d now prefers a free title bar for idle breaks lasting 45 to 100 seconds. Move the window and Claw’d moves with it. On Wayland, the companion window has its own pixel ledge.
+
 ## 0.7.1
 
 Choose Light, Dark or Follow system under **Overlay → Appearance**. Changes take effect immediately and persist after restart. On Linux, the Wayland companion window, tabs, menus and form fields now use matching colors.

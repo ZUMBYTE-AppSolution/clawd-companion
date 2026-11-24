@@ -62,9 +62,24 @@ final class WindowWanderTests: XCTestCase {
         }
         XCTAssertEqual(poses, [.perched, .perchThinking])
         XCTAssertEqual(facings, [true, false])
-        walker.windows = [active(moved, focused: false)]
-        for _ in 0..<3 { _ = walker.tick() }
-        XCTAssertNotEqual(walker.tick()?.phase, .perch)
+        let shifted = moved.offsetBy(dx: 210, dy: -40)
+        walker.windows = [active(shifted, focused: false)]
+        for _ in 0..<1800 {
+            let sitting = try XCTUnwrap(walker.tick())
+            XCTAssertEqual(sitting.phase, .perch)
+            XCTAssertEqual(sitting.origin.x, attached.origin.x + 210, accuracy: 0.01)
+            XCTAssertEqual(sitting.origin.y, attached.origin.y - 40, accuracy: 0.01)
+        }
+        let secondScreen = screen.offsetBy(dx: screen.width, dy: 0)
+        let relocated = shifted.offsetBy(dx: screen.width, dy: 0)
+        walker.windows = [SceneryWindow(id: 8, pid: 17, frame: relocated, screen: secondScreen,
+                                        leftClear: true, rightClear: true)]
+        XCTAssertEqual(walker.tick()?.phase, .perch)
+        walker.screen = secondScreen
+        XCTAssertEqual(walker.tick()?.phase, .perch)
+        XCTAssertEqual(walker.pet.midX, relocated.midX, accuracy: 0.01)
+        walker.windows = []
+        XCTAssertEqual(walker.tick()?.pose, .falling)
     }
 
     func testManualSeatOnlyStartsWithRealActiveReachableTitleAndCanBeginImmediately() throws {

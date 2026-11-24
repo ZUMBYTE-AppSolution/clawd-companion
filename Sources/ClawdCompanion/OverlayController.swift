@@ -959,7 +959,7 @@ final class OverlayController: NSObject {
     private func updateFreePlay(now: TimeInterval) -> Bool {
         let idle = activity == .idle || activity == .sleeping
         let hovered = bubble.isVisible || hoverSince != nil
-        guard !reduced, !speechVisible, !hovered || freePlay.bowInProgress || explicitPerch, !isDragging, !input.hasPress,
+        guard !reduced, !speechVisible, !hovered || freePlay.bowInProgress || explicitPerch || windowWander.isSeated(at: now), !isDragging, !input.hasPress,
               agentCount == 0, idle || freePlay.bowInProgress, temporaryUntil == 0 else {
             if ambientActive || freePlay.needsFastTicks { cancelFreePlay() }
             return false
@@ -1004,11 +1004,11 @@ final class OverlayController: NSObject {
             return nil
         }
         let requested = perchRequestDeadline != nil
-        if freePlay.isWalking || windowWander.isActive || requested { refreshScenery(now: now, screens: screens) }
+        refreshScenery(now: now, screens: screens)
         // A delayed WindowServer read must not keep a vanished ledge alive.
         let fresh = now - scenerySampledAt <= 0.8
         guard let frame = windowWander.tick(now: now, pet: petFrame, screen: screen,
-                                            windows: fresh ? scenery : [], mayStart: fresh && freePlay.isWalking,
+                                            windows: fresh ? scenery : [], mayStart: fresh && !freePlay.bowInProgress,
                                             requestSeat: requested && fresh)
         else {
             if requested, fresh || now >= (perchRequestDeadline ?? .infinity) {
@@ -1024,7 +1024,8 @@ final class OverlayController: NSObject {
 
     private func refreshScenery(now: TimeInterval, screens: [CGRect]) {
         guard !pendingScenery, now >= nextSceneryScan, let primary = NSScreen.screens.first else { return }
-        nextSceneryScan = now + (windowWander.isActive ? 0.14 : 1.25)
+        let draggingWindow = windowWander.isSeated(at: now) && NSEvent.pressedMouseButtons & 1 != 0
+        nextSceneryScan = now + (draggingWindow ? 1.0 / 30 : windowWander.isActive ? 0.14 : 1.25)
         pendingScenery = true
         let generation = sceneryGeneration, top = primary.frame.maxY, size = pet.frame.size
         let front = NSWorkspace.shared.frontmostApplication?.processIdentifier

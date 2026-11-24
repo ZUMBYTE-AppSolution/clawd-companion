@@ -38,7 +38,7 @@ struct WindowWander {
     private struct Route {
         let start: CGPoint
         let pet: CGSize
-        let screen: CGRect
+        var screen: CGRect
         var side: Side
         var exitSide: Side
         let inside: Bool
@@ -136,13 +136,19 @@ struct WindowWander {
             return false
         }
 
-        mutating func endRest(at time: Double) {
-            guard let index = legs.firstIndex(where: { $0.phase == .perch }) else { return }
-            let start = began + legs.prefix(index).reduce(0) { $0 + $1.duration }
-            if time < start { legs.remove(at: index) }
-            else if time < start + legs[index].duration {
-                legs[index] = Leg(from: legs[index].from, to: legs[index].to, phase: .perch, duration: max(0.001, time-start))
-            }
+        mutating func trackSeat(on window: SceneryWindow, at time: Double) -> Bool {
+            guard isSitting(at: time), let seat = legs.first(where: { $0.phase == .perch }),
+                  WindowLedge.seatY(window: window.frame, screen: window.screen, pet: route.pet) != nil else { return false }
+            var moved = route
+            moved.screen = window.screen
+            let x = moved.position(seat.to, window: window.frame).x
+            let clearWidth = window.frame.width * SceneryWindow.surveyedRoofFraction
+            guard x >= window.screen.minX, x + route.pet.width <= window.screen.maxX,
+                  window.roofClear || (window.leftRoofClear && x + route.pet.width <= window.frame.minX + clearWidth)
+                      || (window.rightRoofClear && x >= window.frame.maxX - clearWidth) else { return false }
+            route = moved
+            visibleRect = window.frame
+            return true
         }
 
         /// A new foreground window can cover the planned crossing after takeoff
@@ -199,6 +205,11 @@ struct WindowWander {
     private var originalSize: CGSize?
     var isActive: Bool { action != nil }
 
+    func isSeated(at now: TimeInterval) -> Bool {
+        if case let .visit(visit) = action { return visit.isSitting(at: now) }
+        return false
+    }
+
     init(random: @escaping (ClosedRange<Double>) -> Double = { .random(in: $0) }) { self.random = random }
 
     mutating func cancel() {
@@ -216,7 +227,7 @@ struct WindowWander {
             return nil
         }
         if action == nil {
-            if attemptAt == nil { attemptAt = now + random(4...8) }
+            if attemptAt == nil { attemptAt = now + random(2...5) }
             guard requestSeat || (mayStart && now >= (attemptAt ?? .infinity)) else { return nil }
             attemptAt = now + random(1.8...3.8)
             guard let visit = choose(now: now, pet: pet, screen: screen, windows: windows, requestSeat: requestSeat) else { return nil }
@@ -235,13 +246,13 @@ struct WindowWander {
         case var .visit(visit):
             let match = windows.first {
                 $0.id == visit.targetID && $0.pid == visit.pid &&
-                    (($0.isActive && visit.isSitting(at: now)) || Self.geometryChange($0.frame, visit.visibleRect) < max(85, pet.width * 1.5))
+                    (visit.isSitting(at: now) || Self.geometryChange($0.frame, visit.visibleRect) < max(85, pet.width * 1.5))
             }
-            if let w = match, visit.keepSupport(on: w, pet: pet, now: now) {
+            if let w = match, visit.isSitting(at: now) ? visit.trackSeat(on: w, at: now) : visit.keepSupport(on: w, pet: pet, now: now) {
+                originalScreen = visit.route.screen
                 // Window lists arrive more slowly than animation frames. Ease
                 // ordinary motion between samples; a teleport loses support.
                 let weight = min(1, 1 - exp(-max(0, dt) * 20))
-                if !w.isActive { visit.endRest(at: now) }
                 visit.visibleRect = visit.isSitting(at: now) ? w.frame : Self.blend(visit.visibleRect, w.frame, weight)
                 action = .visit(visit)
                 var elapsed = now - visit.began
@@ -268,9 +279,10 @@ struct WindowWander {
                             pose = .peek
                             left = visit.route.exitSide == .left
                         case .perch:
-                            pose = t > 0.30 && t < 0.74 ? .perchThinking : .perched
-                            left = t < 0.54 ? visit.route.side == .left : visit.route.side == .right
-                            origin.y = WindowLedge.seatY(window: visit.visibleRect, screen: screen, pet: pet.size) ?? origin.y
+                            let cycle = elapsed.truncatingRemainder(dividingBy: 5.4) / 5.4
+                            pose = cycle > 0.30 && cycle < 0.74 ? .perchThinking : .perched
+                            left = cycle < 0.54 ? visit.route.side == .left : visit.route.side == .right
+                            origin.y = WindowLedge.seatY(window: visit.visibleRect, screen: visit.route.screen, pet: pet.size) ?? origin.y
                         default:
                             pose = .walking
                             left = b.x < a.x
@@ -297,7 +309,7 @@ struct WindowWander {
         case let .land(frame, until):
             if now < until { return frame }
             action = nil
-            attemptAt = now + random(16...36)
+            attemptAt = now + random(16...22)
             return nil
         case nil: return nil
         }
@@ -306,7 +318,7 @@ struct WindowWander {
     private func choose(now: TimeInterval, pet: CGRect, screen: CGRect, windows: [SceneryWindow], requestSeat: Bool) -> Visit? {
         var best: Visit?
         var bestDistance = CGFloat.greatestFiniteMagnitude
-        let wantsSeat = requestSeat || (windows.contains { $0.screen == screen && $0.isActive } && random(0...1) < 0.38)
+        let wantsSeat = requestSeat || (windows.contains { $0.screen == screen && $0.isActive } && random(0...1) < 0.82)
         var bestHasSeat = false
         for window in windows where window.screen == screen {
             for side in Side.allCases where side.available(window) {
@@ -327,7 +339,7 @@ struct WindowWander {
                 let distance = Self.distance(entry, pet.origin)
                 let hasSeat = wantsSeat && window.isActive && roof
                 guard !requestSeat || hasSeat,
-                      requestSeat || distance < (hasSeat ? 650 : 350) * route.scale,
+                      requestSeat || (hasSeat || distance < 350 * route.scale),
                       hasSeat == bestHasSeat ? distance < bestDistance : hasSeat else { continue }
                 // Do not make a pet on a neighbouring roof walk down a wall to join this one.
                 let alreadyOnTop = hasSeat && pet.midX >= window.frame.minX && pet.midX <= window.frame.maxX &&
@@ -364,7 +376,7 @@ struct WindowWander {
             let first = visit.legs[i]
             let destination: Contact = visit.route.exitSide == visit.route.side ? .roofTurn : .onRoof(0.5)
             var stops = [visit.route.leg(first.from, destination, .ledge, speed: 150, window: visit.visibleRect),
-                         Leg(from: destination, to: destination, phase: .perch, duration: random(3.5...6.0))]
+                         Leg(from: destination, to: destination, phase: .perch, duration: random(45...100))]
             if first.to != destination {
                 stops.append(visit.route.leg(destination, first.to, .ledge, speed: 150, window: visit.visibleRect))
             }

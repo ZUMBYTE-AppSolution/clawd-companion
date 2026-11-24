@@ -80,6 +80,10 @@ class CompanionStage(QWidget):
         super().__init__()
         self.appearance = appearance
 
+    def ledge_rect(self):
+        width, height = self.width(), self.height()
+        return width//5, height*3//5, width*3//5, height*2//5
+
     def paintEvent(self, event):
         c = PALETTES[self.appearance.mode]
         p = QPainter(self)
@@ -92,4 +96,10 @@ class CompanionStage(QWidget):
         for i in range(width//28+1):
             h=heights[i%len(heights)]
             p.fillRect(i*28,height-h,28,h,QColor(c["hill"]))
+        x, y, w, h = self.ledge_rect()
+        p.fillRect(x, y, w, h, QColor(c["surface"]))
+        p.fillRect(x, y, w, 16, QColor(c["hill"]))
+        p.fillRect(x, y, w, 2, QColor(c["line"]))
+        for i in range(3):
+            p.fillRect(x+8+i*7, y+6, 3, 3, QColor(c["accent"]))
         p.end()

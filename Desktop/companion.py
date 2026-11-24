@@ -457,7 +457,7 @@ class Companion:
         self.motion = None
 
     def ledge_point(self, handle):
-        rect = platform_host.window_rect(handle) if not self.stage else None
+        rect = self.stage.ledge_rect() if self.stage and handle == "stage" else platform_host.window_rect(handle)
         if not rect:
             return None
         x,y,w,h = rect
@@ -474,7 +474,7 @@ class Companion:
         if top is None:
             return
         s=self.prefs["scale"]
-        sc = self.app.screenAt(QPoint(round(x+w/2), round(y+h/2)))
+        sc = None if self.stage else self.app.screenAt(QPoint(round(x+w/2), round(y+h/2)))
         screen = sc.availableGeometry() if sc else self.screen()
         can_sit=top.y() >= screen.top()
         if rest and not can_sit and not for_task:
@@ -486,6 +486,7 @@ class Companion:
         foot=QPoint(edge,round(min(y+h-36*s,screen.bottom()-48*s)))
         self.pin = None
         self.ledge = handle
+        self.ledge_origin = top
         path=[("walking",foot, max(.3,math.dist(self.xy(self.pet.pos()),self.xy(foot))/250)),
               ("climbing",wall,max(.6,(foot.y()-wall.y())/145))]
         if can_sit:
@@ -493,8 +494,16 @@ class Companion:
         else:
             top=wall
         if not for_task:
-            path.extend([("perched" if can_sit else "peek",top,random.uniform(3,6)),
-                         ("perchThinking" if can_sit else "peek",top,random.uniform(2,4))])
+            if can_sit:
+                remaining = random.uniform(45, 100)
+                while remaining > 0:
+                    for pose in ("perched", "perchThinking"):
+                        duration = min(remaining, random.uniform(3, 7))
+                        if duration > 0:
+                            path.append((pose, top, duration))
+                        remaining -= duration
+            else:
+                path.append(("peek", top, random.uniform(2, 4)))
         if not rest:
             path += [("jumping",top+QPoint(30,-15),.25),("falling",self.bound(foot+QPoint(70,5),screen),.65),
                      ("landing",self.bound(foot+QPoint(70,5),screen),.3)]
@@ -577,8 +586,17 @@ class Companion:
             name,start,target,began,duration=self.motion
             if self.ledge and name in ("perched","perchThinking"):
                 live=self.ledge_point(self.ledge)
-                if live is not None:
-                    target=live
+                if live is None:
+                    self.cancel_motion()
+                    return None
+                delta = live - self.ledge_origin
+                if not delta.isNull():
+                    self.pending = [(pose, point + delta, seconds) for pose, point, seconds in self.pending]
+                    self.ledge_origin = live
+                self.pet.move(live)
+                if now - began >= duration:
+                    self.motion = None
+                return name
             u=max(0,min(1,(now-began)/duration))
             if target.x()!=start.x():
                 self.left=target.x()<start.x()
@@ -853,7 +871,9 @@ class Companion:
             self.idle=0
             return
         self.idle=platform_host.idle_seconds()
-        if not self.stage and not (self.dialog and self.dialog.isActiveWindow()):
+        if self.stage:
+            self.focus_window = ("stage", *self.stage.ledge_rect())
+        elif not (self.dialog and self.dialog.isActiveWindow()):
             foreground=platform_host.active_window()
             if foreground is not None:
                 self.focus_window=foreground
@@ -926,7 +946,7 @@ class Companion:
                     if self.pin is not None:
                         if choice<.22:
                             self.rappel()
-                    elif choice<.18 and self.prefs["climbing"] and self.focus_window:
+                    elif self.prefs["climbing"] and self.focus_window and random.random() < .82:
                         self.window_route()
                     elif choice<.26 and self.prefs["projectile"]:
                         self.shoot(random.random()<.7)
