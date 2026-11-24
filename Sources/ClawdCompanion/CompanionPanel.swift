@@ -1,16 +1,6 @@
 import SwiftUI
 import AppKit
 
-enum Ink {
-    static let base = Color(red: 0.105, green: 0.098, blue: 0.102)
-    static let card = Color(red: 0.147, green: 0.138, blue: 0.142)
-    static let cream = Color(red: 0.97, green: 0.934, blue: 0.878)
-    static let dim = Color(red: 0.747, green: 0.714, blue: 0.694)
-    static let coral = Color(red: 1, green: 0.663, blue: 0.515)
-    static let mint = Color(red: 0.62, green: 0.82, blue: 0.73)
-    static let line = Color.white.opacity(0.095)
-}
-
 struct SmallLabel: View {
     var text: String
     var body: some View {
@@ -26,7 +16,7 @@ private struct PanelButton: ButtonStyle {
         configuration.label.font(.system(size: 12, weight: .semibold))
             .padding(.horizontal, 11).padding(.vertical, 7)
             .foregroundStyle(accent ? Ink.base : Ink.cream)
-            .background(RoundedRectangle(cornerRadius: 8).fill(accent ? Ink.coral : Color.white.opacity(0.075)))
+            .background(RoundedRectangle(cornerRadius: 8).fill(accent ? Ink.coral : Ink.control))
             .opacity(configuration.isPressed ? 0.7 : 1)
             .contentShape(Rectangle())
     }
@@ -41,7 +31,7 @@ private struct NightWindow: View {
             func rect(_ x: CGFloat, _ y: CGFloat, _ w: CGFloat, _ h: CGFloat, _ color: Color) {
                 context.fill(Path(CGRect(x: x, y: y, width: w, height: h)), with: .color(color))
             }
-            let pink = Color(red: 0.48, green: 0.34, blue: 0.38)
+            let pink = Ink.pair(0xad7864, 0x7a5761)
             for (x, y) in [(0.08,0.22),(0.21,0.13),(0.38,0.35),(0.46,0.16),(0.54,0.39),
                            (0.59,0.18),(0.74,0.09),(0.87,0.18),(0.93,0.48),(0.66,0.37),(0.32,0.68)] {
                 rect(floor(width*x/step)*step, floor(height*y/step)*step, step, step, pink.opacity(0.75))
@@ -49,10 +39,10 @@ private struct NightWindow: View {
             let skyline: [CGFloat] = [25,19,32,39,30,25,31,43,34,25,12,21,34,48,42,30,35,24,41,48,37,24,18,29]
             let cell = ceil(width / CGFloat(skyline.count))
             for (i, h) in skyline.enumerated() {
-                rect(CGFloat(i)*cell, height-h, cell+1, h, Color(red: 0.22, green: 0.18, blue: 0.218))
+                rect(CGFloat(i)*cell, height-h, cell+1, h, Ink.pair(0xdfcbbb, 0x382e38))
             }
             let x = width - 155, y = height - 36
-            rect(x+3, y, 135, 36, Color(red: 0.20, green: 0.17, blue: 0.20))
+            rect(x+3, y, 135, 36, Ink.pair(0xf1dccc, 0x332b33))
             rect(x, y, 139, 3, pink)
             rect(x, y+3, 3, 33, pink); rect(x+136, y+3, 3, 33, pink)
             rect(x+3, y+13, 133, 2, pink.opacity(0.62))
@@ -65,8 +55,8 @@ private struct SceneHeader: View {
     @ObservedObject var state: CompanionState
     var body: some View {
         ZStack(alignment: .leading) {
-            LinearGradient(colors: [Color(red: 0.18, green: 0.145, blue: 0.17),
-                                    Color(red: 0.25, green: 0.19, blue: 0.23)],
+            LinearGradient(colors: [Ink.pair(0xf0dece, 0x2e252b),
+                                    Ink.pair(0xffefe0, 0x40303b)],
                            startPoint: .bottomLeading, endPoint: .topTrailing)
             NightWindow().scaleEffect(x: L10n.isRTL ? -1 : 1, y: 1)
             HStack(spacing: 0) {
@@ -126,7 +116,7 @@ private struct QuotaCard: View {
             }
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
-                    Capsule().fill(Color.white.opacity(0.08))
+                    Capsule().fill(Ink.control)
                     if let value = window?.remaining {
                         Capsule().fill(value <= 15 ? Ink.coral : Ink.mint)
                             .frame(width: geo.size.width * min(max(0, value), 100)/100)
@@ -164,6 +154,7 @@ private struct ControlRow<Control: View>: View {
 }
 
 struct CompanionPanel: View {
+    @AppStorage("appearance") private var appearance = "system"
     @ObservedObject var state: CompanionState
 
     var body: some View {
@@ -209,7 +200,7 @@ struct CompanionPanel: View {
                 }.padding(18).frame(maxWidth: .infinity, alignment: .leading)
             }
         }.frame(minWidth: 438, minHeight: 475).background(Ink.base)
-            .foregroundStyle(Ink.cream).tint(Ink.coral).preferredColorScheme(.dark)
+            .foregroundStyle(Ink.cream).tint(Ink.coral).onChange(of: appearance) { CompanionAppearance.apply($0) }
             .environment(\.locale, L10n.locale)
             .environment(\.layoutDirection, L10n.isRTL ? .rightToLeft : .leftToRight)
     }
@@ -427,6 +418,11 @@ struct CompanionPanel: View {
     @ViewBuilder private var overlayPage: some View {
         title(L("Auf dem Schreibtisch"))
         VStack(alignment: .leading, spacing: 8) {
+            Picker(L("Darstellung"), selection: $appearance) {
+                Text(L("Wie das System")).tag("system")
+                Text(L("Hell")).tag("light")
+                Text(L("Dunkel")).tag("dark")
+            }.pickerStyle(.menu)
             Picker(L("Sprache"), selection: $state.language) {
                 Text(L("Systemsprache")).tag("system")
                 ForEach(L10n.choices, id: \.0) { item in Text(verbatim: item.1).tag(item.0) }

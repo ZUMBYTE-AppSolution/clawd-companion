@@ -1493,9 +1493,9 @@ private struct HoverReadout: View, Equatable {
     var source = "Claude.ai"
     private(set) var language = L10n.locale.identifier
 
-    private let cream = Color(red: 0.97, green: 0.934, blue: 0.878)
-    private let muted = Color(red: 0.77, green: 0.72, blue: 0.69)
-    private let accent = Color(red: 1, green: 0.663, blue: 0.515)
+    private let cream = Ink.cream
+    private let muted = Ink.dim
+    private let accent = Ink.coral
 
     var body: some View {
         VStack(alignment: .leading, spacing: 7) {

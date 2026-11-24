@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+Choose Light, Dark or Follow system under **Overlay → Appearance**. Changes take effect immediately and persist after restart. On Linux, the Wayland companion window, tabs, menus and form fields now use matching colors.
+
 ## 0.7.0
 
 Open the maximized arena from High scores. Move with WASD or the arrow keys. Claw’d fires automatically. Each level has four waves and a boss. Start with three lives and earn one more every two completed levels. Combine piercing shots, multishot and blast damage. Your best level and wave are saved on this device.

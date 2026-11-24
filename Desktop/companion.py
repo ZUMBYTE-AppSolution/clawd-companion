@@ -19,9 +19,10 @@ from PySide6.QtCore import Qt, QEvent, QPoint, QRect, QSize, QTimer, QUrl, Signa
 from PySide6.QtGui import (QColor, QCursor, QDesktopServices, QFont, QFontDatabase, QGuiApplication, QIcon,
                           QPainter, QPalette, QPixmap, QPolygon, QRegion)
 from PySide6.QtMultimedia import QSoundEffect
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QHBoxLayout, QLabel, QMenu,
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QFrame, QHBoxLayout, QLabel, QMenu,
                                QPushButton, QScrollArea, QSlider, QSystemTrayIcon, QTabWidget, QVBoxLayout, QWidget)
 
+from appearance import Appearance, CompanionStage, PALETTES
 from arcade import Arcade
 from local_arena import LocalArenaRound
 from desktop_core import (ACTIVITIES, ASSETS, DEFAULTS, LANGUAGES, ROOT, SOUNDS, BrowserBridge, Language,
@@ -219,8 +220,9 @@ class Bubble(Layer):
         poly=QPolygon([QPoint(x,y) for x,y in [(4,0),(w-5,0),(w-5,3),(w-1,3),(w-1,h-13),(w-5,h-13),(w-5,h-9),
                                              (w//2+9,h-9),(w//2+1,h-1),(w//2-2,h-1),(w//2-2,h-9),(4,h-9),(4,h-12),(0,h-12),(0,3),(4,3)]])
         p.drawPolygon(poly)
-        p.fillRect(4,4,w-8,h-17,QColor("#fff1d8"))
-        p.setPen(QColor("#483030"))
+        colors = PALETTES[self.host.appearance.mode]
+        p.fillRect(4,4,w-8,h-17,QColor(colors["surface"]))
+        p.setPen(QColor(colors["ink"]))
         p.drawText(QRect(11,6,w-22,h-19), Qt.TextFlag.TextWordWrap.value | Qt.AlignmentFlag.AlignVCenter.value, self.value)
         p.end()
 
@@ -280,6 +282,7 @@ class Companion:
     def __init__(self, app, test_directory=None):
         self.testing = test_directory is not None
         self.app, self.prefs = app, Preferences(test_directory / "desktop.json" if self.testing else None)
+        self.appearance = Appearance(app, self.prefs["appearance"])
         self.language = Language(self.prefs["language"])
         self.tr = self.language
         self.mascots, self.icons = Atlas("mascot-atlas"), Atlas("menu-atlas")
@@ -291,11 +294,10 @@ class Companion:
         if app.platformName().startswith("wayland"):
             # Wayland applications cannot position arbitrary top levels or query foreign windows/cursors.
             # Keep every game, click and animation available in one regular compositor-managed window.
-            self.stage = QWidget()
+            self.stage = CompanionStage(self.appearance)
             self.stage.setWindowTitle("Claw’d Companion")
             self.stage.setMinimumSize(490,300)
             self.stage.resize(620,400)
-            self.stage.setStyleSheet("background-color:#e7d7bc")
             self.stage.show()
         self.pet, self.bubble, self.arena, self.targets, self.letters = Pet(self), Bubble(self), Arena(self), Targets(self), Letters(self)
         self.dialog = None
@@ -401,6 +403,8 @@ class Companion:
             self.cancel_motion()
             self.volley = None
             self.letters.hide()
+        if key == "appearance":
+            self.appearance.select(value)
         if key == "language":
             self.language.select(value)
             QTimer.singleShot(0, self.rebuild_settings)
@@ -637,7 +641,7 @@ class Companion:
     def open_endless(self):
         from endless_window import EndlessWindow
         if getattr(self, "endless", None) is None:
-            self.endless = EndlessWindow(self.tr, self.prefs, self.refresh_endless_record)
+            self.endless = EndlessWindow(self.tr, self.prefs, self.refresh_endless_record, self.appearance.mode)
             self.endless.destroyed.connect(lambda: setattr(self, "endless", None))
         self.endless.showMaximized()
         self.endless.raise_()
@@ -1057,7 +1061,10 @@ class Companion:
             scroll=QScrollArea()
             scroll.setWidgetResizable(True)
             content=QWidget()
+            content.setObjectName("settingsPage")
             layout=QVBoxLayout(content)
+            layout.setContentsMargins(18, 12, 18, 18)
+            layout.setSpacing(8)
             layout.setAlignment(Qt.AlignmentFlag.AlignTop)
             scroll.setWidget(content)
             tabs.addTab(scroll,self.tr(title))
@@ -1082,20 +1089,34 @@ class Companion:
             layout.addWidget(c)
         def heading(layout,key):
             title=label(layout,self.tr(key))
+            title.setProperty("heading", True)
             font=title.font()
             font.setBold(True)
             title.setFont(font)
 
         home=page("Begleiter")
-        label(home,"", "activity")
+        hero = QFrame()
+        hero.setObjectName("companionHeader")
+        hero_row = QHBoxLayout(hero)
+        hero_row.setContentsMargins(18, 8, 18, 8)
+        identity = QVBoxLayout()
+        identity.setSpacing(2)
+        label(identity, "Claw’d").setObjectName("companionName")
+        label(identity, "", "activity")
+        hero_row.addLayout(identity, 1)
+        self.header_sprite = QLabel()
+        hero_row.addWidget(self.header_sprite)
+        home.addWidget(hero)
         heading(home,"Kontingent")
         label(home,"","quota")
         button(home,"Nutzungsseite öffnen",lambda:QDesktopServices.openUrl(QUrl("https://claude.ai/settings/usage")))
         heading(home,"Mit Claw’d spielen")
         label(home,"","arcade")
         button(home,"Arcade starten",self.request_game)
-        button(home,"Streicheln",lambda:self.flash("happy"))
-        button(home,"Buchstabensalve testen",self.shoot)
+        play_actions = QHBoxLayout()
+        home.addLayout(play_actions)
+        button(play_actions,"Streicheln",lambda:self.flash("happy"))
+        button(play_actions,"Buchstabensalve testen",self.shoot)
         label(home,"","hits")
         heading(home,"Sprache")
         langs=QComboBox()
@@ -1108,6 +1129,14 @@ class Companion:
         button(home,"Info & Updates",self.updater.show)
 
         overlay=page("Overlay")
+        heading(overlay, "Darstellung")
+        appearance = QComboBox()
+        appearance.setAccessibleName(self.tr("Darstellung"))
+        for mode, title in (("system","Wie das System"),("light","Hell"),("dark","Dunkel")):
+            appearance.addItem(self.tr(title), mode)
+        appearance.setCurrentIndex(max(0, appearance.findData(self.prefs["appearance"])))
+        appearance.currentIndexChanged.connect(lambda i: self.set_pref("appearance", appearance.itemData(i)))
+        overlay.addWidget(appearance)
         for key,title in (("roaming","Spazieren"),("climbing","An Fenstern klettern"),("follow","Aktives Fenster für Claude-Aktionen"),("chase","Mauszeiger jagen"),
                           ("projectile","Codebogen und Buchstabenblaster"),("bubbles","Sprechblasen"),
                           ("voice","Eigene Meldungen vorlesen"),("reduce","Bewegung reduzieren"),("arcade","Im Leerlauf spielen"),
@@ -1171,9 +1200,7 @@ class Companion:
             self.online.refresh_language()
         scores.addWidget(self.online)
         dlg.finished.connect(lambda n:self.online.stop())
-        dlg.setStyleSheet("QDialog {background:#302831;} QScrollArea,QScrollArea>QWidget>QWidget {background:#3a3035;} "
-                          "QLabel,QCheckBox {color:#fff0d8;padding:4px;} QTabBar::tab {padding:8px;} "
-                          "QPushButton {padding:5px 9px;} QSlider {min-height:22px;}")
+
 
     def quota_text(self):
         quota=self.prefs["quota"]
@@ -1202,7 +1229,8 @@ class Companion:
         description=self.tr(POSE_LABELS.get(self.pose,"Startklar"))
         if self.pose=="juggling":
             description=self.tr("Jongliert mit einem Agenten") if len(self.agent_times)==1 else self.tr("Jongliert mit {0} Agenten",len(self.agent_times))
-        self.labels["activity"].setText("Claw’d · "+description)
+        self.labels["activity"].setText(description)
+        self.header_sprite.setPixmap(self.mascots.sprite(self.pose, time.monotonic()-self.pose_start, 2, self.left, self.prefs["reduce"]))
         self.labels["quota"].setText(self.quota_text())
         if self.prefs["graveUntil"]>time.time():
             seconds=math.ceil(self.prefs["graveUntil"]-time.time())
@@ -1301,6 +1329,14 @@ def main():
             desktop=Companion(app,Path(path))
             desktop.show_settings()
             desktop.set_pref("sound",False)
+            for mode in ("light", "dark"):
+                desktop.set_pref("appearance", mode)
+                app.processEvents()
+                roles = QPalette.ColorRole
+                assert app.palette().color(roles.Window).name() == PALETTES[mode]["window"]
+                assert app.palette().color(roles.WindowText).name() == PALETTES[mode]["ink"]
+                assert Preferences(Path(path) / "desktop.json")["appearance"] == mode
+            desktop.set_pref("appearance", "system")
             # Exercise the actual tab button and canvas event without a session or idle permission.
             desktop.set_pref("arcade", False)
             desktop.show_settings(3)

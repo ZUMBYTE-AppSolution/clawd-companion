@@ -9,11 +9,13 @@ LABELS = ("Endlos-Arena", "Level", "Welle", "Bestleistung", "Spielen", "Pause", 
           "Mehrfachschuss", "Flächenschaden", "Durchschuss", "Schnellfeuer", "Bewegen")
 
 class EndlessWindow(QWebEngineView):
-    def __init__(self, translate, preferences, on_record):
+    def __init__(self, translate, preferences, on_record, mode):
         super().__init__()
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         self.setWindowTitle(translate(LABELS[0]))
         self.titleChanged.connect(self.record)
+        self.mode = mode
+        self.loadFinished.connect(lambda ok: self.set_game_appearance(self.mode) if ok else None)
         self.preferences = preferences
         self.on_record = on_record
         url = QUrl.fromLocalFile(str(ROOT / "Resources/EndlessArena/index.html"))
@@ -21,6 +23,10 @@ class EndlessWindow(QWebEngineView):
                               "volume": preferences["volume"]/100 if preferences["sound"] else 0,
                               "muted": json.dumps(preferences["muted"]), "best": preferences["endlessBest"]})
         self.load(QUrl.fromEncoded(url.toEncoded().data() + b"#" + fragment.encode("ascii")))
+
+    def set_game_appearance(self, mode):
+        self.mode = mode
+        self.page().runJavaScript("document.documentElement.dataset.mode=" + json.dumps(mode))
 
     def record(self, title):
         prefix = "ClawdArena/"

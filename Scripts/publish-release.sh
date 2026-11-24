@@ -15,6 +15,7 @@ paths=()
 for asset in "${packages[@]}"; do test -s "$assets/$asset"; paths+=("$assets/$asset"); done
 python3 Scripts/make-update-manifest.py --tag "$tag" --notes "$notes" --assets-dir "$assets" --output "$assets/clawd-update.json"
 (cd "$assets" && sha256sum "${packages[@]}" clawd-update.json > SHA256SUMS)
+for image in Clawd-Linux-light.png Clawd-Linux-dark.png; do test -s "$assets/$image"; paths+=("$assets/$image"); done
 paths+=("$assets/clawd-update.json" "$assets/SHA256SUMS")
 state="$(gh release view "$tag" --json isDraft --jq '.isDraft' 2>/dev/null || true)"
 if [[ "$state" = false ]]; then

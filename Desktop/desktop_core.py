@@ -32,7 +32,7 @@ ACTIVITIES = {"working":"typing", "thinking":"thinking", "searching":"researchin
               "idle":"idle", "connected":"idle"}
 DEFAULTS = dict(language="system", roaming=True, chase=True, projectile=True, climbing=True, follow=True, bubbles=True,
                 reduce=False, visible=True, arcade=True, activePlay=False, sound=True, voice=False, volume=28,
-                endlessBest=0, scale=2, hits=0, dodges=0, graveUntil=0.0, muted=[], quota={}, highscore={}, finished=[], rankedFinished=[])
+                appearance="system", endlessBest=0, scale=2, hits=0, dodges=0, graveUntil=0.0, muted=[], quota={}, highscore={}, finished=[], rankedFinished=[])
 
 
 def config_dir():

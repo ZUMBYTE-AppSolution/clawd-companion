@@ -6,13 +6,17 @@
 
 आपके डेस्कटॉप पर रहने वाला एक नन्हा पिक्सेल केकड़ा। जब Claude को आपकी ज़रूरत होती है, Claw’d अपने लैपटॉप से नज़र उठाता है। बाकी समय वह कर्सर को देखता है या किसी विंडो के किनारे पैर लटकाकर बैठ जाता है।
 
-[**v0.7.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.7.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## अंतहीन अखाड़ा · 0.7.0
+## अंतहीन अखाड़ा · 0.7.1
+
+**ओवरले → दिखावट** में हल्का, गहरा या सिस्टम के अनुसार चुनें। बदलाव तुरंत लागू होता है और पुनः शुरू करने पर बना रहता है। Linux पर Wayland विंडो, टैब, मेनू और इनपुट फ़ील्ड में एक जैसी रंग योजना दिखती है।
 
 हाई स्कोर से अखाड़ा अधिकतम आकार में खोलें। WASD या तीर वाली कुंजियों से चलें। Claw’d अपने आप गोली चलाता है। हर स्तर में चार लहरें और एक बॉस है।
 
 शुरू में तीन जीवन मिलते हैं। हर दो स्तर पूरे करने पर एक और जीवन मिलता है। भेदी गोली, एक साथ कई गोलियाँ और क्षेत्रीय क्षति को मिलाएँ। आपका सर्वश्रेष्ठ स्तर और लहर इसी उपकरण पर सहेजे जाते हैं।
+
+<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Linux-dark.png"></p>
 
 ## ऐप की एक झलक
 
@@ -41,11 +45,11 @@ Windows और Linux में Qt इस्तेमाल होता है�
 
 | OS | इंस्टॉल करें |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion_0.7.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion-0.7.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/clawd-companion_0.7.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/clawd-companion-0.7.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/Clawd-Companion-0.7.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -57,13 +61,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.7.0_amd64.deb
+sudo apt install ./clawd-companion_0.7.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.7.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.7.1-1.x86_64.rpm
 ```
 
 ## जब Claude काम करता है

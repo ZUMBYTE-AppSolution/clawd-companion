@@ -15,6 +15,7 @@ final class CompanionDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private var desktop: OverlayController?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        CompanionAppearance.apply(UserDefaults.standard.string(forKey: "appearance") ?? "system")
         let running = NSRunningApplication.current
         if let id = running.bundleIdentifier,
            let previous = NSRunningApplication.runningApplications(withBundleIdentifier: id)
@@ -92,8 +93,7 @@ final class CompanionDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             panel.minSize = NSSize(width: 452, height: 518)
             panel.maxSize = NSSize(width: 590, height: 950)
             panel.isReleasedWhenClosed = false
-            panel.appearance = NSAppearance(named: .darkAqua)
-            panel.backgroundColor = NSColor(srgbRed: 0.105, green: 0.098, blue: 0.102, alpha: 1)
+            panel.backgroundColor = .windowBackgroundColor
             panel.contentView = NSHostingView(rootView: CompanionPanel(state: state))
             panel.center()
             panel.setFrameAutosaveName("ClawdCompanion.ControlPanel")

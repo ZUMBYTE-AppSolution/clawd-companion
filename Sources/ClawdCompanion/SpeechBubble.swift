@@ -17,10 +17,10 @@ enum SpeechKind: String {
 
     var accent: NSColor {
         switch self {
-        case .success: return NSColor(srgbRed: 0.62, green: 0.82, blue: 0.73, alpha: 1)
-        case .warning, .attention: return NSColor(srgbRed: 0.99, green: 0.80, blue: 0.52, alpha: 1)
-        case .error: return NSColor(srgbRed: 1.0, green: 0.64, blue: 0.62, alpha: 1)
-        case .info: return NSColor(srgbRed: 1.0, green: 0.67, blue: 0.53, alpha: 1)
+        case .success: return CompanionAppearance.color(light: 0x306954, dark: 0x9ed1ba)
+        case .warning, .attention: return CompanionAppearance.color(light: 0x764906, dark: 0xfccc85)
+        case .error: return CompanionAppearance.color(light: 0x91312f, dark: 0xffa39e)
+        case .info: return CompanionAppearance.color(light: 0x9c452d, dark: 0xffab87)
         }
     }
 }
@@ -285,7 +285,7 @@ enum PixelDialogue {
         cg.setShouldAntialias(false)
         let outline = CGColor(srgbRed: 0.21, green: 0.14, blue: 0.15, alpha: 1)
         let trim = CGColor(srgbRed: 0.91, green: 0.57, blue: 0.44, alpha: 1)
-        let fill = CGColor(srgbRed: 0.17, green: 0.13, blue: 0.15, alpha: 1)
+        let fill = CompanionAppearance.color(light: 0xfff2df, dark: 0x2b2126).cgColor
         let tail = SpeechPlacement.tail
         let horizontalTail = side == .left || side == .right
         let center = horizontalTail
@@ -333,7 +333,7 @@ final class SpeechCanvas: NSView {
         kind = notice.kind
         let language = L10n.code, rtl = L10n.isRTL
         heading = PixelDialogue.paragraph(notice.title, language: language, rightToLeft: rtl, color: kind.accent)
-        let cream = NSColor(srgbRed: 1, green: 0.95, blue: 0.85, alpha: 1)
+        let cream = CompanionAppearance.color(light: 0x2e2426, dark: 0xfff2d9)
         detail = PixelDialogue.paragraph(notice.message, language: language, rightToLeft: rtl, color: cream)
         setAccessibilityElement(true)
         setAccessibilityRole(.staticText)
