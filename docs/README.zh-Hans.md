@@ -6,11 +6,11 @@
 
 一只住在桌面上的像素小螃蟹。Claude 需要你回应时，Claw’d 会从笔记本电脑前抬起头。平时它会盯着鼠标，或找个窗沿歇歇脚。
 
-[**v0.7.2**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.2) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**最新版本**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## 无尽竞技场 · 0.7.2
+## 无尽竞技场
 
-Claw’d 空闲时优先坐在可用的标题栏上，每次停留 45 至 100 秒。移动窗口时，它也会跟着移动。在 Wayland 上，它会坐在伙伴窗口内的像素窗沿上。
+**0.7.2 · main** — Claw’d 空闲时优先坐在可用的标题栏上，每次停留 45 至 100 秒。移动窗口时，它也会跟着移动。在 Wayland 上，它会坐在伙伴窗口内的像素窗沿上。
 
 在 **叠加层 → 外观** 中选择浅色、深色或跟随系统。更改立即生效，重启后仍然保留。在 Linux 上，Wayland 窗口、标签页、菜单和输入框使用协调的颜色。
 
@@ -18,7 +18,7 @@ Claw’d 空闲时优先坐在可用的标题栏上，每次停留 45 至 100 �
 
 初始有三条命，每完成两关增加一条。穿透、多重射击与范围伤害可以叠加。最高关卡和波次保存在本机。
 
-<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-dark.png"></p>
+<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-dark.png"></p>
 
 ## 应用一览
 
@@ -47,11 +47,11 @@ Windows 和 Linux 版使用 Qt。在 Windows 和 X11 下，Claw’d 能读取活
 
 | OS | 安装 |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion_0.7.2_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion-0.7.2-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Linux-x86_64.tar.gz) |
+| macOS | PKG · ZIP |
+| Windows x64 | Setup · Portable ZIP |
+| Linux x86-64 | DEB · RPM · tar.gz |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/SHA256SUMS) · [最新版本](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest)
 
 **macOS · Homebrew**
 
@@ -60,16 +60,23 @@ brew tap zumbyte/clawd https://github.com/ZUMBYTE-AppSolution/clawd-companion
 brew install --cask zumbyte/clawd/clawd-companion
 ```
 
+**通过 Homebrew 更新**
+
+```sh
+brew update
+brew upgrade --cask zumbyte/clawd/clawd-companion
+```
+
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.7.2_amd64.deb
+sudo apt install ./clawd-companion_*_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.7.2-1.x86_64.rpm
+sudo dnf install ./clawd-companion-*-1.x86_64.rpm
 ```
 
 ## Claude 在忙什么

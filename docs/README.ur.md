@@ -6,11 +6,11 @@
 
 آپ کے ڈیسک ٹاپ کا ننھا سا پِکسل کیکڑا۔ جب Claude کو آپ کی توجہ چاہیے تو Claw’d اپنے لیپ ٹاپ سے سر اٹھاتا ہے۔ باقی وقت وہ کرسر کو تکتا ہے یا کسی ونڈو کے کنارے پر بیٹھ کر سستاتا ہے۔
 
-[**v0.7.2**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.2) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**تازہ ترین ریلیز**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## لامحدود میدان · 0.7.2
+## لامحدود میدان
 
-فرصت میں Claw’d خالی ٹائٹل بار پر 45 سے 100 سیکنڈ تک بیٹھنا پسند کرتا ہے۔ ونڈو کھسکانے پر وہ ساتھ حرکت کرتا ہے۔ Wayland پر اس کی اپنی ونڈو میں پکسل کنارہ ہے۔
+**0.7.2 · main** — فرصت میں Claw’d خالی ٹائٹل بار پر 45 سے 100 سیکنڈ تک بیٹھنا پسند کرتا ہے۔ ونڈو کھسکانے پر وہ ساتھ حرکت کرتا ہے۔ Wayland پر اس کی اپنی ونڈو میں پکسل کنارہ ہے۔
 
 **اوورلے ← ظاہری شکل** میں روشن، تاریک یا سسٹم کے مطابق منتخب کریں۔ تبدیلی فوراً لاگو ہوتی ہے اور دوبارہ شروع کرنے پر برقرار رہتی ہے۔ لینکس پر Wayland ونڈو، ٹیب، مینو اور اندراج کے خانوں میں ہم آہنگ رنگ دکھائی دیتے ہیں۔
 
@@ -18,7 +18,7 @@
 
 تین جانوں سے آغاز کریں۔ ہر دو سطحیں مکمل کرنے پر ایک اضافی جان ملتی ہے۔ آر پار گولی، متعدد فائر اور دھماکے کو ملائیں۔ بہترین سطح اور لہر اسی آلے پر محفوظ رہتی ہیں۔
 
-<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-dark.png"></p>
+<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-dark.png"></p>
 
 ## ایپ کی ایک جھلک
 
@@ -47,11 +47,11 @@ Windows اور Linux میں Qt استعمال ہوتا ہے۔ Windows اور X11
 
 | OS | انسٹال کریں |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion_0.7.2_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion-0.7.2-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Linux-x86_64.tar.gz) |
+| macOS | PKG · ZIP |
+| Windows x64 | Setup · Portable ZIP |
+| Linux x86-64 | DEB · RPM · tar.gz |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/SHA256SUMS) · [تازہ ترین ریلیز](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest)
 
 **macOS · Homebrew**
 
@@ -60,16 +60,23 @@ brew tap zumbyte/clawd https://github.com/ZUMBYTE-AppSolution/clawd-companion
 brew install --cask zumbyte/clawd/clawd-companion
 ```
 
+**Homebrew سے اپ ڈیٹ کریں**
+
+```sh
+brew update
+brew upgrade --cask zumbyte/clawd/clawd-companion
+```
+
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.7.2_amd64.deb
+sudo apt install ./clawd-companion_*_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.7.2-1.x86_64.rpm
+sudo dnf install ./clawd-companion-*-1.x86_64.rpm
 ```
 
 ## جب Claude کام کر رہا ہو

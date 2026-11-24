@@ -6,11 +6,11 @@
 
 आपके डेस्कटॉप पर रहने वाला एक नन्हा पिक्सेल केकड़ा। जब Claude को आपकी ज़रूरत होती है, Claw’d अपने लैपटॉप से नज़र उठाता है। बाकी समय वह कर्सर को देखता है या किसी विंडो के किनारे पैर लटकाकर बैठ जाता है।
 
-[**v0.7.2**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.2) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**नवीनतम रिलीज़**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## अंतहीन अखाड़ा · 0.7.2
+## अंतहीन अखाड़ा
 
-खाली समय में Claw’d किसी खाली शीर्षक पट्टी पर 45 से 100 सेकंड तक बैठना पसंद करता है। विंडो खिसकाने पर वह भी साथ चलता है। Wayland पर उसकी अपनी विंडो में एक पिक्सेल चौखट है।
+**0.7.2 · main** — खाली समय में Claw’d किसी खाली शीर्षक पट्टी पर 45 से 100 सेकंड तक बैठना पसंद करता है। विंडो खिसकाने पर वह भी साथ चलता है। Wayland पर उसकी अपनी विंडो में एक पिक्सेल चौखट है।
 
 **ओवरले → दिखावट** में हल्का, गहरा या सिस्टम के अनुसार चुनें। बदलाव तुरंत लागू होता है और पुनः शुरू करने पर बना रहता है। Linux पर Wayland विंडो, टैब, मेनू और इनपुट फ़ील्ड में एक जैसी रंग योजना दिखती है।
 
@@ -18,7 +18,7 @@
 
 शुरू में तीन जीवन मिलते हैं। हर दो स्तर पूरे करने पर एक और जीवन मिलता है। भेदी गोली, एक साथ कई गोलियाँ और क्षेत्रीय क्षति को मिलाएँ। आपका सर्वश्रेष्ठ स्तर और लहर इसी उपकरण पर सहेजे जाते हैं।
 
-<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-dark.png"></p>
+<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-dark.png"></p>
 
 ## ऐप की एक झलक
 
@@ -47,11 +47,11 @@ Windows और Linux में Qt इस्तेमाल होता है�
 
 | OS | इंस्टॉल करें |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion_0.7.2_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion-0.7.2-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Linux-x86_64.tar.gz) |
+| macOS | PKG · ZIP |
+| Windows x64 | Setup · Portable ZIP |
+| Linux x86-64 | DEB · RPM · tar.gz |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/SHA256SUMS) · [नवीनतम रिलीज़](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest)
 
 **macOS · Homebrew**
 
@@ -60,16 +60,23 @@ brew tap zumbyte/clawd https://github.com/ZUMBYTE-AppSolution/clawd-companion
 brew install --cask zumbyte/clawd/clawd-companion
 ```
 
+**Homebrew से अपडेट करें**
+
+```sh
+brew update
+brew upgrade --cask zumbyte/clawd/clawd-companion
+```
+
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.7.2_amd64.deb
+sudo apt install ./clawd-companion_*_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.7.2-1.x86_64.rpm
+sudo dnf install ./clawd-companion-*-1.x86_64.rpm
 ```
 
 ## जब Claude काम करता है

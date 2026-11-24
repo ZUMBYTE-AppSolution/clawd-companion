@@ -6,11 +6,11 @@
 
 A pixel crab for your desktop. Claw’d looks up from his notebook when Claude needs your attention, watches your cursor and finds a window ledge to rest on between replies.
 
-[**v0.7.2**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.2) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**Latest release**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## Endless arena · 0.7.2
+## Endless arena
 
-Claw’d now prefers a free title bar for idle breaks lasting 45 to 100 seconds. Move the window and Claw’d moves with it. On Wayland, the companion window has its own pixel ledge.
+**0.7.2 · main** — Claw’d now prefers a free title bar for idle breaks lasting 45 to 100 seconds. Move the window and Claw’d moves with it. On Wayland, the companion window has its own pixel ledge.
 
 Choose Light, Dark or Follow system under **Overlay → Appearance**. Changes take effect immediately and persist after restart. On Linux, the Wayland companion window, tabs, menus and form fields now use matching colors.
 
@@ -18,7 +18,7 @@ Open the maximized arena from High scores. Move with WASD or the arrow keys. Cla
 
 Start with three lives and earn one more every two completed levels. Combine piercing shots, multishot and blast damage. Your best level and wave are saved on this device.
 
-<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Linux-dark.png"></p>
+<p><img width="47%" alt="Claw’d · ☀" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-light.png"> <img width="47%" alt="Claw’d · ☾" src="https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/Clawd-Linux-dark.png"></p>
 
 ## Inside the app
 
@@ -47,11 +47,11 @@ Windows and Linux use Qt. On Windows and X11, Claw’d can read foreground windo
 
 | OS | Install |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion_0.7.2_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/clawd-companion-0.7.2-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/Clawd-Companion-0.7.2-Linux-x86_64.tar.gz) |
+| macOS | PKG · ZIP |
+| Windows x64 | Setup · Portable ZIP |
+| Linux x86-64 | DEB · RPM · tar.gz |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.2/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest/download/SHA256SUMS) · [Latest release](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/latest)
 
 **macOS · Homebrew**
 
@@ -60,16 +60,23 @@ brew tap zumbyte/clawd https://github.com/ZUMBYTE-AppSolution/clawd-companion
 brew install --cask zumbyte/clawd/clawd-companion
 ```
 
+**Update with Homebrew**
+
+```sh
+brew update
+brew upgrade --cask zumbyte/clawd/clawd-companion
+```
+
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.7.2_amd64.deb
+sudo apt install ./clawd-companion_*_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.7.2-1.x86_64.rpm
+sudo dnf install ./clawd-companion-*-1.x86_64.rpm
 ```
 
 ## What Claude does on screen
