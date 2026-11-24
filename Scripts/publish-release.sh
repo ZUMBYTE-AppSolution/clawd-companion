@@ -38,15 +38,17 @@ else
     gh release edit "$tag" --draft=false --latest --target "$GITHUB_SHA" --notes-file "$notes"
     cask_assets="$assets"
 fi
-# Only the cask changes. This commit does not retrigger the release workflow.
-git fetch origin main:refs/remotes/origin/main
-git switch -C clawd-cask-publish origin/main
-if [[ "$(cat VERSION)" != "$version" ]]; then echo "A newer version is already on main"; exit 0; fi
-python3 Scripts/render-cask.py "$cask_assets"
-if [[ -n "$(git status --porcelain -- Casks/clawd-companion.rb)" ]]; then
-    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-    git config user.name "github-actions[bot]"
+# Pin the published archive even while main is preparing a newer version.
+git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+git config user.name "github-actions[bot]"
+for attempt in 1 2 3; do
+    git fetch origin main:refs/remotes/origin/main
+    git switch -C clawd-cask-publish origin/main
+    python3 Scripts/render-cask.py "$cask_assets" "$version"
+    if [[ -z "$(git status --porcelain -- Casks/clawd-companion.rb)" ]]; then exit 0; fi
     git add Casks/clawd-companion.rb
     git commit -m "Pin Homebrew cask for $tag"
-    git push origin HEAD:main
-fi
+    if git push origin HEAD:main; then exit 0; fi
+done
+echo "Could not push Homebrew cask for $tag" >&2
+exit 1

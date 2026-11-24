@@ -1,6 +1,6 @@
 cask "clawd-companion" do
-  version "0.6.1"
-  sha256 "a19038331d5c84641c9e779c19fc836aaac64e35dbefc9d56bdd143d5c2408e7"
+  version "0.7.1"
+  sha256 "8fac26668703442c6ff34b8fc88075173186f0b7c4ca788a3e8fa4386730857d"
 
   url "https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v#{version}/Clawd-Companion-#{version}-macOS-universal.zip"
   name "Claw’d Companion"
