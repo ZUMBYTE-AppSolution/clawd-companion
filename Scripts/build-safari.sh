@@ -5,6 +5,7 @@ if [[ $# != 1 || ! -f "$1/Contents/Info.plist" ]]; then
     exit 2
 fi
 root="$(cd "$(dirname "$0")/.." && pwd)"
+source "$root/Scripts/mac-signing.sh"
 host="$1/Contents"
 out="$host/PlugIns/ClawdSafari.appex/Contents"
 src="$root/SafariExtension"
@@ -30,5 +31,5 @@ command_args=(-arch arm64 -arch x86_64 -mmacosx-version-min=13.0 -Os -fobjc-arc 
 for key in com.apple.FinderInfo com.apple.ResourceFork; do
     /usr/bin/xattr -dr "$key" "$out/.." 2>/dev/null || true
 done
-/usr/bin/codesign --force --sign "${CLAWD_SIGN_IDENTITY:--}" --timestamp=none --entitlements "$src/ClawdSafari.entitlements" "$out/.."
+sign_bundle "$out/.." --entitlements "$src/ClawdSafari.entitlements"
 /usr/bin/codesign --verify --strict "$out/.."

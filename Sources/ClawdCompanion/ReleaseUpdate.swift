@@ -37,7 +37,7 @@ struct CompanionRelease {
     static let repository = URL(string: "https://github.com/ZUMBYTE-AppSolution/clawd-companion")!
     static let manifestURL = repository.appendingPathComponent("releases/latest/download/clawd-update.json")
     static let limit = 768 * 1024
-    static let installed = ReleaseVersion(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") ?? ReleaseVersion("0.7.2")!
+    static let installed = ReleaseVersion(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") ?? ReleaseVersion("0.7.3")!
     let version: ReleaseVersion
     let notes: String
     private let translations: [String: String]
@@ -87,7 +87,7 @@ struct CompanionRelease {
         return ["release-assets.githubusercontent.com", "objects.githubusercontent.com", "github-releases.githubusercontent.com"].contains(host)
     }
 
-    private final class Redirects: NSObject, URLSessionTaskDelegate {
+    final class Redirects: NSObject, URLSessionTaskDelegate {
         func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse,
                         newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
             completionHandler(CompanionRelease.trustedMetadataURL(request.url) ? request : nil)

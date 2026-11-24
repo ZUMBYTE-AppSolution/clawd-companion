@@ -2,6 +2,14 @@ import XCTest
 @testable import ClawdCompanion
 
 final class ReleaseUpdateTests: XCTestCase {
+    func testPublishedManifestThroughMacUpdater() async throws {
+        guard ProcessInfo.processInfo.environment["CLAWD_LIVE_UPDATE_CHECK"] == "1" else {
+            throw XCTSkip("Enabled for the macOS distribution build")
+        }
+        let release = try await CompanionRelease.latest()
+        XCTAssertEqual(release.download?.pathExtension, "pkg")
+    }
+
     private func data(_ version: String = "0.10.0", assets: [String]? = nil) throws -> Data {
         try JSONSerialization.data(withJSONObject: ["schema": 1, "version": version, "tag": "v" + version,
             "notes": "## Changes\n- Item", "notesByLanguage": ["de": "Änderungen", "pt-BR": "Brasil"],

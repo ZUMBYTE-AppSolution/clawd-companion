@@ -23,6 +23,8 @@ private struct ReleaseNotes: View {
 }
 
 struct ReleaseInfoView: View {
+    @State private var installing = false
+    @State private var installMessage: String?
     @ObservedObject var updates: ReleaseUpdateCenter
 
     var body: some View {
@@ -40,8 +42,27 @@ struct ReleaseInfoView: View {
             }.font(.system(size: 12))
             if let release = updates.release {
                 if release.version > updates.installed, let url = release.download {
-                    Link(destination: url) { Label(L("Paket herunterladen"), systemImage: "arrow.down.circle") }
-                        .font(.system(size: 13, weight: .semibold))
+                    if let team = SignedUpdateInstaller.currentTeam(), url.pathExtension == "pkg" {
+                        Button {
+                            installing = true
+                            installMessage = nil
+                            Task {
+                                defer { installing = false }
+                                do {
+                                    let file = try await SignedUpdateInstaller.prepare(release, team: team)
+                                    guard NSWorkspace.shared.open(file) else { throw UpdateInstallError.launch }
+                                } catch {
+                                    installMessage = "Update konnte nicht geprüft oder geöffnet werden."
+                                }
+                            }
+                        } label: { Label(L("Update installieren"), systemImage: "arrow.down.circle") }
+                        .disabled(installing)
+                        if installing { ProgressView().controlSize(.small) }
+                        if let installMessage { Text(L(installMessage)).font(.caption) }
+                    } else {
+                        Link(destination: url) { Label(L("Paket herunterladen"), systemImage: "arrow.down.circle") }
+                            .font(.system(size: 13, weight: .semibold))
+                    }
                 }
                 Divider()
                 Text(L("Änderungen in Version {0}", release.version.raw)).font(.system(size: 13, weight: .semibold))

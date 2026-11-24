@@ -2,6 +2,7 @@
 set -euo pipefail
 
 project_dir="$(cd "$(dirname "$0")/.." && pwd)"
+source "$project_dir/Scripts/mac-signing.sh"
 output_dir="${1:-$project_dir/.build/app}"
 mkdir -p "$output_dir"
 staging="$(mktemp -d "${TMPDIR:-/tmp}/clawd-build.XXXXXXXX")"
@@ -27,7 +28,7 @@ if [[ -f "$project_dir/Resources/ArenaEndpoint.txt" ]]; then
 fi
 ditto --norsrc --noextattr --noqtn "$project_dir/BrowserExtension" "$contents/Resources/BrowserExtension"
 bash "$project_dir/Scripts/build-safari.sh" "$app"
-codesign --force --sign "${CLAWD_SIGN_IDENTITY:--}" --timestamp=none "$app"
+sign_bundle "$app"
 codesign --verify --deep --strict --verbose=1 "$app"
 ditto --norsrc --noextattr --noqtn "$app" "$output_dir/Clawd Companion.app"
 echo "Gebaut: $output_dir/Clawd Companion.app"

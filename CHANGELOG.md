@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.3
+
+Signed Mac builds download updates in the app, verify the publisher and open macOS Installer. Install the signed PKG manually once when upgrading from an earlier ad-hoc build.
+
 ## 0.7.2
 
 Claw’d now prefers a free title bar for idle breaks lasting 45 to 100 seconds. Move the window and Claw’d moves with it. On Wayland, the companion window has its own pixel ledge.
