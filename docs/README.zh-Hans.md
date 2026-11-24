@@ -6,13 +6,13 @@
 
 一只住在桌面上的像素小螃蟹。Claude 需要你回应时，Claw’d 会从笔记本电脑前抬起头。平时它会盯着鼠标，或找个窗沿歇歇脚。
 
-[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.7.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## 0.6.1 版新功能
+## 无尽竞技场 · 0.7.0
 
-在 Mac 上，Claw’d 现在可以直接从 Claude 桌面版的用量页面读取剩余额度。在用量限额中，Claude 桌面版与 Claude.ai、Claude Code 分别作为独立数据来源。 在 Mac、Windows 和 Linux 上，选择**高分榜 → 开始本地对局**即可随时离线游玩。
+在高分榜中打开最大化的竞技场。用 WASD 或方向键移动，Claw’d 会自动射击。每关有四波敌人和一个首领。
 
-[0.6.1 版新功能](releases/0.6.1/zh.md)
+初始有三条命，每完成两关增加一条。穿透、多重射击与范围伤害可以叠加。最高关卡和波次保存在本机。
 
 ## 应用一览
 
@@ -26,7 +26,6 @@
 | --- | --- |
 | ![关于和更新](media/app-updates.png) | ![高分榜与竞技场账号](media/app-highscores.png) |
 
-![本地竞技场](media/app-local-arena.png)
 
 更新面板截图时未请求网络。高分榜截图使用原生排行榜界面，展示的是本地测试会话和示例成绩。
 
@@ -42,11 +41,11 @@ Windows 和 Linux 版使用 Qt。在 Windows 和 X11 下，Claw’d 能读取活
 
 | OS | 安装 |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion_0.7.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion-0.7.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -58,13 +57,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.1_amd64.deb
+sudo apt install ./clawd-companion_0.7.0_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.7.0-1.x86_64.rpm
 ```
 
 ## Claude 在忙什么
@@ -135,8 +134,6 @@ sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 Mac 上的桌面自动对局会在至少 90 秒没有输入后启动。Claw’d 有 100 点生命值。击退两波随机敌人后迎战首领。留意敌人的血条，收集治疗、护盾和速射道具。输入会暂停游戏；允许在使用电脑时游玩后，可以点击助战。战败后会留下刻着 GIT 的墓碑，现实时间五分钟后它会破土而出。音乐和各项音效可以分别开关。
 
 在悬浮层设置中选择语言、减少动态效果并调节音量。各个音效可单独关闭。Claude.ai 通知保留原文。
-
-在 Mac、Windows 和 Linux 上，打开**高分榜 → 开始本地对局**即可马上游玩。本地对局可以离线进行，无需账号。你可以随时主动开始，不必等待设备空闲，自动游戏设置也会保留。一局结束后，只有你亲自击中过敌人或收集了生效道具，该局才会计入本机统计。在线排行榜只统计登录后在服务器上进行的对局。
 
 ## 高分榜与竞技场账号
 

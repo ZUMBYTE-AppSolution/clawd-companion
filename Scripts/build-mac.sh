@@ -21,6 +21,7 @@ cp -X "$project_dir/Resources/Info.plist" "$contents/Info.plist"
 cp -X "$project_dir/Resources/ClawdDialogue.ttf" "$project_dir/Resources/Clawd.icns" "$project_dir/Resources/MenuPet.png" \
     "$project_dir/Resources/MenuPet@2x.png" "$contents/Resources/"
 ditto --norsrc --noextattr --noqtn "$project_dir/Resources/Languages" "$contents/Resources/Languages"
+ditto --norsrc --noextattr --noqtn "$project_dir/Resources/EndlessArena" "$contents/Resources/EndlessArena"
 if [[ -f "$project_dir/Resources/ArenaEndpoint.txt" ]]; then
     cp -X "$project_dir/Resources/ArenaEndpoint.txt" "$contents/Resources/ArenaEndpoint.txt"
 fi

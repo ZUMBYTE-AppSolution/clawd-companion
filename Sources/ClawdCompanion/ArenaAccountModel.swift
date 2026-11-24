@@ -43,7 +43,7 @@ final class ArenaAccountModel: ObservableObject {
         if session != nil { await refresh() }
     }
 
-    func authenticate(name: String, email: String?, password: String) async {
+    func authenticate(name: String, email: String?, password: String, remember: Bool = false) async {
         guard !busy, session == nil else { return }
         busy = true
         message = nil
@@ -51,7 +51,7 @@ final class ArenaAccountModel: ObservableObject {
             let login = try await client.authenticate(name: name.trimmingCharacters(in: .whitespacesAndNewlines),
                 email: email?.trimmingCharacters(in: .whitespacesAndNewlines), password: password)
             setSession(login)
-            do { try vault.save(login) }
+            do { if remember { try vault.save(login) } else { try vault.clear() } }
             catch { show(error) }
             try await readScores(for: login)
         } catch { show(error) }

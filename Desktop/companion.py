@@ -628,6 +628,21 @@ class Companion:
             self.requested=True
             self.next_arcade=time.monotonic()
 
+    def refresh_endless_record(self):
+        best = self.prefs["endlessBest"]
+        self.endless_best.setVisible(best > 0)
+        if best:
+            self.endless_best.setText(f'{self.tr("Bestleistung")} · {self.tr("Level")} {(best-1)//4+1} · {self.tr("Welle")} {(best-1)%4+1}')
+
+    def open_endless(self):
+        from endless_window import EndlessWindow
+        if getattr(self, "endless", None) is None:
+            self.endless = EndlessWindow(self.tr, self.prefs, self.refresh_endless_record)
+            self.endless.destroyed.connect(lambda: setattr(self, "endless", None))
+        self.endless.showMaximized()
+        self.endless.raise_()
+        self.endless.activateWindow()
+
     def toggle_local_round(self):
         if self.manual.playing:
             self.manual.clear()
@@ -1139,29 +1154,12 @@ class Companion:
         label(links,"","hookMessage")
 
         scores=page("Highscores")
-        from online_arena import RankedCanvas
-        heading(scores, "Lokale Arena")
-        self.local_button = QPushButton(self.tr("Lokale Runde starten"))
-        self.local_button.clicked.connect(lambda checked=False: self.toggle_local_round())
-        label(scores, self.tr("Klicke auf Viren und Power-ups. Nur selbst gespielte Runden zählen."))
-        local_actions = QHBoxLayout()
-        local_actions.addWidget(self.local_button)
-        self.local_pause = QPushButton()
-        self.local_pause.clicked.connect(lambda checked=False: self.toggle_local_pause())
-        self.local_pause.hide()
-        local_actions.addWidget(self.local_pause)
-        local_actions.addStretch(1)
-        scores.addLayout(local_actions)
-        # Capture even brief tab switches that fall between two simulation ticks.
-        local_page = tabs.count() - 1
-        tabs.currentChanged.connect(lambda index: self.pause_local_round() if index != local_page else None)
-        self.local_status = QLabel()
-        self.local_status.hide()
-        scores.addWidget(self.local_status)
-        self.panel_canvas = RankedCanvas()
-        self.panel_canvas.clicked.connect(self.local_round_click)
-        self.panel_canvas.hide()
-        scores.addWidget(self.panel_canvas)
+        self.endless_button = QPushButton(self.tr("Endlos-Arena"))
+        self.endless_button.clicked.connect(self.open_endless)
+        scores.addWidget(self.endless_button)
+        self.endless_best = QLabel()
+        scores.addWidget(self.endless_best)
+        self.refresh_endless_record()
         heading(scores,"Meine Arena-Statistik")
         label(scores,"","score")
         label(scores,self.tr("Nur abgeschlossene Runden, in denen du selbst einen Gegner getroffen oder ein wirksames Power-up eingesammelt hast, zählen."))
@@ -1275,6 +1273,7 @@ def main():
     testing="--self-test" in sys.argv
     if testing and not os.environ.get("QT_QPA_PLATFORM") and not os.environ.get("DISPLAY") and sys.platform.startswith("linux"):
         os.environ["QT_QPA_PLATFORM"]="offscreen"
+    QApplication.setAttribute(Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
     app=QApplication(sys.argv)
     app.setApplicationName("ClawdCompanion")
     app.setOrganizationName("Zumbyte")
@@ -1306,25 +1305,11 @@ def main():
             desktop.set_pref("arcade", False)
             desktop.show_settings(3)
             app.processEvents()
-            desktop.local_button.click()
+            desktop.endless_button.click()
             app.processEvents()
-            assert desktop.manual.playing and desktop.panel_canvas.isVisible()
-            assert not desktop.prefs["activePlay"] and not desktop.prefs["arcade"]
-            from PySide6.QtCore import QEvent, QPointF
-            from PySide6.QtGui import QMouseEvent
-            x, y, w, h = next(desktop.manual.scene.hit_rects())
-            box = desktop.panel_canvas.box()
-            point = QPointF(box.x() + (x + w/2)*box.width()/300, box.y() + (y + h/2)*box.height()/160)
-            click = QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
-                                Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier)
-            QApplication.sendEvent(desktop.panel_canvas, click)
-            assert desktop.manual.scene.stats["manualDamage"] > 0
-            desktop.local_pause.click()
-            assert desktop.manual.paused
-            desktop.local_pause.click()
-            assert not desktop.manual.paused
-            desktop.local_button.click()
-            assert not desktop.manual.playing and not desktop.prefs["highscore"]
+            assert desktop.endless.isMaximized() and not desktop.manual.playing
+            assert (ROOT/"Resources/EndlessArena/arena.js").is_file()
+            desktop.endless.close()
             desktop.set_pref("arcade", True)
             desktop.set_pref("activePlay",True)
             desktop.request_game()

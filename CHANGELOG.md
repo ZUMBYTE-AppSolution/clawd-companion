@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.0
+
+Open the maximized arena from High scores. Move with WASD or the arrow keys. Claw’d fires automatically. Each level has four waves and a boss. Start with three lives and earn one more every two completed levels. Combine piercing shots, multishot and blast damage. Your best level and wave are saved on this device.
+
+
 ## [0.6.1](docs/releases/0.6.1.md)
 
 Play a local round directly from Highscores on Mac, Windows and Linux. The Mac companion can also display the account limits shown in Claude Desktop’s Usage settings.

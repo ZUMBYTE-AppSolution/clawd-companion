@@ -1,11 +1,12 @@
 """Optional, server-scored arena and account controls for the desktop Highscores tab."""
 from concurrent.futures import ThreadPoolExecutor
 import json
+import arena_session
 from time import monotonic
 
 from PySide6.QtCore import QCoreApplication, QRectF, Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QPainter, QPixmap
-from PySide6.QtWidgets import (QAbstractItemView, QDialog, QDialogButtonBox, QFormLayout, QHBoxLayout,
+from PySide6.QtWidgets import (QAbstractItemView, QCheckBox, QDialog, QDialogButtonBox, QFormLayout, QHBoxLayout,
                                QLabel, QLineEdit, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 from arena_wire import ArenaClient, ArenaError, RemoteFrame, USER, kd_ratio, leaderboard_rows, number, validate_account
@@ -73,6 +74,8 @@ class OnlineArenaWidget(QWidget):
         self._workers = ThreadPoolExecutor(max_workers=3, thread_name_prefix="clawd-arena")
         self._pending = {}
         self._token, self._username = "", ""
+        self._remember = False
+        self._stored = False
         self._auth_epoch = self._run_epoch = 0
         self._next_poll = self._opened = 0.0
         self._next_click = None
@@ -125,7 +128,15 @@ class OnlineArenaWidget(QWidget):
         self._timer.setInterval(70)
         self._timer.timeout.connect(self._pump)
         QCoreApplication.instance().aboutToQuit.connect(self._shutdown)
+        if client is None:
+            try:
+                self._token, self._username = arena_session.read()
+                self._stored = bool(self._token)
+            except Exception:
+                pass
         self.refresh_language()
+        if self._token:
+            self._refresh()
 
     def _shutdown(self):
         self._timer.stop()
@@ -220,6 +231,8 @@ class OnlineArenaWidget(QWidget):
         if register:
             form.addRow(t("E-Mail"), mail)
         form.addRow(t("Passwort"), password)
+        remember = QCheckBox(t("Angemeldet bleiben"))
+        form.addRow(remember)
         buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)
@@ -228,6 +241,7 @@ class OnlineArenaWidget(QWidget):
             password.clear()
             dialog.deleteLater()
             return
+        self._remember = remember.isChecked()
         name, secret, email = user.text().strip(), password.text(), mail.text().strip()
         password.clear()
         dialog.deleteLater()
@@ -245,6 +259,14 @@ class OnlineArenaWidget(QWidget):
         self._sync()
 
     def _logout(self):
+        if self._stored:
+            try:
+                arena_session.clear()
+            except Exception:
+                self._message_key = "Schlüsselbund nicht verfügbar"
+                self._sync()
+                return
+            self._stored = False
         token = self._token
         self.stop()
         self._clear_auth()
@@ -336,6 +358,12 @@ class OnlineArenaWidget(QWidget):
             self._token, self._username = token, username
             self._refresh()
             self._message_key = ""
+            if self._remember:
+                try:
+                    arena_session.save(token, username)
+                    self._stored = True
+                except Exception:
+                    self._message_key = "Schlüsselbund nicht verfügbar"
         elif op == "board":
             self._rows = leaderboard_rows(data)
             self.table.setRowCount(len(self._rows))
@@ -373,6 +401,12 @@ class OnlineArenaWidget(QWidget):
     def _failure(self, op, error):
         code, http = getattr(error, "code", "network"), getattr(error, "http", 0)
         if http == 401 and op not in ("login", "register"):
+            if self._stored:
+                try:
+                    arena_session.clear()
+                except Exception:
+                    pass
+                self._stored = False
             self.stop()
             self._clear_auth()
         if op == "click" and code == "network" and self._retry_click < 2:

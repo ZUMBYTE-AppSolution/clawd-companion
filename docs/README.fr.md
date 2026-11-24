@@ -6,13 +6,13 @@
 
 Un petit crabe en pixels sur votre bureau. Claw’d lève les yeux de son portable quand Claude a besoin de vous, suit le pointeur du regard et, entre deux réponses, trouve un rebord de fenêtre où se poser.
 
-[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.7.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## Nouveautés de la version 0.6.1
+## Arène sans fin · 0.7.0
 
-Sur Mac, Claw’d peut désormais lire le quota restant directement dans la page d’utilisation de Claude Desktop. L’application Claude a sa propre source de quotas, aux côtés de Claude.ai et de Claude Code. Sur Mac, Windows et Linux, choisissez **Meilleurs scores → Commencer une manche locale** pour jouer hors ligne à tout moment.
+Ouvrez l’arène agrandie depuis les meilleurs scores. Déplacez-vous avec WASD ou les flèches. Claw’d tire automatiquement. Chaque niveau comporte quatre vagues et un boss.
 
-[Nouveautés de la version 0.6.1](releases/0.6.1/fr.md)
+Vous démarrez avec trois vies et en gagnez une tous les deux niveaux terminés. Combinez tirs perforants, tirs multiples et dégâts de zone. Votre meilleur niveau et votre meilleure vague sont enregistrés sur cet appareil.
 
 ## Aperçu de l’application
 
@@ -26,7 +26,6 @@ Sur Mac, Claw’d peut désormais lire le quota restant directement dans la page
 | --- | --- |
 | ![À propos et mises à jour](media/app-updates.png) | ![Meilleurs scores et comptes d’arène](media/app-highscores.png) |
 
-![Arène locale](media/app-local-arena.png)
 
 Le panneau de mise à jour a été photographié sans requête réseau. La capture des meilleurs scores montre le classement natif avec une session de test locale et des scores fictifs.
 
@@ -42,11 +41,11 @@ Windows et Linux utilisent Qt. Sous Windows et X11, Claw’d peut lire la positi
 
 | OS | Installation |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion_0.7.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion-0.7.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -58,13 +57,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.1_amd64.deb
+sudo apt install ./clawd-companion_0.7.0_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.7.0-1.x86_64.rpm
 ```
 
 ## Quand Claude travaille
@@ -135,8 +134,6 @@ Sur Mac, faites glisser Claw’d sur une fenêtre, faites un clic droit et chois
 Sur Mac, une manche automatique sur le bureau peut démarrer après au moins 90 secondes sans saisie. Claw’d a 100 points de vie. Deux vagues aléatoires précèdent le boss. Surveillez les barres de vie et ramassez les soins, boucliers ou tirs rapides. Bouger la souris ou taper suspend la partie. Autorisez le jeu pendant l’utilisation pour aider en cliquant. Après une défaite, une pierre tombale marquée GIT reste en place cinq minutes réelles avant que Claw’d sorte de terre. La musique et les effets se règlent séparément.
 
 Dans les réglages de la superposition, choisissez la langue, réduisez les animations et ajustez le volume. Chaque son peut être coupé séparément. Les notifications de Claude.ai gardent leur texte d’origine.
-
-Sur Mac, Windows et Linux, ouvrez **Meilleurs scores → Commencer une manche locale** pour jouer immédiatement. Les manches locales fonctionnent hors ligne, sans compte. Vous pouvez en lancer une à tout moment, sans attendre l’inactivité de l’ordinateur. Vos réglages de jeu automatique sont conservés. Une manche terminée entre dans vos statistiques locales si vous avez touché un ennemi ou ramassé un bonus qui a fait effet. Le classement en ligne compte uniquement les manches jouées sur le serveur après connexion.
 
 ## Meilleurs scores et comptes d’arène
 

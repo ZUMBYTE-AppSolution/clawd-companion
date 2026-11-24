@@ -6,13 +6,13 @@
 
 سلطعون صغير من البكسلات يسكن سطح مكتبك. يرفع Claw’d رأسه عن حاسوبه عندما يحتاج Claude إلى انتباهك، ويتابع المؤشر بعينيه، ثم يجد حافة نافذة يجلس عليها بين إجابتين.
 
-[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.7.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## الجديد في الإصدار 0.6.1
+## الساحة اللانهائية · 0.7.0
 
-على Mac، يستطيع Claw’d الآن قراءة حصتك المتبقية مباشرة من صفحة الاستخدام في Claude Desktop. يظهر تطبيق Claude مصدرًا مستقلًا للحصة إلى جانب Claude.ai وClaude Code. على Mac وWindows وLinux، اختر **أعلى النتائج ← بدء جولة محلية** للعب دون اتصال في أي وقت.
+افتح الساحة المكبّرة من أعلى النتائج. تحرّك بمفاتيح WASD أو الأسهم. يطلق Claw’d النار تلقائيًا. يضم كل مستوى أربع موجات وزعيمًا.
 
-[الجديد في الإصدار 0.6.1](releases/0.6.1/ar.md)
+تبدأ بثلاث أرواح وتكسب روحًا بعد كل مستويين مكتملين. اجمع بين الطلقات الخارقة والمتعددة والضرر المساحي. يُحفظ أفضل مستوى وموجة على جهازك.
 
 ## جولة في التطبيق
 
@@ -26,7 +26,6 @@
 | --- | --- |
 | ![حول التطبيق والتحديثات](media/app-updates.png) | ![أعلى النتائج وحساب الساحة](media/app-highscores.png) |
 
-![الساحة المحلية](media/app-local-arena.png)
 
 صُوّرت لوحة التحديثات دون إجراء طلب عبر الشبكة. وتعرض صورة النتائج واجهة الترتيب الأصلية مع جلسة اختبار محلية ونتائج تمثيلية.
 
@@ -42,11 +41,11 @@
 
 | OS | التثبيت |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion_0.7.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion-0.7.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -58,13 +57,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.1_amd64.deb
+sudo apt install ./clawd-companion_0.7.0_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.7.0-1.x86_64.rpm
 ```
 
 ## أثناء عمل Claude
@@ -135,8 +134,6 @@ sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 على Mac يمكن أن تبدأ جولة سطح المكتب التلقائية بعد مرور 90 ثانية على الأقل دون إدخال. لدى Claw’d مئة نقطة صحة. بعد موجتين عشوائيتين يصل الزعيم الأخير. راقب أشرطة صحة الخصوم واجمع العلاج أو الدروع أو إطلاق النار السريع. يتوقف اللعب عند استخدام الفأرة أو لوحة المفاتيح. فعّل اللعب أثناء الاستخدام لتساعد بالنقر. عند الهزيمة يظهر شاهد قبر كُتب عليه GIT لخمس دقائق فعلية، ثم يحفر Claw’d طريقه إلى الخارج. يمكنك التحكم في الموسيقى والمؤثرات الصوتية كل على حدة.
 
 اختر اللغة وخفض الحركة ومستوى الصوت في إعدادات الطبقة العائمة. يمكنك كتم كل مؤثر على حدة. تحتفظ إشعارات Claude.ai بنصها الأصلي.
-
-في Mac وWindows وLinux، افتح **أعلى النتائج ← بدء جولة محلية** للعب فورًا. تعمل الجولة المحلية دون اتصال أو حساب. يمكنك بدؤها في أي وقت دون انتظار خمول الجهاز، وتبقى إعدادات اللعب التلقائي محفوظة. تُحتسب الجولة المكتملة في إحصاءاتك المحلية إذا أصبت خصمًا بنفسك أو جمعت معززًا كان له أثر. وتقتصر لوحة المتصدرين عبر الإنترنت على الجولات التي تُلعب على الخادم بعد تسجيل الدخول.
 
 ## أعلى النتائج وحساب الساحة
 

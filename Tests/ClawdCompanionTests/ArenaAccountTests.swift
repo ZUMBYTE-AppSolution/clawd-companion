@@ -45,8 +45,8 @@ private final class ArenaFixtureTransport: URLProtocol {
              "ranked":terminal, "seq":terminal ? 1:0, "score":terminal ? 12:0]
         }
         switch route {
-        case "register":
-            XCTAssertEqual(Set(body.keys), ["username","email","password"])
+        case "login", "register":
+            XCTAssertEqual(Set(body.keys), route == "login" ? ["username","password"] : ["username","email","password"])
             XCTAssertEqual(body["username"] as? String,"demo")
             XCTAssertEqual(request.httpMethod,"POST")
             output = ["username":"demo","token":"sample-token"]
@@ -68,7 +68,7 @@ private final class ArenaFixtureTransport: URLProtocol {
         case "logout": output=["ok":true]
         default: XCTFail("Unexpected fixture route"); code=404;output=["error":"not_found"]
         }
-        if route != "register", !mortal, request.value(forHTTPHeaderField:"Authorization") != "Bearer expired" {
+        if !["login","register"].contains(route), !mortal, request.value(forHTTPHeaderField:"Authorization") != "Bearer expired" {
             XCTAssertEqual(request.value(forHTTPHeaderField:"Authorization"),"Bearer sample-token")
         }
         let response = HTTPURLResponse(url:url,statusCode:code,httpVersion:"HTTP/1.1",headerFields:["Content-Type":"application/json"])!
@@ -212,11 +212,22 @@ private final class DiscoveryFixtureTransport: URLProtocol {
         XCTAssertEqual(DiscoveryFixtureTransport.requests, 0)
     }
 
+    func testUncheckedRememberKeepsLoginInMemory() async {
+        let vault = MemoryArenaVault(), model = account(vault)
+        await model.appear()
+        await model.authenticate(name: "demo", email: nil, password: "fixture-only-password", remember: false)
+        XCTAssertEqual(model.username, "demo")
+        XCTAssertNil(vault.login)
+        let relaunched = account(vault)
+        await relaunched.appear()
+        XCTAssertNil(relaunched.username)
+    }
+
     func testRegistrationRankedClickAndLogoutUseServerFrames() async {
         let vault=MemoryArenaVault(), model=account(vault)
         await model.appear()
         XCTAssertNil(model.username)
-        await model.authenticate(name:"demo",email:"demo@example.invalid",password:"fixture-only-password")
+        await model.authenticate(name:"demo",email:"demo@example.invalid",password:"fixture-only-password", remember:true)
         XCTAssertEqual(vault.login?.token,"sample-token")
         XCTAssertEqual(model.leaders.first?.rank,1)
         XCTAssertNil(model.leaders.last?.kd)

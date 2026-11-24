@@ -6,13 +6,13 @@
 
 आपके डेस्कटॉप पर रहने वाला एक नन्हा पिक्सेल केकड़ा। जब Claude को आपकी ज़रूरत होती है, Claw’d अपने लैपटॉप से नज़र उठाता है। बाकी समय वह कर्सर को देखता है या किसी विंडो के किनारे पैर लटकाकर बैठ जाता है।
 
-[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.7.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.7.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## संस्करण 0.6.1 में नया क्या है
+## अंतहीन अखाड़ा · 0.7.0
 
-Mac पर Claw’d अब Claude Desktop के उपयोग पेज से बचा हुआ कोटा पढ़ सकता है। उपयोग सीमाओं में Claude.ai और Claude Code के साथ Claude ऐप का अलग स्रोत है। Mac, Windows और Linux पर **हाई स्कोर → स्थानीय राउंड शुरू करें** चुनकर कभी भी ऑफ़लाइन खेलें।
+हाई स्कोर से अखाड़ा अधिकतम आकार में खोलें। WASD या तीर वाली कुंजियों से चलें। Claw’d अपने आप गोली चलाता है। हर स्तर में चार लहरें और एक बॉस है।
 
-[संस्करण 0.6.1 में नया क्या है](releases/0.6.1/hi.md)
+शुरू में तीन जीवन मिलते हैं। हर दो स्तर पूरे करने पर एक और जीवन मिलता है। भेदी गोली, एक साथ कई गोलियाँ और क्षेत्रीय क्षति को मिलाएँ। आपका सर्वश्रेष्ठ स्तर और लहर इसी उपकरण पर सहेजे जाते हैं।
 
 ## ऐप की एक झलक
 
@@ -26,7 +26,6 @@ Mac पर Claw’d अब Claude Desktop के उपयोग पेज स�
 | --- | --- |
 | ![परिचय और अपडेट](media/app-updates.png) | ![हाई स्कोर और अखाड़े का खाता](media/app-highscores.png) |
 
-![स्थानीय एरीना](media/app-local-arena.png)
 
 अपडेट पैनल की तस्वीर बिना नेटवर्क अनुरोध के ली गई है। हाई स्कोर की तस्वीर में मूल रैंकिंग इंटरफ़ेस, स्थानीय टेस्ट सत्र और उदाहरण के स्कोर हैं।
 
@@ -42,11 +41,11 @@ Windows और Linux में Qt इस्तेमाल होता है�
 
 | OS | इंस्टॉल करें |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion_0.7.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/clawd-companion-0.7.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/Clawd-Companion-0.7.0-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.7.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -58,13 +57,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.1_amd64.deb
+sudo apt install ./clawd-companion_0.7.0_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.7.0-1.x86_64.rpm
 ```
 
 ## जब Claude काम करता है
@@ -135,8 +134,6 @@ Mac पर Claw’d को खींचकर किसी विंडो प�
 Mac पर डेस्कटॉप का स्वचालित राउंड कम से कम 90 सेकंड तक कोई इनपुट न मिलने पर शुरू हो सकता है। Claw’d की सेहत 100 है। दुश्मनों की दो बेतरतीब लहरों के बाद बॉस आता है। उनकी सेहत की पट्टियाँ देखें और इलाज, ढाल या तेज़ फ़ायर बटोरें। इनपुट देने पर खेल रुक जाता है। इस्तेमाल के दौरान खेलने की अनुमति देकर क्लिक से मदद की जा सकती है। हारने पर पाँच वास्तविक मिनट तक GIT लिखा पत्थर रहता है, फिर Claw’d मिट्टी से बाहर निकलता है। संगीत और ध्वनि प्रभाव अलग-अलग बंद कर सकते हैं।
 
 ओवरले सेटिंग में भाषा, कम गति और आवाज़ चुनें। हर ध्वनि अलग से बंद की जा सकती है। Claude.ai की सूचनाएँ मूल भाषा में रहती हैं।
-
-Mac, Windows और Linux पर **हाई स्कोर → स्थानीय राउंड शुरू करें** चुनकर तुरंत खेलें। स्थानीय राउंड ऑफ़लाइन चलता है और किसी खाते की ज़रूरत नहीं होती। आप निष्क्रिय समय का इंतज़ार किए बिना कभी भी राउंड शुरू कर सकते हैं। अपने आप खेल शुरू होने की सेटिंग पहले जैसी रहती है। पूरा राउंड आपके स्थानीय आँकड़ों में तभी जुड़ता है जब आपने ख़ुद किसी दुश्मन को निशाना बनाया हो या असर करने वाला पावर-अप लिया हो। ऑनलाइन रैंकिंग में सिर्फ़ साइन इन करके खेले गए सर्वर राउंड गिने जाते हैं।
 
 ## हाई स्कोर और अखाड़े का खाता
 

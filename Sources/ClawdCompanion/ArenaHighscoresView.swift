@@ -5,13 +5,12 @@ struct ArenaHighscoresView: View {
 
     var body: some View {
         ArenaHighscoresContent(totals: state.arenaTotals, account: state.arenaAccount,
-                               rankedLocked: !state.canStartRankedArena,
-                               localArena: LocalArenaCard(state: state, manual: state.manualArena,
-                                                         account: state.arenaAccount))
+                               rankedLocked: !state.canStartRankedArena)
     }
 }
 
 private final class ArenaCredentialsForm: ObservableObject {
+    @Published var remember = false
     @Published var registering = false
     @Published var name = ""
     @Published var email = ""
@@ -22,13 +21,12 @@ struct ArenaHighscoresContent: View {
     let totals: ArenaTotals
     @ObservedObject var account: ArenaAccountModel
     var rankedLocked = false
-    var localArena: LocalArenaCard? = nil
     @StateObject private var form = ArenaCredentialsForm()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(L("Highscores")).font(.system(size: 22, weight: .semibold))
-            localArena
+            EndlessArenaCard()
             if let username = account.username {
                 HStack {
                     Label(L("Angemeldet als {0}", username), systemImage: "person.crop.circle.fill")
@@ -96,6 +94,7 @@ struct ArenaHighscoresContent: View {
             SecureField(L("Passwort"), text: $form.password)
                 .textContentType(.password)
                 .onSubmit { if canSubmit { submit() } }
+            Toggle(L("Angemeldet bleiben"), isOn: $form.remember)
             if form.registering {
                 Text(L("3–24 Zeichen für den Namen, 12–128 Zeichen für das Passwort."))
                     .font(.system(size: 11)).foregroundStyle(Ink.dim)
@@ -118,7 +117,7 @@ struct ArenaHighscoresContent: View {
     private func submit() {
         let sentName = form.name, sentEmail = form.registering ? form.email : nil, sentPassword = form.password
         Task {
-            await account.authenticate(name: sentName, email: sentEmail, password: sentPassword)
+            await account.authenticate(name: sentName, email: sentEmail, password: sentPassword, remember: form.remember)
             if account.username != nil { form.password = ""; form.email = ""; form.name = "" }
         }
     }

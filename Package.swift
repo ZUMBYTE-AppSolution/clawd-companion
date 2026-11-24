@@ -8,7 +8,7 @@ let package = Package(
     targets: [
         .target(name: "ClawdLanguageResources", path: "Resources",
                 exclude: ["Info.plist", "Clawd.icns", "ClawdDialogue.ttf", "MenuPet.png", "MenuPet@2x.png"],
-                sources: ["LanguageResources.swift"], resources: [.copy("Languages")]),
+                sources: ["LanguageResources.swift"], resources: [.copy("Languages"), .copy("EndlessArena")]),
         .executableTarget(name: "ClawdCompanion", dependencies: ["ClawdLanguageResources"]),
         .testTarget(name: "ClawdCompanionTests", dependencies: ["ClawdCompanion"])
     ]
