@@ -9,37 +9,37 @@ final class ClaudeDesktopUsageParserTests: XCTestCase {
         ClaudeDesktopUsageParser.parse(lines, observedAt: date ?? observed, timeZone: berlin)
     }
 
-    func testRealGermanDesktopSettingsCardsAndProductBreakdown() throws {
+    func testGermanDesktopSettingsCardsAndProductBreakdown() throws {
         let report = try XCTUnwrap(parse([
-            "Aktuelle Sitzung", "Wird um 22:20 zurückgesetzt", "Aktuelle Sitzung", "4 % verwendet",
-            "Diese Woche", "Zurücksetzung am Freitag, 21:00", "Diese Woche", "38 % verwendet",
-            "Nutzung nach Produkt", "Claude Code", "61 %", "Chats", "38 %", "Cowork", "1 %"
+            "Aktuelle Sitzung", "Wird um 12:35 zurückgesetzt", "Aktuelle Sitzung", "23 % verwendet",
+            "Diese Woche", "Zurücksetzung am Donnerstag, 16:45", "Diese Woche", "57 % verwendet",
+            "Nutzung nach Produkt", "Claude Code", "35 %", "Chats", "57 %", "Cowork", "1 %"
         ]))
-        XCTAssertEqual(report.session?.remaining, 96)
-        XCTAssertEqual(report.week?.remaining, 62)
-        XCTAssertEqual(report.session?.reset, ISO8601DateFormatter().date(from: "2026-11-24T21:20:00Z"))
-        XCTAssertEqual(report.week?.reset, ISO8601DateFormatter().date(from: "2026-11-27T20:00:00Z"))
+        XCTAssertEqual(report.session?.remaining, 77)
+        XCTAssertEqual(report.week?.remaining, 43)
+        XCTAssertEqual(report.session?.reset, ISO8601DateFormatter().date(from: "2026-11-24T11:35:00Z"))
+        XCTAssertEqual(report.week?.reset, ISO8601DateFormatter().date(from: "2026-11-26T15:45:00Z"))
     }
 
-    func testRealGermanDesktopPopoverAndOfficialClosedButton() throws {
+    func testGermanDesktopPopoverAndOfficialClosedButton() throws {
         let report = try XCTUnwrap(parse([
-            "5-Stunden-Limit", "Wird um 22:20 zurückgesetzt", "4 % genutzt",
-            "Wöchentlich · alle Modelle", "Zurücksetzung am Fr., 21:00", "38 % genutzt"
+            "5-Stunden-Limit", "Wird um 12:35 zurückgesetzt", "23 % genutzt",
+            "Wöchentlich · alle Modelle", "Zurücksetzung am Do., 16:45", "57 % genutzt"
         ]))
-        let actual = "Nutzung: Wöchentlich · alle Modelle: 38%, Zurücksetzung am Fr., 21:00"
+        let actual = "Nutzung: Wöchentlich · alle Modelle: 57%, Zurücksetzung am Do., 16:45"
         let closed = try XCTUnwrap(ClaudeDesktopUsageParser.parseUsageButton(actual, observedAt: observed, timeZone: berlin))
-        XCTAssertEqual(report.session?.remaining, 96)
-        XCTAssertEqual(report.week?.remaining, 62)
+        XCTAssertEqual(report.session?.remaining, 77)
+        XCTAssertEqual(report.week?.remaining, 43)
         XCTAssertNil(closed.session)
         XCTAssertEqual(report.week, closed.week)
-        XCTAssertEqual(closed.week?.resetLabel, "Zurücksetzung am Fr., 21:00")
-        let english = "Usage: Weekly · All models: 38%, Resets Friday at 9:00 PM"
+        XCTAssertEqual(closed.week?.resetLabel, "Zurücksetzung am Do., 16:45")
+        let english = "Usage: Weekly · All models: 57%, Resets Thursday at 4:45 PM"
         let localized = ClaudeDesktopUsageParser.parseUsageButton(english, observedAt: observed, timeZone: berlin)
         XCTAssertEqual(localized?.week?.reset, closed.week?.reset)
-        XCTAssertEqual(localized?.week?.remaining, 62)
-        for other in ["Button, 38%", "Nutzung: Claude Code: 61%", "Nutzung: Wöchentlich · alle Modelle: 138%",
-                      "Thread Nutzung: Wöchentlich · alle Modelle: 38%", "Usage: Weekly · all models: 38%, 29%",
-                      "Nutzung: Wöchentlich · alle Modelle: 38%, Sie haben eine Nachricht"] {
+        XCTAssertEqual(localized?.week?.remaining, 43)
+        for other in ["Button, 57%", "Nutzung: Claude Code: 35%", "Nutzung: Wöchentlich · alle Modelle: 138%",
+                      "Thread Nutzung: Wöchentlich · alle Modelle: 57%", "Usage: Weekly · all models: 57%, 29%",
+                      "Nutzung: Wöchentlich · alle Modelle: 57%, Sie haben eine Nachricht"] {
             XCTAssertNil(ClaudeDesktopUsageParser.parseUsageButton(other, observedAt: observed), other)
         }
     }

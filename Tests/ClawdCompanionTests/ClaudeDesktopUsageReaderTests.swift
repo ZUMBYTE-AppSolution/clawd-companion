@@ -56,20 +56,20 @@ final class ClaudeDesktopUsageReaderTests: XCTestCase {
         }
     }
 
-    func testRealHashOverlayUsesNamedMetersAndNeverReadsChatOrProductData() {
+    func testHashOverlayUsesNamedMetersAndNeverReadsChatOrProductData() {
         let t = Tree()
         let chat = t.text("Aktuelle Sitzung · 99 % verwendet")
         let privateInput = t.node("AXTextArea", [kAXValueAttribute:"private"])
-        let product = t.bar("Claude Code", "61 % verwendet")
+        let product = t.bar("Claude Code", "35 % verwendet")
         let settings = t.node("AXGroup", [kAXDescriptionAttribute:"Einstellungen"], [
-            t.text("Dein Verbrauch"), t.text("Aktuelle Sitzung"), t.text("Wird um 22:20 zurückgesetzt"),
-            t.bar("Aktuelle Sitzung", "4 % verwendet"), t.text("4 % verwendet"),
-            t.text("Diese Woche"), t.text("Zurücksetzung am Fr., 21:00"), t.bar("Diese Woche","38 % verwendet"),
-            t.text("Nutzung nach Produkt"), product, t.bar("Chats", "39 % verwendet")])
+            t.text("Dein Verbrauch"), t.text("Aktuelle Sitzung"), t.text("Wird um 12:35 zurückgesetzt"),
+            t.bar("Aktuelle Sitzung", "23 % verwendet"), t.text("23 % verwendet"),
+            t.text("Diese Woche"), t.text("Zurücksetzung am Do., 16:45"), t.bar("Diese Woche","57 % verwendet"),
+            t.text("Nutzung nach Produkt"), product, t.bar("Chats", "65 % verwendet")])
         let web = t.node("AXWebArea", [kAXURLAttribute:"https://claude.ai/epitaxy/local_example#settings/usage"],
                          [chat, privateInput, settings])
-        XCTAssertEqual(t.read(t.window(web)), .usage(["Aktuelle Sitzung", "Wird um 22:20 zurückgesetzt",
-            "4 % verwendet", "Diese Woche", "Zurücksetzung am Fr., 21:00", "38 % verwendet"]))
+        XCTAssertEqual(t.read(t.window(web)), .usage(["Aktuelle Sitzung", "Wird um 12:35 zurückgesetzt",
+            "23 % verwendet", "Diese Woche", "Zurücksetzung am Do., 16:45", "57 % verwendet"]))
         t.assertNotRead(chat)
         t.assertNotRead(privateInput)
         XCTAssertFalse(t.queried[product]?.contains(kAXValueDescriptionAttribute) == true)
@@ -79,14 +79,14 @@ final class ClaudeDesktopUsageReaderTests: XCTestCase {
         for linked in [true, false] {
             let t = Tree()
             let limits = t.node("AXGroup", [kAXTitleAttribute:"Nutzungslimits"], [
-                t.text("5-Stunden-Limit"), t.text("Wird um 22:20 zurückgesetzt"), t.bar("5-Stunden-Limit","4 % genutzt"),
-                t.text("Wöchentlich · alle Modelle"), t.text("Zurücksetzung am Fr., 21:00"), t.bar("Wöchentlich · alle Modelle","38 % genutzt")])
+                t.text("5-Stunden-Limit"), t.text("Wird um 12:35 zurückgesetzt"), t.bar("5-Stunden-Limit","23 % genutzt"),
+                t.text("Wöchentlich · alle Modelle"), t.text("Zurücksetzung am Do., 16:45"), t.bar("Wöchentlich · alle Modelle","57 % genutzt")])
             let link = t.node("AXLink", [kAXURLAttribute: linked ? "https://claude.ai/settings/usage" : "https://example.test/settings/usage"])
             let panel = t.node("AXGroup", [kAXTitleAttribute:"Nutzung"], [link, limits])
             let chat = t.text("5-Stunden-Limit 100 % genutzt")
             let area = t.node("AXWebArea",[kAXURLAttribute:"https://claude.ai/epitaxy/local_example"],[chat, panel])
-            let expected: Reader.Result = linked ? .usage(["5-Stunden-Limit","Wird um 22:20 zurückgesetzt","4 % genutzt",
-                                                           "Wöchentlich · alle Modelle","Zurücksetzung am Fr., 21:00","38 % genutzt"]) : .unavailable
+            let expected: Reader.Result = linked ? .usage(["5-Stunden-Limit","Wird um 12:35 zurückgesetzt","23 % genutzt",
+                                                           "Wöchentlich · alle Modelle","Zurücksetzung am Do., 16:45","57 % genutzt"]) : .unavailable
             XCTAssertEqual(t.read(t.window(area)), expected)
             t.assertNotRead(chat)
         }
@@ -95,7 +95,7 @@ final class ClaudeDesktopUsageReaderTests: XCTestCase {
     func testClosedButtonRequiresComposerAndOtherControlsWithoutReadingTheirText() {
         for composer in [true, false] {
             let t = Tree()
-            let title = "Nutzung: Wöchentlich · alle Modelle: 38%, Zurücksetzung am Fr., 21:00"
+            let title = "Nutzung: Wöchentlich · alle Modelle: 57%, Zurücksetzung am Do., 16:45"
             let button = t.node("AXPopUpButton", [kAXTitleAttribute:title])
             let input = t.node("AXTextArea", [kAXValueAttribute:"private draft"])
             let other = t.node("AXPopUpButton", [kAXTitleAttribute:"Auto"])
@@ -143,7 +143,7 @@ final class ClaudeDesktopUsageReaderTests: XCTestCase {
     }
 
     func testOnlyUnambiguousProgressScalesAndDescriptionsAreUsed() {
-        XCTAssertEqual(Reader.progress("38 % verwendet", value: 38, min: 0, max: 100), "38 % verwendet")
+        XCTAssertEqual(Reader.progress("57 % verwendet", value: 57, min: 0, max: 100), "57 % verwendet")
         XCTAssertEqual(Reader.progress(nil, value: 0.4, min: 0, max: 1), "40%")
         XCTAssertEqual(Reader.progress(nil, value: 3.2, min: 0, max: 100), "3.2%")
         XCTAssertNil(Reader.progress(nil, value: 4, min: nil, max: nil))
