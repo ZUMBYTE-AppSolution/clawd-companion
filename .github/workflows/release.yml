@@ -76,7 +76,7 @@ jobs:
           xvfb-run -a timeout 60 "$RUNNER_TEMP/portable/ClawdCompanion/ClawdCompanion" --self-test
           sudo apt-get install -y ./dist/*.deb
           xvfb-run -a timeout 60 clawd-companion --self-test
-          docker run --rm -v "$PWD/dist:/packages:ro" fedora:latest bash -ec 'dnf install -y /packages/*.rpm xorg-x11-server-Xvfb util-linux; Xvfb :99 -screen 0 1024x768x24 & p=$!; trap "kill $p" EXIT; export DISPLAY=:99; sleep 2; runuser -u nobody -- timeout 60 clawd-companion --self-test'
+          docker run --rm -v "$PWD/dist:/packages:ro" fedora:latest bash -ec 'dnf install -y /packages/*.rpm xorg-x11-server-Xvfb util-linux; Xvfb :99 -screen 0 1024x768x24 & p=$!; trap "kill $p" EXIT; export DISPLAY=:99 QT_XCB_GL_INTEGRATION=none QT_QUICK_BACKEND=software QTWEBENGINE_CHROMIUM_FLAGS=--disable-gpu; sleep 2; runuser -u nobody -- timeout 60 clawd-companion --self-test'
       - uses: actions/upload-artifact@v4
         with: {name: linux, path: 'dist/*', if-no-files-found: error}
   release:
