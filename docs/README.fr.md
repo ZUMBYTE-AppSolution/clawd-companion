@@ -6,13 +6,13 @@
 
 Un petit crabe en pixels sur votre bureau. Claw’d lève les yeux de son portable quand Claude a besoin de vous, suit le pointeur du regard et, entre deux réponses, trouve un rebord de fenêtre où se poser.
 
-[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## Nouveautés de la version 0.6.0
+## Nouveautés de la version 0.6.1
 
-L’application Mac est désormais accompagnée de paquets pour Windows et Linux. La rubrique À propos et mises à jour permet de rechercher une version, de lire ses nouveautés et de choisir un paquet.
+Sur Mac, Claw’d peut désormais lire le quota restant directement dans la page d’utilisation de Claude Desktop. L’application Claude a sa propre source de quotas, aux côtés de Claude.ai et de Claude Code. Sur Mac, Windows et Linux, choisissez **Meilleurs scores → Commencer une manche locale** pour jouer hors ligne à tout moment.
 
-[Nouveautés de la version 0.6.0](releases/0.6.0/fr.md)
+[Nouveautés de la version 0.6.1](releases/0.6.1/fr.md)
 
 ## Aperçu de l’application
 
@@ -25,6 +25,8 @@ L’application Mac est désormais accompagnée de paquets pour Windows et Linux
 | À propos et mises à jour | Meilleurs scores et comptes d’arène |
 | --- | --- |
 | ![À propos et mises à jour](media/app-updates.png) | ![Meilleurs scores et comptes d’arène](media/app-highscores.png) |
+
+![Arène locale](media/app-local-arena.png)
 
 Le panneau de mise à jour a été photographié sans requête réseau. La capture des meilleurs scores montre le classement natif avec une session de test locale et des scores fictifs.
 
@@ -40,11 +42,11 @@ Windows et Linux utilisent Qt. Sous Windows et X11, Claw’d peut lire la positi
 
 | OS | Installation |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -56,13 +58,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.0_amd64.deb
+sudo apt install ./clawd-companion_0.6.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 ```
 
 ## Quand Claude travaille
@@ -75,6 +77,20 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 | Un outil demande votre accord | Déroule une pancarte « OK? » jusqu’au traitement de la demande. Répondez dans Claude. |
 | Claude Code signale des sous-agents | Jongle avec des figurines. L’état affiche le nombre réel d’agents. |
 | Une réponse se termine ou un avertissement apparaît | Descend en rappel et se réjouit, ou affiche le texte de l’avertissement dans une bulle en pixels. |
+
+## Connecter Claude Desktop (macOS)
+
+1. Dans Claw’d, ouvrez **Connexions** et activez la connexion à **Claude Desktop**.
+2. Choisissez **Autoriser l’accès…**. Dans macOS, ouvrez **Réglages Système → Confidentialité et sécurité → Accessibilité** et activez **Claw’d Companion**.
+3. Dans **l’application Claude** sur le Mac, ouvrez **Paramètres → Utilisation** et laissez la page ouverte un instant. Choisissez **Lire maintenant** dans Claw’d pour la vérifier de nouveau.
+
+Vous pouvez aussi ouvrir le menu **Utilisation** près du champ de saisie dans Claude. Lorsque ce menu est ouvert, Claw’d peut lire les périodes affichées. Lorsqu’il est fermé, le bouton fournit uniquement la période précisée dans son libellé, par exemple la limite hebdomadaire.
+
+Claw’d relève le pourcentage restant pour la session ou la semaine, ainsi que l’heure de réinitialisation, lorsque Claude affiche ces valeurs dans un format reconnu. Rouvrez la page d’utilisation pour obtenir un relevé récent.
+
+L’activation de la connexion sélectionne **Claude Desktop** comme source de quotas. Le dernier relevé valide conserve son horodatage d’origine. Si vous changez ensuite de source dans **Compagnon → Limites d’utilisation**, Claw’d s’en souvient au prochain démarrage.
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
 
 ## Connecter Claude.ai
 
@@ -116,9 +132,11 @@ Dans un onglet Claude.ai appairé, cet exemple ajoute une notification visible e
 
 Sur Mac, faites glisser Claw’d sur une fenêtre, faites un clic droit et choisissez Pin to Window. Il garde sa place lorsque la fenêtre bouge et peut en descendre en rappel. En balade, il grimpe sur les barres de titre, observe, cligne des yeux et saute. Son regard suit le pointeur. Le lance-lettres réajuste sa visée à chaque tir d’une rafale aléatoire de 3 à 42 projectiles. Le compteur enregistre le contact avec un projectile visible.
 
-Sur Mac, l’arène peut démarrer après au moins 90 secondes sans saisie. Claw’d a 100 points de vie. Deux vagues aléatoires précèdent le boss. Surveillez les barres de vie et ramassez les soins, boucliers ou tirs rapides. Bouger la souris ou taper suspend la partie. Autorisez le jeu pendant l’utilisation pour aider en cliquant. Après une défaite, une pierre tombale marquée GIT reste en place cinq minutes réelles avant que Claw’d sorte de terre. La musique et les effets se règlent séparément.
+Sur Mac, une manche automatique sur le bureau peut démarrer après au moins 90 secondes sans saisie. Claw’d a 100 points de vie. Deux vagues aléatoires précèdent le boss. Surveillez les barres de vie et ramassez les soins, boucliers ou tirs rapides. Bouger la souris ou taper suspend la partie. Autorisez le jeu pendant l’utilisation pour aider en cliquant. Après une défaite, une pierre tombale marquée GIT reste en place cinq minutes réelles avant que Claw’d sorte de terre. La musique et les effets se règlent séparément.
 
 Dans les réglages de la superposition, choisissez la langue, réduisez les animations et ajustez le volume. Chaque son peut être coupé séparément. Les notifications de Claude.ai gardent leur texte d’origine.
+
+Sur Mac, Windows et Linux, ouvrez **Meilleurs scores → Commencer une manche locale** pour jouer immédiatement. Les manches locales fonctionnent hors ligne, sans compte. Vous pouvez en lancer une à tout moment, sans attendre l’inactivité de l’ordinateur. Vos réglages de jeu automatique sont conservés. Une manche terminée entre dans vos statistiques locales si vous avez touché un ennemi ou ramassé un bonus qui a fait effet. Le classement en ligne compte uniquement les manches jouées sur le serveur après connexion.
 
 ## Meilleurs scores et comptes d’arène
 
@@ -155,7 +173,7 @@ python3 Scripts/test-hooks.py
 
 [Swift](../Package.swift) · [Desktop](../Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
 
-[Arena API](../Server/README.md) · [Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
+[Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
 
 ## Studio et communauté
 

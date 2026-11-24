@@ -63,6 +63,21 @@ final class ArcadeCoordinator {
         return true
     }
 
+    var hasRound: Bool { game != nil }
+
+    /// Move an existing ambient game into the panel without minting a second score identity.
+    func takeForPanel() -> (UUID, VirusArcade)? {
+        requested = false
+        guard var current = game else { return nil }
+        current.pause()
+        game = nil
+        running = false
+        firstBout = false
+        nextAutomaticStart = nil
+        status = enabled ? .ready : .disabled
+        return (roundID, current)
+    }
+
     func strike(_ enemy: Int) {
         guard running, allowWhileActive else { return }
         game?.hit(enemyID: enemy)

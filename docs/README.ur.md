@@ -6,13 +6,13 @@
 
 آپ کے ڈیسک ٹاپ کا ننھا سا پِکسل کیکڑا۔ جب Claude کو آپ کی توجہ چاہیے تو Claw’d اپنے لیپ ٹاپ سے سر اٹھاتا ہے۔ باقی وقت وہ کرسر کو تکتا ہے یا کسی ونڈو کے کنارے پر بیٹھ کر سستاتا ہے۔
 
-[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## ورژن 0.6.0 میں نیا کیا ہے
+## ورژن 0.6.1 میں نیا کیا ہے
 
-Mac ایپ کے ساتھ اب Windows اور Linux کے ڈیسک ٹاپ پیکیج بھی ہیں۔ تعارف اور اپ ڈیٹس میں نیا ورژن تلاش کریں، تبدیلیاں پڑھیں اور اپنا پیکیج چنیں۔
+Mac پر Claw’d اب Claude Desktop کے استعمال کے صفحے سے باقی کوٹا براہ راست پڑھ سکتا ہے۔ استعمال کی حدود میں Claude.ai اور Claude Code کے ساتھ Claude ایپ کا الگ ماخذ موجود ہے۔ Mac، Windows اور Linux پر **اعلیٰ اسکور ← مقامی راؤنڈ شروع کریں** منتخب کرکے کسی بھی وقت آف لائن کھیلیں۔
 
-[ورژن 0.6.0 میں نیا کیا ہے](releases/0.6.0/ur.md)
+[ورژن 0.6.1 میں نیا کیا ہے](releases/0.6.1/ur.md)
 
 ## ایپ کی ایک جھلک
 
@@ -25,6 +25,8 @@ Mac ایپ کے ساتھ اب Windows اور Linux کے ڈیسک ٹاپ پیکی
 | تعارف اور اپ ڈیٹس | اعلیٰ اسکور اور میدان کا اکاؤنٹ |
 | --- | --- |
 | ![تعارف اور اپ ڈیٹس](media/app-updates.png) | ![اعلیٰ اسکور اور میدان کا اکاؤنٹ](media/app-highscores.png) |
+
+![مقامی ارینا](media/app-local-arena.png)
 
 اپ ڈیٹ پینل کی تصویر لیتے وقت نیٹ ورک کو کوئی درخواست نہیں بھیجی گئی۔ اعلیٰ اسکور کی تصویر میں مقامی رینکنگ انٹرفیس، ایک ٹیسٹ سیشن اور نمونہ اسکور دکھائے گئے ہیں۔
 
@@ -40,11 +42,11 @@ Windows اور Linux میں Qt استعمال ہوتا ہے۔ Windows اور X11
 
 | OS | انسٹال کریں |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -56,13 +58,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.0_amd64.deb
+sudo apt install ./clawd-companion_0.6.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 ```
 
 ## جب Claude کام کر رہا ہو
@@ -75,6 +77,20 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 | کوئی ٹول اجازت مانگتا ہے | فیصلہ ہونے تک “OK?” کی تختی اٹھائے رکھتا ہے۔ جواب Claude میں دیں۔ |
 | Claude Code ذیلی ایجنٹوں کی اطلاع دیتا ہے | ایجنٹوں کے پتلے ہوا میں اچھالتا اور پکڑتا ہے۔ اصل تعداد اسٹیٹس میں دکھائی دیتی ہے۔ |
 | جواب مکمل ہوتا ہے یا کوئی تنبیہ آتی ہے | رسی کے سہارے اتر کر خوشی مناتا ہے یا پِکسل بلبلے میں تنبیہ کا متن دکھاتا ہے۔ |
+
+## Claude Desktop سے جڑیں (macOS)
+
+1. Claw’d میں **کنکشن** کھولیں اور **Claude Desktop** کے ساتھ کنکشن فعال کریں۔
+2. **رسائی کی اجازت دیں…** منتخب کریں۔ macOS میں **سسٹم کی ترتیبات ← رازداری اور سکیورٹی ← رسائی پذیری** کھول کر **Claw’d Companion** فعال کریں۔
+3. Mac پر **Claude ایپ** میں **ترتیبات ← استعمال** کھولیں اور صفحہ کچھ دیر کھلا رہنے دیں۔ دوبارہ جانچنے کے لیے Claw’d میں **ابھی پڑھیں** منتخب کریں۔
+
+Claude میں پیغام لکھنے کے خانے کے پاس **استعمال** کا مینو بھی کھول سکتے ہیں۔ جب مینو کھلا ہو تو Claw’d اس میں دکھائی جانے والی مدتوں کی حدیں پڑھ سکتا ہے۔ بند ہونے پر بٹن صرف اسی مدت کی معلومات دیتا ہے جس کا نام اس پر واضح ہو، مثلاً ہفتہ وار حد۔
+
+جب Claude سیشن یا ہفتے کی حد اور ری سیٹ کا وقت معاون شکل میں دکھائے تو Claw’d باقی فیصد اور دستیاب ری سیٹ وقت پڑھ لیتا ہے۔ تازہ اعداد کے لیے استعمال کا صفحہ پھر کھولیں۔
+
+کنکشن فعال کرنے پر **Claude Desktop** خود کوٹے کا ماخذ بن جاتا ہے۔ آخری درست پیمائش کے ساتھ اس کا اصل وقت برقرار رہتا ہے۔ اگر بعد میں **ساتھی ← استعمال کی حدود** میں کوئی دوسرا ماخذ چنیں تو اگلی بار ایپ چلانے پر بھی وہی منتخب رہے گا۔
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
 
 ## Claude.ai سے جڑیں
 
@@ -116,9 +132,11 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 
 Mac پر Claw’d کو کھینچ کر کسی ونڈو پر رکھیں، دایاں کلک کریں اور Pin to Window منتخب کریں۔ ونڈو سرکانے پر وہ اپنی جگہ قائم رہتا ہے اور وہاں سے رسی کے سہارے اتر بھی سکتا ہے۔ سیر کرتے ہوئے وہ ٹائٹل بار پر چڑھتا ہے، اردگرد دیکھتا ہے، پلک جھپکتا ہے اور نیچے کودتا ہے۔ اس کی نظریں کرسر کا پیچھا کرتی ہیں۔ حروف پھینکنے والا بلاسٹر ہر باری میں بے ترتیب طور پر ۳ سے ۴۲ گولیاں چلاتا ہے اور ہر گولی کے لیے دوبارہ نشانہ لیتا ہے۔ صرف دکھائی دینے والی گولی کے کرسر چھونے پر ہٹ شمار ہوتی ہے۔
 
-Mac پر کم از کم ۹۰ سیکنڈ تک کوئی ان پٹ نہ ملے تو کھیل شروع ہو سکتا ہے۔ Claw’d کی صحت ۱۰۰ ہے۔ دشمنوں کی دو بے ترتیب لہروں کے بعد آخری باس آتا ہے۔ دشمن کی صحت کی پٹیاں دیکھیں اور شفا، ڈھال یا تیز فائر کے پاور اپ جمع کریں۔ ان پٹ سے کھیل رک جاتا ہے۔ کمپیوٹر استعمال کرتے ہوئے کھیلنے کی اجازت دیں تو کلک کرکے مدد کر سکتے ہیں۔ ہارنے پر پانچ حقیقی منٹ تک GIT لکھا کتبہ رہتا ہے، پھر وہ مٹی کھود کر باہر آتا ہے۔ موسیقی اور صوتی اثرات الگ الگ بند کیے جا سکتے ہیں۔
+Mac پر کم از کم ۹۰ سیکنڈ تک کوئی ان پٹ نہ ملے تو ڈیسک ٹاپ پر خودکار راؤنڈ شروع ہو سکتا ہے۔ Claw’d کی صحت ۱۰۰ ہے۔ دشمنوں کی دو بے ترتیب لہروں کے بعد آخری باس آتا ہے۔ دشمن کی صحت کی پٹیاں دیکھیں اور شفا، ڈھال یا تیز فائر کے پاور اپ جمع کریں۔ ان پٹ سے کھیل رک جاتا ہے۔ کمپیوٹر استعمال کرتے ہوئے کھیلنے کی اجازت دیں تو کلک کرکے مدد کر سکتے ہیں۔ ہارنے پر پانچ حقیقی منٹ تک GIT لکھا کتبہ رہتا ہے، پھر وہ مٹی کھود کر باہر آتا ہے۔ موسیقی اور صوتی اثرات الگ الگ بند کیے جا سکتے ہیں۔
 
 اوورلے کی ترتیبات میں زبان، کم حرکت اور آواز کی سطح چنیں۔ ہر آواز الگ سے بند کی جا سکتی ہے۔ Claude.ai کی اطلاعات اصل الفاظ میں دکھائی جاتی ہیں۔
+
+Mac، Windows اور Linux پر **اعلیٰ اسکور ← مقامی راؤنڈ شروع کریں** منتخب کرکے فوراً کھیلیں۔ مقامی راؤنڈ آف لائن اور اکاؤنٹ کے بغیر چلتا ہے۔ آپ کمپیوٹر کے غیر فعال ہونے کا انتظار کیے بغیر اسے کسی بھی وقت خود شروع کر سکتے ہیں۔ خودکار کھیل کی ترتیبات محفوظ رہتی ہیں۔ مکمل راؤنڈ مقامی اعداد میں تب شامل ہوتا ہے جب آپ نے خود کسی دشمن کو نشانہ بنایا ہو یا مؤثر پاور اپ لیا ہو۔ آن لائن درجہ بندی میں صرف سائن اِن کرکے سرور پر کھیلے گئے راؤنڈ گنے جاتے ہیں۔
 
 ## اعلیٰ اسکور اور میدان کا اکاؤنٹ
 
@@ -155,7 +173,7 @@ python3 Scripts/test-hooks.py
 
 [Swift](../Package.swift) · [Desktop](../Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
 
-[Arena API](../Server/README.md) · [Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
+[Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
 
 ## اسٹوڈیو اور برادری
 

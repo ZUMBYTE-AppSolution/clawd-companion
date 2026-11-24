@@ -6,13 +6,13 @@
 
 Um caranguejinho de píxeis no seu ambiente de trabalho. Claw’d levanta os olhos do portátil quando o Claude precisa de si, segue o ponteiro com o olhar e procura uma janela onde descansar entre respostas.
 
-[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## Novidades da versão 0.6.0
+## Novidades da versão 0.6.1
 
-À aplicação para Mac juntam-se pacotes de ambiente de trabalho para Windows e Linux. Em Sobre e atualizações, pode procurar uma versão, ler as alterações e escolher um pacote.
+No Mac, o Claw’d já pode ler a quota restante diretamente na página de utilização do Claude Desktop. A aplicação Claude tem uma fonte própria nos limites de uso, a par do Claude.ai e do Claude Code. No Mac, Windows e Linux, escolha **Recordes → Iniciar ronda local** para jogar offline quando quiser.
 
-[Novidades da versão 0.6.0](releases/0.6.0/pt.md)
+[Novidades da versão 0.6.1](releases/0.6.1/pt.md)
 
 ## Por dentro da aplicação
 
@@ -25,6 +25,8 @@ Um caranguejinho de píxeis no seu ambiente de trabalho. Claw’d levanta os olh
 | Sobre e atualizações | Recordes e contas da arena |
 | --- | --- |
 | ![Sobre e atualizações](media/app-updates.png) | ![Recordes e contas da arena](media/app-highscores.png) |
+
+![Arena local](media/app-local-arena.png)
 
 O painel de atualizações foi capturado sem qualquer pedido à rede. A imagem dos recordes mostra a classificação nativa com uma sessão de teste local e pontuações de exemplo.
 
@@ -40,11 +42,11 @@ Os clientes Windows e Linux usam Qt. Em Windows e X11, o Claw’d consegue ler a
 
 | OS | Instalação |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -56,13 +58,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.0_amd64.deb
+sudo apt install ./clawd-companion_0.6.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 ```
 
 ## Enquanto o Claude trabalha
@@ -75,6 +77,20 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 | Uma ferramenta pede autorização | Desenrola um cartaz «OK?» até o pedido ser resolvido. Responda no Claude. |
 | O Claude Code comunica subagentes | Faz malabarismos com pequenas figuras. O estado indica o número real de agentes. |
 | Uma resposta termina ou surge um aviso | Desce por uma corda para festejar ou mostra o texto do aviso num balão de fala em píxeis. |
+
+## Ligar o Claude Desktop (macOS)
+
+1. Abra **Conexões** no Claw’d e ative a ligação ao **Claude Desktop**.
+2. Escolha **Permitir acesso…**. No macOS, abra **Definições do Sistema → Privacidade e segurança → Acessibilidade** e ative o **Claw’d Companion**.
+3. Na **aplicação Claude** do Mac, abra **Definições → Utilização** e deixe a página aberta por instantes. Selecione **Ler agora** no Claw’d para voltar a consultá-la.
+
+Também pode abrir o menu **Utilização** junto à caixa de mensagem no Claude. Com o menu aberto, o Claw’d pode ler os períodos apresentados. Quando está fechado, o botão só indica o período identificado no rótulo, como o limite semanal.
+
+O Claw’d lê a percentagem restante da sessão ou da semana e a hora de reposição quando o Claude apresenta esses valores num formato compatível. Volte a abrir a página de utilização para obter uma leitura atualizada.
+
+Ao ativar a ligação, o Claw’d seleciona **Claude Desktop** como fonte da quota. A última leitura válida conserva a data e hora originais. Se escolher outra fonte em **Companheiro → Limites de uso**, a escolha mantém-se após reiniciar.
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
 
 ## Ligar o Claude.ai
 
@@ -116,9 +132,11 @@ Este exemplo acrescenta um aviso temporário e visível ao separador emparelhado
 
 No Mac, arraste o Claw’d para uma janela, clique com o botão direito e escolha Pin to Window. Mantém a posição quando a janela se move e pode descer por uma corda a partir desse ponto. Nos seus passeios, trepa às barras de título, olha à volta, pestaneja e salta. Os olhos seguem o ponteiro. O lança-letras volta a apontar em cada disparo de uma rajada aleatória de 3 a 42. O contador regista o contacto com um projétil visível.
 
-No Mac, a arena pode começar após pelo menos 90 segundos sem interação. O Claw’d tem 100 pontos de vida. Duas vagas aleatórias antecedem o chefe final. Observe as barras de vida e apanhe curas, escudos ou tiro rápido. Uma interação pausa o jogo. Ative a opção de jogar durante a utilização para ajudar com cliques. Se perder, fica uma lápide com GIT durante cinco minutos reais, até ele sair da terra. A música e os efeitos podem ser ligados em separado.
+No Mac, uma ronda automática no ambiente de trabalho pode começar após pelo menos 90 segundos sem interação. O Claw’d tem 100 pontos de vida. Duas vagas aleatórias antecedem o chefe final. Observe as barras de vida e apanhe curas, escudos ou tiro rápido. Uma interação pausa o jogo. Ative a opção de jogar durante a utilização para ajudar com cliques. Se perder, fica uma lápide com GIT durante cinco minutos reais, até ele sair da terra. A música e os efeitos podem ser ligados em separado.
 
 Nas definições da sobreposição, escolha o idioma, reduza o movimento e ajuste o volume. Pode silenciar cada som em separado. Os avisos do Claude.ai mantêm o texto original.
+
+No Mac, Windows e Linux, abra **Recordes → Iniciar ronda local** para jogar de imediato. As rondas locais funcionam offline e sem conta. Pode iniciar uma ronda quando quiser, sem esperar que o computador esteja inativo. As definições de jogo automático mantêm-se. Uma ronda concluída conta para as suas estatísticas locais se tiver atingido um inimigo ou apanhado um bónus que tenha surtido efeito. A classificação online só contabiliza rondas de servidor jogadas com sessão iniciada.
 
 ## Recordes e contas da arena
 
@@ -155,7 +173,7 @@ python3 Scripts/test-hooks.py
 
 [Swift](../Package.swift) · [Desktop](../Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
 
-[Arena API](../Server/README.md) · [Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
+[Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
 
 ## Estúdio e comunidade
 

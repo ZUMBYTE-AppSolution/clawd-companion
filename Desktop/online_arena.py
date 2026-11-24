@@ -65,9 +65,10 @@ class RankedCanvas(QWidget):
 class OnlineArenaWidget(QWidget):
     roundEnded = Signal(str, str)
 
-    def __init__(self, translate, can_play, parent=None, *, client=None):
+    def __init__(self, translate, can_play, parent=None, *, client=None, local_playing=lambda: False):
         super().__init__(parent)
         self.tr_text, self.can_play = translate, can_play
+        self.local_playing = local_playing
         self._client = client or ArenaClient()
         self._workers = ThreadPoolExecutor(max_workers=3, thread_name_prefix="clawd-arena")
         self._pending = {}
@@ -165,7 +166,7 @@ class OnlineArenaWidget(QWidget):
         for control in (self.login, self.register, self.logout):
             control.setEnabled("auth" not in self._pending)
         self.start.setText(t("Wertungsrunde beenden" if self.is_playing() else "Wertungsrunde starten"))
-        self.start.setEnabled(logged and (self.is_playing() or "game" not in self._pending))
+        self.refresh_start_button()
         self.profile.setVisible(bool(self._profile))
         if self._profile:
             self.profile.setText("    ".join(f"{t(key)}  {self._stat_text(key, value)}" for key, value in zip(
@@ -181,6 +182,10 @@ class OnlineArenaWidget(QWidget):
             credit = t("Gewerteter Treffer bestätigt" if frame.ranked else "Noch ohne gewerteten Treffer")
             message = "    ".join(filter(None, (message, credit, f"{t('Punkte')}  {frame.score}")))
         self.status.setText(message)
+
+    def refresh_start_button(self):
+        self.start.setEnabled(bool(self._token) and not self.local_playing()
+                              and (self.is_playing() or "game" not in self._pending))
 
     @staticmethod
     def _stat_text(key, value):

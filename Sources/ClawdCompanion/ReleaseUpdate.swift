@@ -37,7 +37,7 @@ struct CompanionRelease {
     static let repository = URL(string: "https://github.com/ZUMBYTE-AppSolution/clawd-companion")!
     static let manifestURL = repository.appendingPathComponent("releases/latest/download/clawd-update.json")
     static let limit = 768 * 1024
-    static let installed = ReleaseVersion(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") ?? ReleaseVersion("0.6.0")!
+    static let installed = ReleaseVersion(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") ?? ReleaseVersion("0.6.1")!
     let version: ReleaseVersion
     let notes: String
     private let translations: [String: String]

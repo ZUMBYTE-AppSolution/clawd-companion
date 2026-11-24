@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: clawd-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   macos:
@@ -65,7 +65,6 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y rpm xvfb libgl1 libegl1 libpulse0 libspeechd2 libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xinerama0 libxcb-shape0 libx11-xcb1
           python -m pip install -r Packaging/desktop-requirements.txt
-      - run: python -m unittest discover -s Server/tests -p 'test_*.py'
       - run: CLAWD_ISOLATED_X11=1 xvfb-run -a python -m unittest discover -s Desktop/tests -p 'test_*.py'
       - run: bash Scripts/package-linux.sh dist
       - name: Smoke test Linux distributions

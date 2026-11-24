@@ -110,18 +110,111 @@ private final class ArenaRedirectPolicy: NSObject, URLSessionTaskDelegate {
     }
 }
 
+private actor ArenaEndpointResolver {
+    private let host: String
+    private let discover: Bool
+    private let session: URLSession
+    private var origin: URL?
+    private var pending: Task<URL, Error>?
+
+    init(host: String, configured: String?, allowsDiscovery: Bool, session: URLSession) {
+        self.host = host
+        origin = configured.flatMap { Self.validatedOrigin($0, host: host) }
+        discover = allowsDiscovery
+        self.session = session
+    }
+
+    func resolve() async throws -> URL {
+        if let origin { return origin }
+        guard discover else { throw ArenaAccountFailure.unavailable }
+        if let pending { return try await pending.value }
+        let task = Task { [host, session] in try await Self.fetch(host: host, session: session) }
+        pending = task
+        defer { pending = nil }
+        let result = try await task.value
+        origin = result
+        return result
+    }
+
+    private struct Discovery: Decodable { let arena: String }
+
+    private static func fetch(host: String, session: URLSession) async throws -> URL {
+        guard let url = URL(string: "https://" + host + "/.well-known/clawd-companion.json") else {
+            throw ArenaAccountFailure.unavailable
+        }
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 6)
+        request.httpShouldHandleCookies = false
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        let (bytes, raw) = try await session.bytes(for: request)
+        defer { bytes.task.cancel() }
+        guard let response = raw as? HTTPURLResponse, response.statusCode == 200, response.url == url,
+              response.mimeType == "application/json", response.expectedContentLength <= 2048 else {
+            throw ArenaAccountFailure.unavailable
+        }
+        var data = Data()
+        for try await byte in bytes {
+            guard data.count < 2048 else { throw ArenaAccountFailure.unavailable }
+            data.append(byte)
+        }
+        guard let info = try? JSONDecoder().decode(Discovery.self, from: data),
+              let endpoint = validatedOrigin(info.arena, host: host) else { throw ArenaAccountFailure.unavailable }
+        return endpoint
+    }
+
+    private static func validatedOrigin(_ input: String, host: String) -> URL? {
+        let raw = input.trimmingCharacters(in: CharacterSet(charactersIn: " \t\r\n"))
+        let prefix = "https://" + host
+        guard raw.utf8.count <= 2048, raw.utf8.allSatisfy({ (33...126).contains($0) }),
+              raw.lowercased().hasPrefix(prefix) else { return nil }
+        let suffix = String(raw.dropFirst(prefix.count))
+        guard suffix.isEmpty || suffix.first == "/" else { return nil }
+        var path = suffix.dropFirst().split(separator: "/", omittingEmptySubsequences: false)
+        if path.last?.isEmpty == true { path.removeLast() }
+        // Allow only literal unreserved URL components. Percent-encoded separators and traversal are rejected.
+        let allowed = Set("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~".utf8)
+        guard path.allSatisfy({ !$0.isEmpty && $0 != "." && $0 != ".." && $0.utf8.allSatisfy(allowed.contains) }) else { return nil }
+        return URL(string: prefix + (path.isEmpty ? "/" : "/" + path.joined(separator: "/") + "/"))
+    }
+
+}
+
 struct ArenaAccountClient {
-    private let origin = URL(string: "https://zumbyte.de/api/clawd/v1/")!
+    private let endpoints: ArenaEndpointResolver
     private let session: URLSession
 
-    init(session: URLSession? = nil) {
+    init() {
+        let file = Bundle.main.url(forResource: "ArenaEndpoint", withExtension: "txt")
+        self.init(host: "zumbyte.de", configured: file.flatMap(Self.readConfiguration),
+                  allowsDiscovery: file == nil, session: Self.transport(), discoverySession: Self.transport())
+    }
+
+    /// Fixture transports exercise a reserved host. The installed app uses only the bundled/operator configuration.
+    init(session: URLSession, fixtureEndpoint: String? = nil, discoverySession: URLSession? = nil) {
+        self.init(host: "arena.invalid", configured: fixtureEndpoint, allowsDiscovery: fixtureEndpoint == nil,
+                  session: session, discoverySession: discoverySession ?? session)
+    }
+
+    private init(host: String, configured: String?, allowsDiscovery: Bool, session: URLSession, discoverySession: URLSession) {
+        endpoints = ArenaEndpointResolver(host: host, configured: configured, allowsDiscovery: allowsDiscovery, session: discoverySession)
+        self.session = session
+    }
+
+    private static func readConfiguration(_ file: URL) -> String? {
+        guard let handle = try? FileHandle(forReadingFrom: file) else { return nil }
+        defer { try? handle.close() }
+        guard let bytes = try? handle.read(upToCount: 2049), bytes.count <= 2048 else { return nil }
+        return String(data: bytes, encoding: .ascii)
+    }
+
+    private static func transport() -> URLSession {
         let settings = URLSessionConfiguration.ephemeral
         settings.timeoutIntervalForRequest = 8
         settings.timeoutIntervalForResource = 14
         settings.httpShouldSetCookies = false
+        settings.httpCookieStorage = nil
         settings.urlCredentialStorage = nil
         settings.urlCache = nil
-        self.session = session ?? URLSession(configuration: settings, delegate: ArenaRedirectPolicy(), delegateQueue: nil)
+        return URLSession(configuration: settings, delegate: ArenaRedirectPolicy(), delegateQueue: nil)
     }
 
     private struct Credentials: Encodable { let username: String; let email: String?; let password: String }
@@ -166,6 +259,7 @@ struct ArenaAccountClient {
     }
 
     private func request<T: Decodable>(_ path: String, token: String? = nil, body: Data? = nil) async throws -> T {
+        let origin = try await endpoints.resolve()
         var request = URLRequest(url: origin.appendingPathComponent(path), cachePolicy: .reloadIgnoringLocalCacheData)
         request.httpMethod = body == nil ? "GET" : "POST"
         request.httpBody = body

@@ -6,13 +6,13 @@
 
 आपके डेस्कटॉप पर रहने वाला एक नन्हा पिक्सेल केकड़ा। जब Claude को आपकी ज़रूरत होती है, Claw’d अपने लैपटॉप से नज़र उठाता है। बाकी समय वह कर्सर को देखता है या किसी विंडो के किनारे पैर लटकाकर बैठ जाता है।
 
-[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## संस्करण 0.6.0 में नया क्या है
+## संस्करण 0.6.1 में नया क्या है
 
-Mac ऐप के साथ अब Windows और Linux के लिए भी डेस्कटॉप पैकेज हैं। परिचय और अपडेट में नया संस्करण ढूँढ़ें, बदलाव पढ़ें और पैकेज चुनें।
+Mac पर Claw’d अब Claude Desktop के उपयोग पेज से बचा हुआ कोटा पढ़ सकता है। उपयोग सीमाओं में Claude.ai और Claude Code के साथ Claude ऐप का अलग स्रोत है। Mac, Windows और Linux पर **हाई स्कोर → स्थानीय राउंड शुरू करें** चुनकर कभी भी ऑफ़लाइन खेलें।
 
-[संस्करण 0.6.0 में नया क्या है](releases/0.6.0/hi.md)
+[संस्करण 0.6.1 में नया क्या है](releases/0.6.1/hi.md)
 
 ## ऐप की एक झलक
 
@@ -25,6 +25,8 @@ Mac ऐप के साथ अब Windows और Linux के लिए भी 
 | परिचय और अपडेट | हाई स्कोर और अखाड़े का खाता |
 | --- | --- |
 | ![परिचय और अपडेट](media/app-updates.png) | ![हाई स्कोर और अखाड़े का खाता](media/app-highscores.png) |
+
+![स्थानीय एरीना](media/app-local-arena.png)
 
 अपडेट पैनल की तस्वीर बिना नेटवर्क अनुरोध के ली गई है। हाई स्कोर की तस्वीर में मूल रैंकिंग इंटरफ़ेस, स्थानीय टेस्ट सत्र और उदाहरण के स्कोर हैं।
 
@@ -40,11 +42,11 @@ Windows और Linux में Qt इस्तेमाल होता है�
 
 | OS | इंस्टॉल करें |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -56,13 +58,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.0_amd64.deb
+sudo apt install ./clawd-companion_0.6.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 ```
 
 ## जब Claude काम करता है
@@ -75,6 +77,20 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 | कोई टूल अनुमति माँगता है | फ़ैसला होने तक “OK?” की तख्ती थामे रहता है। अपना जवाब Claude में दें। |
 | Claude Code सब-एजेंट की सूचना देता है | एजेंट के पुतलों से जगलिंग करता है। उनकी सही संख्या स्थिति में दिखती है। |
 | जवाब पूरा होता है या चेतावनी आती है | रस्सी से उतरकर खुशी मनाता है या चेतावनी का पाठ पिक्सेल बुलबुले में दिखाता है। |
+
+## Claude Desktop से जुड़ें (macOS)
+
+1. Claw’d में **कनेक्शन** खोलें और **Claude Desktop** कनेक्शन चालू करें।
+2. **पहुँच की अनुमति दें…** चुनें। macOS की **सिस्टम सेटिंग → गोपनीयता और सुरक्षा → सुलभता** में **Claw’d Companion** चालू करें।
+3. अपने Mac पर **Claude ऐप** में **सेटिंग → उपयोग** खोलें और पेज को कुछ देर खुला रखें। दोबारा जाँचने के लिए Claw’d में **अभी पढ़ें** चुनें।
+
+Claude में संदेश लिखने के खाने के पास **उपयोग** मेन्यू भी खोल सकते हैं। मेन्यू खुला हो तो Claw’d उसमें दिख रही अवधियों की सीमाएँ पढ़ सकता है। बंद होने पर बटन से सिर्फ़ उसके लेबल पर लिखी अवधि की जानकारी मिलती है, जैसे साप्ताहिक सीमा।
+
+जब Claude सत्र या सप्ताह की सीमा और रीसेट का समय समर्थित रूप में दिखाता है, तब Claw’d बचा हुआ प्रतिशत और उपलब्ध रीसेट समय पढ़ लेता है। नई रीडिंग के लिए उपयोग पेज फिर खोलें।
+
+कनेक्शन चालू करते ही **Claude Desktop** कोटे का स्रोत बन जाता है। पिछली मान्य रीडिंग के साथ उसका मूल समय रहता है। बाद में **साथी → उपयोग सीमाएँ** में कोई दूसरा स्रोत चुनें तो अगली बार भी वही चयन रहेगा।
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
 
 ## Claude.ai से जुड़ें
 
@@ -116,9 +132,11 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 
 Mac पर Claw’d को खींचकर किसी विंडो पर रखें, राइट-क्लिक करें और Pin to Window चुनें। विंडो खिसकाने पर भी वह उसी जगह टिका रहता है और वहाँ से रस्सी पर उतर सकता है। सैर करते हुए वह टाइटल बार पर चढ़ता है, इधर-उधर देखता है, पलकें झपकाता है और नीचे कूदता है। उसकी आँखें कर्सर का पीछा करती हैं। अक्षर वाला ब्लास्टर हर बारी 3 से 42 शॉट चलाता है और हर बार फिर से निशाना लगाता है। दिखता हुआ अक्षर पॉइंटर से टकराए तभी हिट गिनी जाती है।
 
-Mac पर कम से कम 90 सेकंड तक कोई इनपुट न मिलने पर अखाड़ा शुरू हो सकता है। Claw’d की सेहत 100 है। दुश्मनों की दो बेतरतीब लहरों के बाद बॉस आता है। उनकी सेहत की पट्टियाँ देखें और इलाज, ढाल या तेज़ फ़ायर बटोरें। इनपुट देने पर खेल रुक जाता है। इस्तेमाल के दौरान खेलने की अनुमति देकर क्लिक से मदद की जा सकती है। हारने पर पाँच वास्तविक मिनट तक GIT लिखा पत्थर रहता है, फिर Claw’d मिट्टी से बाहर निकलता है। संगीत और ध्वनि प्रभाव अलग-अलग बंद कर सकते हैं।
+Mac पर डेस्कटॉप का स्वचालित राउंड कम से कम 90 सेकंड तक कोई इनपुट न मिलने पर शुरू हो सकता है। Claw’d की सेहत 100 है। दुश्मनों की दो बेतरतीब लहरों के बाद बॉस आता है। उनकी सेहत की पट्टियाँ देखें और इलाज, ढाल या तेज़ फ़ायर बटोरें। इनपुट देने पर खेल रुक जाता है। इस्तेमाल के दौरान खेलने की अनुमति देकर क्लिक से मदद की जा सकती है। हारने पर पाँच वास्तविक मिनट तक GIT लिखा पत्थर रहता है, फिर Claw’d मिट्टी से बाहर निकलता है। संगीत और ध्वनि प्रभाव अलग-अलग बंद कर सकते हैं।
 
 ओवरले सेटिंग में भाषा, कम गति और आवाज़ चुनें। हर ध्वनि अलग से बंद की जा सकती है। Claude.ai की सूचनाएँ मूल भाषा में रहती हैं।
+
+Mac, Windows और Linux पर **हाई स्कोर → स्थानीय राउंड शुरू करें** चुनकर तुरंत खेलें। स्थानीय राउंड ऑफ़लाइन चलता है और किसी खाते की ज़रूरत नहीं होती। आप निष्क्रिय समय का इंतज़ार किए बिना कभी भी राउंड शुरू कर सकते हैं। अपने आप खेल शुरू होने की सेटिंग पहले जैसी रहती है। पूरा राउंड आपके स्थानीय आँकड़ों में तभी जुड़ता है जब आपने ख़ुद किसी दुश्मन को निशाना बनाया हो या असर करने वाला पावर-अप लिया हो। ऑनलाइन रैंकिंग में सिर्फ़ साइन इन करके खेले गए सर्वर राउंड गिने जाते हैं।
 
 ## हाई स्कोर और अखाड़े का खाता
 
@@ -155,7 +173,7 @@ python3 Scripts/test-hooks.py
 
 [Swift](../Package.swift) · [Desktop](../Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
 
-[Arena API](../Server/README.md) · [Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
+[Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
 
 ## स्टूडियो और समुदाय
 

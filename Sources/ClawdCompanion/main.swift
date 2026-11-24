@@ -41,6 +41,8 @@ final class CompanionDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let overlay = OverlayController(onOpenPanel: { [weak self] in self?.showWindow() })
         desktop = overlay
         state.start(overlay: overlay, menuMascot: menuMascot)
+        NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(refreshUsageAfterWake(_:)),
+                                                          name: NSWorkspace.didWakeNotification, object: nil)
         showWindow()
     }
 
@@ -108,7 +110,14 @@ final class CompanionDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }
-    func applicationWillTerminate(_ notification: Notification) { state.stop() }
+    @objc nonisolated private func refreshUsageAfterWake(_ notification: Notification) {
+        Task { @MainActor [weak self] in self?.state.refreshDesktopUsage() }
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        NSWorkspace.shared.notificationCenter.removeObserver(self, name: NSWorkspace.didWakeNotification, object: nil)
+        state.stop()
+    }
 }
 
 MainActor.assumeIsolated {

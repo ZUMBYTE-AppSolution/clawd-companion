@@ -4,14 +4,10 @@ struct ArenaHighscoresView: View {
     @ObservedObject var state: CompanionState
 
     var body: some View {
-        ArenaHighscoresContent(totals: state.arenaTotals, account: state.arenaAccount, rankedLocked: rankedLocked)
-    }
-
-    private var rankedLocked: Bool {
-        switch state.arcadeStatus {
-        case .grave, .reviving: return true
-        default: return false
-        }
+        ArenaHighscoresContent(totals: state.arenaTotals, account: state.arenaAccount,
+                               rankedLocked: !state.canStartRankedArena,
+                               localArena: LocalArenaCard(state: state, manual: state.manualArena,
+                                                         account: state.arenaAccount))
     }
 }
 
@@ -26,11 +22,13 @@ struct ArenaHighscoresContent: View {
     let totals: ArenaTotals
     @ObservedObject var account: ArenaAccountModel
     var rankedLocked = false
+    var localArena: LocalArenaCard? = nil
     @StateObject private var form = ArenaCredentialsForm()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(L("Highscores")).font(.system(size: 22, weight: .semibold))
+            localArena
             if let username = account.username {
                 HStack {
                     Label(L("Angemeldet als {0}", username), systemImage: "person.crop.circle.fill")
@@ -198,56 +196,167 @@ struct ArenaHighscoresContent: View {
     }
 }
 
+struct LocalArenaCard: View {
+    @ObservedObject var state: CompanionState
+    @ObservedObject var manual: ManualArena
+    @ObservedObject var account: ArenaAccountModel
+
+    private var visibleFrame: VirusArcade.Frame? {
+        guard let frame = manual.frame else { return nil }
+        if frame.phase == .dead {
+            guard case .grave(let until) = state.arcadeStatus, until > Date() else { return nil }
+        }
+        return frame
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 9) {
+            SmallLabel(text: "Lokale Arena")
+            Text(L("Klicke auf Viren und Power-ups. Nur selbst gespielte Runden zählen."))
+                .font(.system(size: 12)).foregroundStyle(Ink.dim)
+            HStack {
+                if manual.playing {
+                    Button(L(manual.paused ? "Runde fortsetzen" : "Runde pausieren")) {
+                        if manual.paused { manual.resume(now: ProcessInfo.processInfo.systemUptime) }
+                        else { manual.pause() }
+                    }
+                    Button(L("Lokale Runde beenden")) { manual.end() }
+                } else {
+                    Button(L("Lokale Runde starten")) { state.startManualArena() }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(!state.canStartManualArena || account.round?.playing == true)
+                }
+            }
+            if let frame = visibleFrame {
+                PixelArenaField(frame: frame, label: L("Lokale Arena"), acceptsInput: manual.playing && !manual.paused) {
+                    manual.tap($0)
+                }
+                if frame.phase == .victory {
+                    Text(L("Sieg!")).font(.caption).foregroundStyle(Ink.mint)
+                } else if frame.phase != .dead {
+                    Text(L("Welle {0} · {1} LP", String(frame.wave), String(frame.playerHP)))
+                        .font(.caption).foregroundStyle(Ink.dim)
+                }
+            }
+            if case .grave(let until) = state.arcadeStatus {
+                TimelineView(.periodic(from: .now, by: 1)) { clock in
+                    let seconds = Int(max(0, ceil(until.timeIntervalSince(clock.date))))
+                    Text(L("Auferstehung in {0}", String(format: "%d:%02d", seconds / 60, seconds % 60)))
+                        .font(.caption).monospacedDigit().foregroundStyle(Ink.dim)
+                }
+            }
+        }.padding(12).background(RoundedRectangle(cornerRadius: 9).fill(Ink.card))
+            .background(ArenaWindowFocus(didResign: manual.pause))
+            .task(id: manual.playing && !manual.paused) {
+                while !Task.isCancelled && manual.playing && !manual.paused {
+                    manual.tick(now: ProcessInfo.processInfo.systemUptime)
+                    do { try await Task.sleep(nanoseconds: 33_333_333) } catch { return }
+                }
+            }
+            .onDisappear { manual.pause() }
+    }
+}
+
+private struct ArenaWindowFocus: NSViewRepresentable {
+    let didResign: () -> Void
+    func makeNSView(context: Context) -> Observer {
+        let view = Observer()
+        view.didResign = didResign
+        return view
+    }
+    func updateNSView(_ view: Observer, context: Context) { view.didResign = didResign }
+
+    final class Observer: NSView {
+        var didResign: (() -> Void)?
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            NotificationCenter.default.removeObserver(self)
+            guard let window else { return }
+            NotificationCenter.default.addObserver(self, selector: #selector(resigned(_:)), name: NSWindow.didResignKeyNotification, object: window)
+        }
+        @objc private func resigned(_ notification: Notification) { didResign?() }
+        deinit { NotificationCenter.default.removeObserver(self) }
+    }
+}
+
+private struct PixelArenaField: View {
+    let frame: VirusArcade.Frame
+    let label: String
+    let acceptsInput: Bool
+    let tap: (CGPoint) -> Void
+
+    var body: some View {
+        GeometryReader { geometry in
+            Canvas { context, size in
+                context.withCGContext { cg in
+                    cg.saveGState()
+                    let scale = min(size.width / 300, size.height / 160)
+                    cg.translateBy(x: (size.width - 300 * scale) / 2, y: (size.height - 160 * scale) / 2)
+                    cg.scaleBy(x: scale, y: scale)
+                    cg.translateBy(x: 0, y: 160)
+                    cg.scaleBy(x: 1, y: -1)
+                    VirusArenaPixels.draw(frame, in: cg)
+                    cg.translateBy(x: frame.hero.x - 24, y: frame.hero.y + 20.5)
+                    cg.scaleBy(x: 1, y: -1)
+                    let pose: MascotPose = frame.phase == .dead ? .grave : frame.phase == .victory ? .virusVictory : .virusFight
+                    MascotPixels.draw(in: cg, size: CGSize(width: 48, height: 41), pose: pose,
+                                      facingLeft: false, frame: Int(frame.time * 8))
+                    cg.restoreGState()
+                }
+            }.background(Ink.base)
+                .contentShape(Rectangle())
+                .gesture(SpatialTapGesture().onEnded { value in
+                    guard acceptsInput else { return }
+                    let size = geometry.size, scale = min(size.width / 300, size.height / 160)
+                    guard scale > 0 else { return }
+                    let point = CGPoint(x: (value.location.x - (size.width - 300 * scale) / 2) / scale,
+                                        y: 160 - (value.location.y - (size.height - 160 * scale) / 2) / scale)
+                    guard point.x >= 0, point.x < 300, point.y >= 0, point.y < 160 else { return }
+                    tap(point)
+                })
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(label)
+                .accessibilityValue(L("Welle {0} · {1} LP", String(frame.wave), String(frame.playerHP)))
+                .accessibilityActions {
+                    if acceptsInput {
+                        ForEach(frame.enemies, id: \.id) { enemy in
+                            Button(L(enemy.kind == .boss ? "Endboss" : "Pixelvirus") + " " + String(enemy.id)) {
+                                hit(.enemy(enemy.id), at: enemy.position, radius: enemy.radius)
+                            }
+                        }
+                        ForEach(frame.pickups, id: \.id) { pickup in
+                            Button(L(pickup.kind == .shield ? "Schild" : pickup.kind == .rapidFire ? "Schnellfeuer" : "Heilung")) {
+                                hit(.pickup(pickup.id), at: pickup.position, radius: pickup.radius)
+                            }
+                        }
+                    }
+                }
+        }.frame(maxWidth: .infinity).frame(height: 196).clipShape(RoundedRectangle(cornerRadius: 7))
+    }
+
+    // Some sprites have transparent centers. Find visible ink of this target, including when sprites overlap.
+    private func hit(_ target: VirusArenaPixels.Target, at center: CGPoint, radius: CGFloat) {
+        if VirusArenaPixels.target(at: center, in: frame)?.target == target { tap(center); return }
+        for y in stride(from: center.y - radius, through: center.y + radius, by: 1) {
+            for x in stride(from: center.x - radius, through: center.x + radius, by: 1) {
+                let p = CGPoint(x: x, y: y)
+                if VirusArenaPixels.target(at: p, in: frame)?.target == target { tap(p); return }
+            }
+        }
+    }
+}
+
 private struct RankedArenaField: View {
     let frame: ArenaOnlineFrame
     let tap: (CGPoint) -> Void
 
     var body: some View {
-        GeometryReader { geometry in
-            TimelineView(.animation(minimumInterval: 0.125)) { clock in
-                Canvas { context, size in
-                    context.withCGContext { cg in
-                        cg.saveGState()
-                        let scale = min(size.width / 300, size.height / 160)
-                        cg.translateBy(x: (size.width - 300 * scale) / 2, y: (size.height - 160 * scale) / 2)
-                        cg.scaleBy(x: scale, y: scale)
-                        cg.translateBy(x: 0, y: 160)
-                        cg.scaleBy(x: 1, y: -1)
-                        let seconds = clock.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 4096)
-                        let display = displayFrame(seconds: seconds)
-                        VirusArenaPixels.draw(display, in: cg)
-                        cg.translateBy(x: display.hero.x - 24, y: display.hero.y + 20.5)
-                        cg.scaleBy(x: 1, y: -1)
-                        MascotPixels.draw(in: cg, size: CGSize(width: 48, height: 41), pose: .virusFight,
-                                          facingLeft: false, frame: Int(seconds * 8))
-                        cg.restoreGState()
-                    }
-                }
-            }.background(Ink.base)
-                .contentShape(Rectangle())
-                .gesture(SpatialTapGesture().onEnded { value in
-                    let size = geometry.size
-                    let scale = min(size.width / 300, size.height / 160)
-                    guard scale > 0 else { return }
-                    tap(CGPoint(x: (value.location.x - (size.width - 300 * scale) / 2) / scale,
-                                y: (value.location.y - (size.height - 160 * scale) / 2) / scale))
-                })
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(L("Gewertete Runde"))
-                .accessibilityValue(L("Welle {0} · {1} LP", String(frame.wave), String(frame.hp)))
-                .accessibilityActions {
-                    ForEach(frame.enemies, id: \.id) { enemy in
-                        Button(L(enemy.kind == "boss" ? "Endboss" : "Pixelvirus") + " " + String(enemy.id)) {
-                            tap(CGPoint(x: enemy.x, y: enemy.y))
-                        }
-                    }
-                    ForEach(frame.pickups, id: \.id) { pickup in
-                        Button(L(pickup.kind == "shield" ? "Schild" : pickup.kind == "rapidFire" ? "Schnellfeuer" : "Heilung")) {
-                            tap(CGPoint(x: pickup.x, y: pickup.y))
-                        }
-                    }
-                }
-        }.frame(maxWidth: .infinity).frame(height: 196).clipShape(RoundedRectangle(cornerRadius: 7))
+        TimelineView(.animation(minimumInterval: 0.125)) { clock in
+            let time = clock.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 4096)
+            PixelArenaField(frame: displayFrame(seconds: time), label: L("Gewertete Runde"), acceptsInput: frame.playing) {
+                tap(CGPoint(x: $0.x, y: 160 - $0.y))
+            }
+        }
     }
 
     private func displayFrame(seconds: Double) -> VirusArcade.Frame {

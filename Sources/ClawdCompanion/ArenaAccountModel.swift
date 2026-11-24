@@ -11,6 +11,12 @@ final class ArenaAccountModel: ObservableObject {
     @Published private(set) var message: String?
 
     var onRankedDeath: ((String) -> Void)?
+    var mayStartRound: (() -> Bool)?
+    var onArenaOwnershipChange: (() -> Void)?
+    private var startingRankedRound = false
+    private var reportedOwnership = false
+    var occupiesArena: Bool { startingRankedRound || round?.playing == true }
+
     private var lastReportedDeath: String?
 
     private let client: ArenaAccountClient
@@ -89,7 +95,10 @@ final class ArenaAccountModel: ObservableObject {
     }
 
     func startRound() async {
-        guard !busy, let login = session, round?.playing != true else { return }
+        guard !busy, let login = session, !occupiesArena, mayStartRound?() != false else { return }
+        startingRankedRound = true
+        reportOwnership()
+        defer { startingRankedRound = false; reportOwnership() }
         busy = true
         message = nil
         do {
@@ -145,6 +154,7 @@ final class ArenaAccountModel: ObservableObject {
             }
         }
         readingRound = false
+        reportOwnership()
         if becameTerminal { await refresh() }
     }
 
@@ -157,6 +167,13 @@ final class ArenaAccountModel: ObservableObject {
         queuedPoint = nil
         needsSnapshot = false
         nextClick = .distantPast
+        reportOwnership()
+    }
+
+    private func reportOwnership() {
+        guard reportedOwnership != occupiesArena else { return }
+        reportedOwnership = occupiesArena
+        onArenaOwnershipChange?()
     }
 
     private func show(_ error: Error) {

@@ -10,6 +10,16 @@ __pycache__/
 *.xcuserstate
 xcuserdata/
 .env
+.env.*
+*.pem
+*.p12
+*.pfx
+*.key
+/Resources/ArenaEndpoint.txt
+/Server/
+/Scripts/deploy-arena.sh
+/Scripts/deploy_arena_host.py
+/Scripts/package-arena-server.py
 *.sqlite
 *.sqlite3
 *.sqlite-wal

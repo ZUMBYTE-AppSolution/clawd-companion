@@ -6,13 +6,13 @@
 
 一只住在桌面上的像素小螃蟹。Claude 需要你回应时，Claw’d 会从笔记本电脑前抬起头。平时它会盯着鼠标，或找个窗沿歇歇脚。
 
-[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## 0.6.0 版新功能
+## 0.6.1 版新功能
 
-除了 Mac 应用，现在也提供 Windows 和 Linux 桌面软件包。在“关于和更新”中可以检查新版本、阅读更新说明并挑选软件包。
+在 Mac 上，Claw’d 现在可以直接从 Claude 桌面版的用量页面读取剩余额度。在用量限额中，Claude 桌面版与 Claude.ai、Claude Code 分别作为独立数据来源。 在 Mac、Windows 和 Linux 上，选择**高分榜 → 开始本地对局**即可随时离线游玩。
 
-[0.6.0 版新功能](releases/0.6.0/zh.md)
+[0.6.1 版新功能](releases/0.6.1/zh.md)
 
 ## 应用一览
 
@@ -25,6 +25,8 @@
 | 关于和更新 | 高分榜与竞技场账号 |
 | --- | --- |
 | ![关于和更新](media/app-updates.png) | ![高分榜与竞技场账号](media/app-highscores.png) |
+
+![本地竞技场](media/app-local-arena.png)
 
 更新面板截图时未请求网络。高分榜截图使用原生排行榜界面，展示的是本地测试会话和示例成绩。
 
@@ -40,11 +42,11 @@ Windows 和 Linux 版使用 Qt。在 Windows 和 X11 下，Claw’d 能读取活
 
 | OS | 安装 |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -56,13 +58,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.0_amd64.deb
+sudo apt install ./clawd-companion_0.6.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 ```
 
 ## Claude 在忙什么
@@ -75,6 +77,20 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 | 工具请求授权 | 展开写着“OK?”的牌子，直到请求处理完毕。请在 Claude 中作答。 |
 | Claude Code 报告有子代理在运行 | 用小代理玩偶表演杂耍。状态栏显示实际数量。 |
 | 回答结束或出现警告 | 沿绳滑下，庆祝回答完成；收到警告时，用像素气泡显示原文。 |
+
+## 连接 Claude 桌面版 (macOS)
+
+1. 在 Claw’d 中打开**连接**，启用 **Claude 桌面版**连接。
+2. 选择**允许访问…**，在 macOS 的**系统设置 → 隐私与安全性 → 辅助功能**中打开 **Claw’d Companion**。
+3. 在 Mac 上打开 **Claude 应用**，前往**设置 → 用量**，让页面保持打开片刻。需要重新读取时，在 Claw’d 中选择**立即读取**。
+
+你也可以在 Claude 的消息输入框旁打开**用量**菜单。菜单展开时，Claw’d 可读取其中显示的用量周期。菜单收起时，按钮只提供其标签上明确标注的周期，例如每周限额。
+
+如果 Claude 以支持的格式显示会话或每周限额及重置时间，Claw’d 会读取相应的剩余百分比和重置时间。需要最新数据时，请重新打开用量页面。
+
+启用连接时，Claw’d 会自动将 **Claude Desktop** 设为用量来源。最近一次有效读数保留原始时间戳。如果之后在**伙伴 → 用量限额**中更换来源，重启后仍会沿用你的选择。
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
 
 ## 连接 Claude.ai
 
@@ -116,9 +132,11 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 
 在 Mac 上将 Claw’d 拖到窗口上，右键选择“Pin to Window”。它会随窗口移动，也可以从固定点沿绳滑下。散步时，它会爬上标题栏，四下张望、眨眼，再跳回桌面。它的眼睛会跟随鼠标。字母发射器每轮随机发射 3 至 42 发，每发都会重新瞄准。只有可见弹体碰到鼠标才算命中。
 
-Mac 版在至少 90 秒没有输入后才会启动竞技场。Claw’d 有 100 点生命值。击退两波随机敌人后迎战首领。留意敌人的血条，收集治疗、护盾和速射道具。输入会暂停游戏；允许在使用电脑时游玩后，可以点击助战。战败后会留下刻着 GIT 的墓碑，现实时间五分钟后它会破土而出。音乐和各项音效可以分别开关。
+Mac 上的桌面自动对局会在至少 90 秒没有输入后启动。Claw’d 有 100 点生命值。击退两波随机敌人后迎战首领。留意敌人的血条，收集治疗、护盾和速射道具。输入会暂停游戏；允许在使用电脑时游玩后，可以点击助战。战败后会留下刻着 GIT 的墓碑，现实时间五分钟后它会破土而出。音乐和各项音效可以分别开关。
 
 在悬浮层设置中选择语言、减少动态效果并调节音量。各个音效可单独关闭。Claude.ai 通知保留原文。
+
+在 Mac、Windows 和 Linux 上，打开**高分榜 → 开始本地对局**即可马上游玩。本地对局可以离线进行，无需账号。你可以随时主动开始，不必等待设备空闲，自动游戏设置也会保留。一局结束后，只有你亲自击中过敌人或收集了生效道具，该局才会计入本机统计。在线排行榜只统计登录后在服务器上进行的对局。
 
 ## 高分榜与竞技场账号
 
@@ -155,7 +173,7 @@ python3 Scripts/test-hooks.py
 
 [Swift](../Package.swift) · [Desktop](../Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
 
-[Arena API](../Server/README.md) · [Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
+[Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
 
 ## 工作室与社区
 

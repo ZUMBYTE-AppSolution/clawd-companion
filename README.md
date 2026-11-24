@@ -6,13 +6,13 @@
 
 Ein Pixelkrebs für deinen Schreibtisch. Claw’d schaut vom Notebook auf, wenn Claude deine Aufmerksamkeit braucht, folgt deinem Mauszeiger mit den Augen und sucht sich zwischen zwei Antworten eine Fensterkante zum Ausruhen.
 
-[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## Neu in 0.6.0
+## Neu in 0.6.1
 
-Zur Mac-App kommen Desktop-Pakete für Windows und Linux. Unter „Info & Updates“ kannst du nach einer Version suchen, die Änderungen lesen und ein Paket auswählen.
+Auf dem Mac kann Claw’d das verbleibende Kontingent jetzt direkt aus der Nutzungsansicht von Claude Desktop übernehmen. In der Kontingentanzeige hat die Claude-App eine eigene Quelle neben Claude.ai und Claude Code. Auf Mac, Windows und Linux kannst du unter **Highscores → Lokale Runde starten** jederzeit offline spielen.
 
-[Neu in 0.6.0](docs/releases/0.6.0/de.md)
+[Neu in 0.6.1](docs/releases/0.6.1/de.md)
 
 ## Einblicke
 
@@ -25,6 +25,8 @@ Zur Mac-App kommen Desktop-Pakete für Windows und Linux. Unter „Info & Update
 | Info & Updates | Highscores und Arena-Konto |
 | --- | --- |
 | ![Info & Updates](docs/media/app-updates.png) | ![Highscores und Arena-Konto](docs/media/app-highscores.png) |
+
+![Lokale Arena](docs/media/app-local-arena.png)
 
 Das Update-Fenster wurde ohne Netzabfrage aufgenommen. Der Highscore-Screenshot zeigt die native Ranglistenansicht mit einer lokalen Beispiel-Sitzung und erfundenen Spieldaten.
 
@@ -40,11 +42,11 @@ Windows und Linux verwenden Qt. Unter Windows und X11 kann Claw’d die Position
 
 | OS | Installation |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -56,13 +58,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.0_amd64.deb
+sudo apt install ./clawd-companion_0.6.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 ```
 
 ## Wenn Claude arbeitet
@@ -75,6 +77,20 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 | Ein Werkzeug braucht deine Freigabe | Entrollt ein „OK?“-Schild und hält es bis zur Klärung hoch. Die Antwort gibst du in Claude. |
 | Claude Code meldet Subagents | Jongliert mit Agentenfiguren. Im Status steht die tatsächliche Anzahl. |
 | Eine Antwort endet oder eine Warnung erscheint | Seilt sich ab und freut sich über die fertige Antwort oder zeigt den Warntext in einer Pixel-Sprechblase. |
+
+## Claude Desktop verbinden (macOS)
+
+1. Öffne in Claw’d **Verbindungen** und schalte die Verbindung zu **Claude Desktop** ein.
+2. Klicke auf **Zugriff erlauben …**. Aktiviere **Claw’d Companion** in den macOS-Systemeinstellungen unter **Datenschutz & Sicherheit → Bedienungshilfen**.
+3. Öffne in der **Claude-App** auf dem Mac **Einstellungen → Nutzung** und lass die Seite kurz geöffnet. Mit **Jetzt einlesen** kannst du die Ansicht erneut prüfen lassen.
+
+Alternativ öffnest du in Claude neben dem Eingabefeld das Menü **Nutzung**. Im geöffneten Menü kann Claw’d die angezeigten Zeitfenster lesen. Bei geschlossenem Menü liefert die Schaltfläche nur den ausdrücklich bezeichneten Zeitraum, etwa das Wochenlimit.
+
+Claw’d liest die verbleibenden Prozente für das Sitzungs- oder Wochenlimit und die Rücksetzzeit, soweit Claude diese Werte in einer unterstützten Form anzeigt. Öffne die Nutzungsansicht erneut, wenn du einen aktuellen Stand brauchst.
+
+Beim Einschalten wählt Claw’d automatisch **Claude Desktop** als Kontingentquelle. Die letzte gültige Messung behält ihren ursprünglichen Zeitstempel. Eine später unter **Begleiter → Kontingent** getroffene Quellenwahl bleibt beim nächsten Start erhalten.
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
 
 ## Claude.ai verbinden
 
@@ -116,9 +132,11 @@ Im gekoppelten Claude.ai-Tab erzeugt dieses Beispiel einen kurzen, sichtbaren Hi
 
 Ziehe Claw’d auf dem Mac an ein Fenster und wähle per Rechtsklick „Pin to Window“. Beim Verschieben bleibt er an seinem Platz und kann sich von dort abseilen. Unterwegs klettert er auf Titelleisten, schaut sich um, blinzelt und springt herunter. Seine Augen folgen deinem Cursor. Der Buchstabenblaster zielt bei jedem der zufällig 3 bis 42 Schüsse neu. Ein Treffer zählt bei Kontakt mit einem sichtbaren Geschoss.
 
-Die Mac-Arena startet frühestens nach 90 Sekunden ohne Eingabe. Claw’d hat 100 Lebenspunkte. Zwei zufällige Wellen führen zum Endboss. Beobachte die gegnerischen Lebensbalken und sammle Heilung, Schilde oder Schnellfeuer. Bei Eingaben pausiert das Spiel. Mit „Auch bei aktiver Nutzung spielen“ kannst du per Mausklick mithelfen. Nach einer Niederlage steht fünf echte Minuten lang ein GIT-Grabstein an seiner Stelle. Dann gräbt er sich wieder aus. Musik und Effekte lassen sich einzeln schalten.
+Die automatische Desktop-Runde auf dem Mac kann nach mindestens 90 Sekunden ohne Eingabe beginnen. Claw’d hat 100 Lebenspunkte. Zwei zufällige Wellen führen zum Endboss. Beobachte die gegnerischen Lebensbalken und sammle Heilung, Schilde oder Schnellfeuer. Bei Eingaben pausiert das Spiel. Mit „Auch bei aktiver Nutzung spielen“ kannst du per Mausklick mithelfen. Nach einer Niederlage steht fünf echte Minuten lang ein GIT-Grabstein an seiner Stelle. Dann gräbt er sich wieder aus. Musik und Effekte lassen sich einzeln schalten.
 
 Wähle in den Overlay-Einstellungen die Sprache, reduzierte Bewegung und die Lautstärke. Eigene Töne lassen sich einzeln ausschalten. Claude.ai-Hinweise behalten ihren ursprünglichen Wortlaut.
+
+Du kannst die Virenarena auf Mac, Windows und Linux direkt unter **Highscores → Lokale Runde starten** spielen. Die lokale Runde läuft auch offline und ohne Konto. Du startest sie jederzeit selbst, unabhängig vom Leerlauf. Deine Einstellungen für das automatische Spiel bleiben erhalten. Für deine lokale Statistik zählen nur abgeschlossene Runden, in denen du selbst einen Gegner getroffen oder ein wirksames Power-up eingesammelt hast. Die Online-Rangliste wertet ausschließlich angemeldete Serverrunden.
 
 ## Highscores und Arena-Konto
 
@@ -155,7 +173,7 @@ python3 Scripts/test-hooks.py
 
 [Swift](Package.swift) · [Desktop](Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
 
-[Arena API](Server/README.md) · [Windows](Scripts/package-windows.ps1) · [Linux](Scripts/package-linux.sh)
+[Windows](Scripts/package-windows.ps1) · [Linux](Scripts/package-linux.sh)
 
 ## Studio und Community
 

@@ -31,7 +31,8 @@ with tempfile.TemporaryDirectory() as scratch:
         icon = Path(scratch, "Clawd.ico")
         icon.write_bytes(entries + b"".join(data for _, data in images))
         command.extend(["--icon", str(icon)])
-    for source, destination in [("BrowserExtension", "BrowserExtension"), ("Resources", "Resources"),
+    for source, destination in [("BrowserExtension", "BrowserExtension"), ("Resources/Languages", "Resources/Languages"),
+                                ("Resources/ClawdDialogue.ttf", "Resources"), ("Resources/ArenaEndpoint.txt", "Resources"),
                                 ("Desktop/assets", "Desktop/assets"), ("VERSION", ".")]:
         path = root / source
         if path.exists():

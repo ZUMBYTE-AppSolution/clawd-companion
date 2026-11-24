@@ -15,7 +15,7 @@ if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] in ("--clawd-hoo
     code_link.collect(sys.argv[1])
     sys.exit(0)
 
-from PySide6.QtCore import Qt, QPoint, QRect, QSize, QTimer, QUrl
+from PySide6.QtCore import Qt, QEvent, QPoint, QRect, QSize, QTimer, QUrl, Signal
 from PySide6.QtGui import (QColor, QCursor, QDesktopServices, QFont, QFontDatabase, QGuiApplication, QIcon,
                           QPainter, QPalette, QPixmap, QPolygon, QRegion)
 from PySide6.QtMultimedia import QSoundEffect
@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog, QHBo
                                QPushButton, QScrollArea, QSlider, QSystemTrayIcon, QTabWidget, QVBoxLayout, QWidget)
 
 from arcade import Arcade
+from local_arena import LocalArenaRound
 from desktop_core import (ACTIVITIES, ASSETS, DEFAULTS, LANGUAGES, ROOT, SOUNDS, BrowserBridge, Language,
                           PointerVolley, Preferences, iso_time, pairing_token, projectile_ink, ranked_terminal)
 import platform_host
@@ -266,6 +267,15 @@ class Letters(Layer):
         p.end()
 
 
+class SettingsDialog(QDialog):
+    lostFocus = Signal()
+
+    def event(self, event):
+        if event.type() in (QEvent.Type.WindowDeactivate, QEvent.Type.Hide):
+            self.lostFocus.emit()
+        return super().event(event)
+
+
 class Companion:
     def __init__(self, app, test_directory=None):
         self.testing = test_directory is not None
@@ -299,6 +309,8 @@ class Companion:
         self.volley = None
         self.game = None
         self.game_visible = False
+        self.manual = LocalArenaRound(self.tr)
+        self.panel_canvas = None
         self.requested = False
         self.pin_offset = QPoint()
         self.pin_origin = None
@@ -616,6 +628,85 @@ class Companion:
             self.requested=True
             self.next_arcade=time.monotonic()
 
+    def toggle_local_round(self):
+        if self.manual.playing:
+            self.manual.clear()
+            self.audio.music()
+        else:
+            existing = (self.game, self.run_id) if self.game is not None else None
+            ranked = hasattr(self, "online") and self.online.is_playing()
+            if not self.manual.start(now=time.time(), grave_until=self.prefs["graveUntil"],
+                                     online_playing=ranked, existing=existing):
+                return
+            if existing is not None:
+                self.hide_arena()
+                self.game = None
+            self.requested = False
+        if hasattr(self, "online"):
+            self.online.refresh_start_button()
+        self.draw_local_round(time.monotonic())
+
+    def pause_local_round(self):
+        if self.manual.playing:
+            self.manual.pause()
+            self.audio.music()
+
+    def toggle_local_pause(self):
+        if self.manual.paused:
+            self.manual.resume(time.monotonic())
+        else:
+            self.pause_local_round()
+        self.draw_local_round(time.monotonic())
+
+    def local_round_click(self, x, y):
+        if self.panel_canvas.isVisible() and self.manual.click(x, y):
+            # A final hit is committed even when the user closes the panel before another timer tick.
+            self.draw_local_round(time.monotonic())
+
+    def draw_local_round(self, now):
+        if self.panel_canvas is None:
+            return
+        visible = self.local_button.isVisible()
+        wall = time.time()
+        grave = max(0, self.prefs["graveUntil"] - wall)
+        if self.manual.scene is not None:
+            for cue in self.manual.tick(now, visible):
+                self.audio.play(BATTLE_SOUND.get(cue))
+            if self.manual.finish(self.prefs, wall):
+                self.online.refresh_start_button()
+                self.audio.music()
+                self.next_arcade = now + random.uniform(150, 300)
+                if self.manual.phase == "victory":
+                    self.flash("virusVictory", 3)
+                grave = max(0, self.prefs["graveUntil"] - wall)
+                self.update_status()
+            elif self.manual.playing:
+                self.audio.music(self.manual.phase if visible and not self.manual.paused else "")
+            elif self.manual.phase == "dead" and not grave:
+                self.manual.clear()
+        if not visible:
+            return
+        ranked = hasattr(self, "online") and self.online.is_playing()
+        self.local_button.setText(self.tr("Lokale Runde beenden" if self.manual.playing else "Lokale Runde starten"))
+        self.local_button.setEnabled(not ranked and not grave)
+        self.local_pause.setVisible(self.manual.playing)
+        self.local_pause.setText(self.tr("Runde fortsetzen" if self.manual.paused else "Runde pausieren"))
+        self.panel_canvas.frame = self.manual if self.manual.scene is not None else None
+        self.panel_canvas.setVisible(self.panel_canvas.frame is not None)
+        if self.panel_canvas.frame is not None:
+            self.panel_canvas.update()
+        if grave:
+            seconds = math.ceil(grave)
+            status = self.tr("Auferstehung in {0}", f"{seconds//60}:{seconds%60:02d}")
+        elif self.manual.playing:
+            scene = self.manual.scene
+            status = (self.tr("Endboss · {0} LP", scene.player_hp) if self.manual.phase == "boss"
+                      else self.tr("Welle {0} · {1} LP", scene.wave, scene.player_hp))
+        else:
+            status = self.tr("Sieg!") if self.manual.phase == "victory" else ""
+        self.local_status.setText(status)
+        self.local_status.setVisible(bool(status))
+
     def drive_arena(self,now,busy):
         from desktop_core import record_round
         import uuid
@@ -774,7 +865,8 @@ class Companion:
             activity="awaitingApproval"
         if activity in ("idle","happy"):
             self.task_window=None
-        busy=activity not in ("idle","happy") or bool(self.volley) or bool(self.pet.drag)
+        self.draw_local_round(now)
+        busy=activity not in ("idle","happy") or bool(self.volley) or bool(self.pet.drag) or self.manual.playing
         if getattr(self,"online",None) and self.online.is_playing():
             busy=True
         if self.pin is not None and not self.game_visible and not self.pet.drag:
@@ -869,7 +961,8 @@ class Companion:
                 self.tray_key=key
                 self.tray.setIcon(self.tray_pix[key])
                 self.tray.setToolTip("Claw’d · "+self.tr(POSE_LABELS.get(pose,"Startklar")))
-        fast=bool(self.game_visible or self.volley or self.motion or self.pending or self.pet.drag)
+        manual_visible = self.manual.playing and not self.manual.paused and self.panel_canvas is not None and self.panel_canvas.isVisible()
+        fast=bool(manual_visible or self.game_visible or self.volley or self.motion or self.pending or self.pet.drag)
         next_interval=33 if fast else 125
         if self.timer.interval()!=next_interval:
             self.timer.setInterval(next_interval)
@@ -911,7 +1004,7 @@ class Companion:
 
     def ranked_available(self):
         return bool(self.prefs["activePlay"] and self.prefs["arcade"] and self.prefs["visible"] and not self.prefs["reduce"]
-                    and not self.game and not self.volley and not self.prefs["graveUntil"] and not self.agent_times
+                    and not self.manual.playing and not self.game and not self.volley and not self.prefs["graveUntil"] and not self.agent_times
                     and not self.approvals and not self.sessions and (self.browser_state[0] in ("idle","happy") or self.browser_state[1]<=time.monotonic()))
 
     def rebuild_settings(self):
@@ -936,7 +1029,8 @@ class Companion:
         self.dialog.activateWindow()
 
     def build_settings(self):
-        dlg=self.dialog=QDialog(self.stage)
+        dlg=self.dialog=SettingsDialog(self.stage)
+        dlg.lostFocus.connect(self.pause_local_round)
         dlg.setWindowTitle("Claw’d Companion")
         dlg.resize(620,560)
         dlg.setLayoutDirection(Qt.LayoutDirection.RightToLeft if self.language.code in ("ar","ur") else Qt.LayoutDirection.LeftToRight)
@@ -1045,12 +1139,35 @@ class Companion:
         label(links,"","hookMessage")
 
         scores=page("Highscores")
+        from online_arena import RankedCanvas
+        heading(scores, "Lokale Arena")
+        self.local_button = QPushButton(self.tr("Lokale Runde starten"))
+        self.local_button.clicked.connect(lambda checked=False: self.toggle_local_round())
+        label(scores, self.tr("Klicke auf Viren und Power-ups. Nur selbst gespielte Runden zählen."))
+        local_actions = QHBoxLayout()
+        local_actions.addWidget(self.local_button)
+        self.local_pause = QPushButton()
+        self.local_pause.clicked.connect(lambda checked=False: self.toggle_local_pause())
+        self.local_pause.hide()
+        local_actions.addWidget(self.local_pause)
+        local_actions.addStretch(1)
+        scores.addLayout(local_actions)
+        # Capture even brief tab switches that fall between two simulation ticks.
+        local_page = tabs.count() - 1
+        tabs.currentChanged.connect(lambda index: self.pause_local_round() if index != local_page else None)
+        self.local_status = QLabel()
+        self.local_status.hide()
+        scores.addWidget(self.local_status)
+        self.panel_canvas = RankedCanvas()
+        self.panel_canvas.clicked.connect(self.local_round_click)
+        self.panel_canvas.hide()
+        scores.addWidget(self.panel_canvas)
         heading(scores,"Meine Arena-Statistik")
         label(scores,"","score")
         label(scores,self.tr("Nur abgeschlossene Runden, in denen du selbst einen Gegner getroffen oder ein wirksames Power-up eingesammelt hast, zählen."))
         from online_arena import OnlineArenaWidget
         if not hasattr(self,"online"):
-            self.online=OnlineArenaWidget(self.tr,self.ranked_available)
+            self.online=OnlineArenaWidget(self.tr,self.ranked_available,local_playing=lambda: self.manual.playing)
             self.online.roundEnded.connect(self.ranked_finished)
         else:
             self.online.refresh_language()
@@ -1185,6 +1302,30 @@ def main():
             desktop=Companion(app,Path(path))
             desktop.show_settings()
             desktop.set_pref("sound",False)
+            # Exercise the actual tab button and canvas event without a session or idle permission.
+            desktop.set_pref("arcade", False)
+            desktop.show_settings(3)
+            app.processEvents()
+            desktop.local_button.click()
+            app.processEvents()
+            assert desktop.manual.playing and desktop.panel_canvas.isVisible()
+            assert not desktop.prefs["activePlay"] and not desktop.prefs["arcade"]
+            from PySide6.QtCore import QEvent, QPointF
+            from PySide6.QtGui import QMouseEvent
+            x, y, w, h = next(desktop.manual.scene.hit_rects())
+            box = desktop.panel_canvas.box()
+            point = QPointF(box.x() + (x + w/2)*box.width()/300, box.y() + (y + h/2)*box.height()/160)
+            click = QMouseEvent(QEvent.Type.MouseButtonPress, point, point, Qt.MouseButton.LeftButton,
+                                Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier)
+            QApplication.sendEvent(desktop.panel_canvas, click)
+            assert desktop.manual.scene.stats["manualDamage"] > 0
+            desktop.local_pause.click()
+            assert desktop.manual.paused
+            desktop.local_pause.click()
+            assert not desktop.manual.paused
+            desktop.local_button.click()
+            assert not desktop.manual.playing and not desktop.prefs["highscore"]
+            desktop.set_pref("arcade", True)
             desktop.set_pref("activePlay",True)
             desktop.request_game()
             desktop.tick()

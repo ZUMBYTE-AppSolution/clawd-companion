@@ -11,8 +11,6 @@ test -s "$notes"
 packages=("Clawd-Companion-$version-macOS-universal.pkg" "Clawd-Companion-$version-macOS-universal.zip"
           "Clawd-Companion-$version-Windows-x64-Setup.exe" "Clawd-Companion-$version-Windows-x64-Portable.zip"
           "Clawd-Companion-$version-Linux-x86_64.tar.gz" "clawd-companion_${version}_amd64.deb" "clawd-companion-$version-1.x86_64.rpm")
-python3 Scripts/package-arena-server.py "$assets/Clawd-Arena-API-$version.tar.gz"
-packages+=("Clawd-Arena-API-$version.tar.gz")
 paths=()
 for asset in "${packages[@]}"; do test -s "$assets/$asset"; paths+=("$assets/$asset"); done
 python3 Scripts/make-update-manifest.py --tag "$tag" --notes "$notes" --assets-dir "$assets" --output "$assets/clawd-update.json"

@@ -8,20 +8,22 @@ enum PanelPage: String, CaseIterable {
 enum QuotaSource: String, CaseIterable {
     case browser = "Claude.ai"
     case code = "Claude Code"
+    case desktop = "Claude Desktop"
 }
 
-struct LimitWindow: Codable, Equatable {
+struct LimitWindow: Codable, Equatable, Sendable {
     var remaining: Double
     var reset: Date?
     var resetLabel: String?
     var resetApproximate: Bool?
+    var observedAt: Date?
     var resetPrefix: String {
         let relative = resetLabel?.range(of: #"\b(in|nach)\s+\d"#, options: [.regularExpression, .caseInsensitive]) != nil
         return (resetApproximate ?? relative) ? "Reset ca." : "Reset"
     }
 }
 
-struct LimitReport: Codable, Equatable {
+struct LimitReport: Codable, Equatable, Sendable {
     var seen: Date
     var session: LimitWindow?
     var week: LimitWindow?
@@ -29,8 +31,11 @@ struct LimitReport: Codable, Equatable {
     func current(weekly: Bool, at now: Date) -> LimitWindow? {
         guard seen <= now.addingTimeInterval(60),
               let window = weekly ? week : session else { return nil }
+        let observation = window.observedAt ?? seen
+        guard observation <= now.addingTimeInterval(60),
+              window.remaining.isFinite, (0...100).contains(window.remaining) else { return nil }
         if let reset = window.reset { return reset > now ? window : nil }
-        return now.timeIntervalSince(seen) < 900 ? window : nil
+        return now.timeIntervalSince(observation) < 900 ? window : nil
     }
 }
 
@@ -61,7 +66,9 @@ struct PlayScore: Equatable {
 
 @MainActor
 final class CompanionState: ObservableObject {
-    @Published var page: PanelPage = .companion
+    @Published var page: PanelPage = .companion {
+        didSet { if page != .highscores { manualArena.pause() } }
+    }
     @Published var safariSetup = false
     @Published private(set) var now = Date()
     @Published private(set) var pose: MascotPose = .idle
@@ -73,12 +80,30 @@ final class CompanionState: ObservableObject {
     @Published private(set) var playScore: PlayScore
     @Published private(set) var arcadeStatus: ArcadeStatus = .ready
     @Published private(set) var arenaTotals: ArenaTotals
-    let arenaAccount = ArenaAccountModel()
+    let arenaAccount: ArenaAccountModel
+    let manualArena: ManualArena
+    @Published private(set) var panelArenaReserved = false
     @Published private(set) var hooksNeedUpgrade = false
     @Published private(set) var activityLabel = "Startklar"
     @Published private(set) var activitySource = "Claw’d"
     @Published private(set) var webReport: LimitReport?
     @Published private(set) var codeReport: LimitReport?
+    @Published private(set) var desktopReport: LimitReport?
+    @Published private(set) var desktopUsageStatus: DesktopUsageStatus = .disabled
+    @Published var desktopUsageEnabled: Bool {
+        didSet {
+            guard desktopUsageEnabled != oldValue else { return }
+            save(desktopUsageEnabled, "desktopUsageEnabled")
+            desktopUsageGeneration &+= 1
+            if desktopUsageEnabled {
+                quotaSource = .desktop
+                desktopUsageStatus = .checking
+                refreshDesktopUsage()
+            } else {
+                desktopUsageStatus = .disabled
+            }
+        }
+    }
     @Published private(set) var browserSeen: Date?
     @Published private(set) var browserRunning = false
     @Published private(set) var bridgeIssue: String?
@@ -120,11 +145,19 @@ final class CompanionState: ObservableObject {
     @Published var quiet: Bool { didSet { save(quiet, "quiet"); configureOverlay() } }
     @Published var scale: Double { didSet { save(scale, "scale"); configureOverlay() } }
     @Published var webEnabled: Bool { didSet { save(webEnabled, "webEnabled"); updateBridge() } }
-    @Published var quotaSource: QuotaSource { didSet { save(quotaSource.rawValue, "quotaSource") } }
+    @Published var quotaSource: QuotaSource {
+        didSet { save(quotaSource.rawValue, "quotaSource"); updateReadout() }
+    }
 
     let updates: ReleaseUpdateCenter
     private let defaults: UserDefaults
     private let uptime: () -> TimeInterval
+    private let readDesktopUsage: @Sendable () -> DesktopUsageSample
+    private let desktopUsageQueue = DispatchQueue(label: "de.zumbyte.clawd.desktop-usage", qos: .utility)
+    private var desktopUsageGeneration = 0
+    private var desktopUsageReadInFlight = false
+    private var desktopUsageSuspended = false
+    private var nextDesktopUsageRead = -TimeInterval.infinity
     private let audio = CompanionAudio()
     private let sessionStatus = ClaudeSessionStatus()
     private lazy var bridge = BrowserBridge()
@@ -143,7 +176,12 @@ final class CompanionState: ObservableObject {
     private var lastAction = Date()
     private var lastAppliedPose: MascotPose?
 
-    init(defaults: UserDefaults = .standard, uptime: @escaping () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
+    init(defaults: UserDefaults = .standard, readDesktopUsage: @escaping @Sendable () -> DesktopUsageSample = { DesktopUsageSample.read() },
+         manualArena: ManualArena? = nil, arenaAccount: ArenaAccountModel? = nil, uptime: @escaping () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
+        self.manualArena = manualArena ?? ManualArena()
+        self.arenaAccount = arenaAccount ?? ArenaAccountModel()
+        self.readDesktopUsage = readDesktopUsage
+        desktopUsageEnabled = defaults.bool(forKey: "desktopUsageEnabled")
         self.defaults = defaults
         arenaTotals = defaults.data(forKey: "arena.totals.v1").flatMap { try? JSONDecoder().decode(ArenaTotals.self, from: $0) } ?? ArenaTotals()
         self.updates = ReleaseUpdateCenter(defaults: defaults)
@@ -178,6 +216,10 @@ final class CompanionState: ObservableObject {
            let defaultBrowser = NSWorkspace.shared.urlForApplication(toOpen: url) {
             safariSetup = Bundle(url: defaultBrowser)?.bundleIdentifier == "com.apple.Safari"
         }
+        if let data = defaults.data(forKey: "desktopUsageReport") {
+            desktopReport = try? JSONDecoder().decode(LimitReport.self, from: data)
+        }
+        if desktopUsageEnabled { desktopUsageStatus = .checking }
         if let data = defaults.data(forKey: "webReport") {
             webReport = try? JSONDecoder().decode(LimitReport.self, from: data)
         }
@@ -187,6 +229,7 @@ final class CompanionState: ObservableObject {
         voice.enabled = voiceEnabled
         if defaults.string(forKey: "language") == nil { defaults.set(language, forKey: "language") }
         L10n.select(language)
+        configurePanelArenaSessions()
     }
 
     func isSoundEnabled(_ sound: PetSound) -> Bool { !mutedSounds.contains(sound) }
@@ -200,9 +243,12 @@ final class CompanionState: ObservableObject {
     private func save(_ value: Any, _ key: String) { defaults.set(value, forKey: key) }
 
     func start(overlay: OverlayController, menuMascot: MenuMascot? = nil) {
+        desktopUsageSuspended = false
+        nextDesktopUsageRead = -.infinity
         self.overlay = overlay
         self.menuMascot = menuMascot
-        arenaAccount.onRankedDeath = { [weak self] id in self?.recordRankedDeath(id: id) }
+        overlay.setPanelArenaReserved(panelArenaReserved)
+        overlay.onArenaEnvironmentPause = { [weak self] in self?.manualArena.pause() }
         updates.onAvailable = { [weak self] version in
             guard let self, self.showOverlay, self.speechEnabled else { return }
             self.overlay?.speak(title: "Claw’d Companion", message: L("Version {0} ist verfügbar.", version), kind: "info")
@@ -244,6 +290,9 @@ final class CompanionState: ObservableObject {
     }
 
     func stop() {
+        manualArena.pause()
+        desktopUsageSuspended = true
+        desktopUsageGeneration &+= 1
         updates.stop()
         voice.stop()
         audio.setArcadeMusic(nil)
@@ -264,7 +313,15 @@ final class CompanionState: ObservableObject {
     private func poll() {
         now = Date()
         tick += 1
-        if tick % 5 == 0 { refreshIntegrations() }
+        if desktopUsageEnabled, uptime() >= nextDesktopUsageRead { beginDesktopUsageRead(showProgress: false) }
+        if tick % 5 == 0 {
+            refreshIntegrations()
+            if arenaAccount.round?.playing == true, page != .highscores || NSApp.keyWindow == nil {
+                // A server round keeps advancing while its panel is hidden. Observe its end
+                // so the shared pet can recover or become available for local play again.
+                Task { [weak self] in await self?.arenaAccount.updateRound() }
+            }
+        }
         let codeInfo = hooksInstalled ? ClaudeHooks.poll() : nil
         codeApprovals = codeInfo?.approvalCount ?? 0
         sessionStatus.update(pending: codeInfo?.pendingApprovals ?? [:]) { resolved in
@@ -374,7 +431,62 @@ final class CompanionState: ObservableObject {
     var webConnected: Bool {
         webEnabled && browserSeen.map { now.timeIntervalSince($0) < 100 } == true
     }
-    var selectedReport: LimitReport? { quotaSource == .browser ? webReport : codeReport }
+    var selectedReport: LimitReport? {
+        switch quotaSource {
+        case .desktop: return desktopReport
+        case .browser: return webReport
+        case .code: return codeReport
+        }
+    }
+
+    func refreshDesktopUsage() { beginDesktopUsageRead(showProgress: true) }
+
+    func requestDesktopUsageAccess() {
+        guard desktopUsageEnabled else { return }
+        ClaudeDesktopUsageReader.requestAccess()
+        refreshDesktopUsage()
+    }
+
+    private func beginDesktopUsageRead(showProgress: Bool) {
+        guard desktopUsageEnabled, !desktopUsageSuspended, !desktopUsageReadInFlight else { return }
+        desktopUsageReadInFlight = true
+        nextDesktopUsageRead = uptime() + 10
+        if showProgress { desktopUsageStatus = .checking }
+        let generation = desktopUsageGeneration
+        let read = readDesktopUsage
+        desktopUsageQueue.async { [weak self] in
+            let result = read()
+            DispatchQueue.main.async { [weak self] in
+                self?.finishDesktopUsageRead(result, generation: generation)
+            }
+        }
+    }
+
+    private func finishDesktopUsageRead(_ result: DesktopUsageSample, generation: Int) {
+        desktopUsageReadInFlight = false
+        guard desktopUsageEnabled, !desktopUsageSuspended else { return }
+        guard generation == desktopUsageGeneration else {
+            beginDesktopUsageRead(showProgress: true)
+            return
+        }
+        switch result {
+        case .needsPermission: desktopUsageStatus = .needsPermission
+        case .notRunning: desktopUsageStatus = .notRunning
+        case .identityUnavailable: desktopUsageStatus = .identityUnavailable
+        case .unavailable: desktopUsageStatus = .unavailable
+        case let .usage(sample, fromCompactButton):
+            guard let report = sample.desktopObservation(preserving: desktopReport, now: Date(), fromCompactButton: fromCompactButton) else {
+                desktopUsageStatus = .unavailable
+                return
+            }
+            desktopUsageStatus = .ready
+            if report != desktopReport {
+                desktopReport = report
+                if let data = try? JSONEncoder().encode(report) { defaults.set(data, forKey: "desktopUsageReport") }
+                updateReadout()
+            }
+        }
+    }
 
     private func resolveActivity() {
         let date = Date()
@@ -463,6 +575,49 @@ final class CompanionState: ObservableObject {
         save(["hits": playScore.hits, "dodges": playScore.dodges], "playScore")
     }
 
+    private func configurePanelArenaSessions() {
+        manualArena.onFinish = { [weak self] id, stats in
+            self?.recordArenaRound(id: id, stats: stats)
+            if stats.deaths > 0 { self?.beginArenaGrave() }
+        }
+        manualArena.onOwnershipChange = { [weak self] in self?.syncArenaOwnership() }
+        manualArena.onMusic = { [weak self] phase in self?.audio.setArcadeMusic(phase) }
+        manualArena.onSound = { [weak self] sound in self?.audio.play(sound) }
+        arenaAccount.mayStartRound = { [weak self] in self?.canStartRankedArena ?? false }
+        arenaAccount.onArenaOwnershipChange = { [weak self] in self?.syncArenaOwnership() }
+        arenaAccount.onRankedDeath = { [weak self] id in self?.recordRankedDeath(id: id) }
+    }
+
+    private func syncArenaOwnership() {
+        let occupied = manualArena.playing || arenaAccount.occupiesArena
+        guard occupied != panelArenaReserved else { return }
+        panelArenaReserved = occupied
+        overlay?.setPanelArenaReserved(occupied)
+    }
+
+    private var arenaPetAvailable: Bool {
+        switch arcadeStatus {
+        case .grave, .reviving, .victory: return false
+        default: return true
+        }
+    }
+
+    var canStartManualArena: Bool { arenaPetAvailable && !panelArenaReserved }
+
+    var canStartRankedArena: Bool {
+        guard arenaPetAvailable, !panelArenaReserved, overlay?.hasAmbientArenaRound != true else { return false }
+        switch arcadeStatus {
+        case .wave, .boss, .paused: return false
+        default: return true
+        }
+    }
+
+    func startManualArena() {
+        guard canStartManualArena else { return }
+        let carried = overlay?.takeArenaForPanel()
+        manualArena.start(now: uptime(), existing: carried)
+    }
+
     func recordArenaRound(id: UUID, stats: VirusArcade.RunStats) {
         var updated = arenaTotals
         guard updated.record(id: id, stats: stats), let data = try? JSONEncoder().encode(updated) else { return }
@@ -473,6 +628,10 @@ final class CompanionState: ObservableObject {
     func recordRankedDeath(id: String) {
         guard !id.isEmpty, defaults.string(forKey: "lastRankedGraveID") != id else { return }
         save(id, "lastRankedGraveID")
+        beginArenaGrave()
+    }
+
+    private func beginArenaGrave() {
         if case .grave = arcadeStatus { return }
         let until = Date().addingTimeInterval(ArcadeCoordinator.graveDuration)
         save(until, "arcadeGraveUntil")
@@ -508,7 +667,7 @@ final class CompanionState: ObservableObject {
     }
 
     var canRequestArcade: Bool {
-        arcadeEnabled && arcadeStatus == .ready && showOverlay && !lessMotion && !isAwaitingApproval
+        !panelArenaReserved && arcadeEnabled && arcadeStatus == .ready && showOverlay && !lessMotion && !isAwaitingApproval
     }
 
     func requestArcade() {

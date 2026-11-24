@@ -96,6 +96,7 @@ private struct QuotaCard: View {
     let title: String
     let window: LimitWindow?
     let now: Date
+    var latestObservation: Date?
     private var percent: String {
         guard let value = window?.remaining else { return "–" }
         return (value / 100).formatted(.percent.precision(.fractionLength(0...1)).locale(L10n.locale))
@@ -134,6 +135,11 @@ private struct QuotaCard: View {
             }.frame(height: 4)
             Text(caption).font(.system(size: 11)).foregroundStyle(Ink.dim)
                 .lineLimit(2).fixedSize(horizontal: false, vertical: true)
+            if let seen = window?.observedAt, let latestObservation,
+               latestObservation.timeIntervalSince(seen) >= 60 {
+                Text(L("Stand {0}", seen.formatted(.dateTime.day().month().hour().minute().locale(L10n.locale))))
+                    .font(.system(size: 10, design: .monospaced)).foregroundStyle(Ink.dim)
+            }
         }.padding(14).frame(maxWidth: .infinity, alignment: .leading)
             .background(RoundedRectangle(cornerRadius: 12).fill(Ink.card))
             .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(Ink.line))
@@ -226,14 +232,22 @@ struct CompanionPanel: View {
                     .accessibilityLabel(L("Kontingentquelle, {0}", state.quotaSource.rawValue))
             }
             HStack(alignment: .top, spacing: 9) {
-                QuotaCard(title: "5-Stunden-Fenster", window: state.selectedReport?.current(weekly: false, at: state.now), now: state.now)
-                QuotaCard(title: "Wochenlimit", window: state.selectedReport?.current(weekly: true, at: state.now), now: state.now)
+                QuotaCard(title: "5-Stunden-Fenster", window: state.selectedReport?.current(weekly: false, at: state.now),
+                          now: state.now, latestObservation: state.selectedReport?.seen)
+                QuotaCard(title: "Wochenlimit", window: state.selectedReport?.current(weekly: true, at: state.now),
+                          now: state.now, latestObservation: state.selectedReport?.seen)
             }
             if let seen = state.selectedReport?.seen {
                 Text(L("Letzte Messung · {0} Uhr", seen.formatted(.dateTime.day().month().hour().minute().locale(L10n.locale))))
                     .font(.system(size: 11, design: .monospaced)).foregroundStyle(Ink.dim)
             }
-            if state.quotaSource == .browser && state.webConnected {
+            if state.quotaSource == .desktop {
+                if state.desktopUsageEnabled {
+                    desktopUsageActions
+                } else {
+                    connectDesktopButton
+                }
+            } else if state.quotaSource == .browser && state.webConnected {
                 usageMenu
             } else if state.quotaSource == .code && state.quotaInstalled && state.selectedReport == nil {
                 Text(L("Öffne eine neue Claude-Code-Sitzung. Nach der ersten Antwort erscheinen verfügbare Limits hier."))
@@ -242,6 +256,7 @@ struct CompanionPanel: View {
                 Button { state.page = .connections } label: {
                     Label(L(state.quotaSource == .browser ? "Claude.ai verbinden" : "Claude Code verbinden"), systemImage: "link")
                 }.buttonStyle(PanelButton())
+                if !state.desktopUsageEnabled { connectDesktopButton }
             }
         }
         VStack(alignment: .leading, spacing: 10) {
@@ -312,7 +327,54 @@ struct CompanionPanel: View {
         }.accessibilityElement(children: .combine)
     }
 
+    private var connectDesktopButton: some View {
+        Button {
+            state.page = .connections
+        } label: {
+            Label(L("Claude Desktop verbinden"), systemImage: "macwindow")
+        }.buttonStyle(PanelButton())
+    }
+
+    private var desktopUsageMessage: String {
+        switch state.desktopUsageStatus {
+        case .disabled: return "Verbindung mit Claude Desktop aktivieren"
+        case .checking: return "Nutzungsanzeige wird geprüft …"
+        case .needsPermission: return "Erlaube Claw’d unter Datenschutz & Sicherheit → Bedienungshilfen den Zugriff."
+        case .notRunning: return "Starte die Claude-App und öffne Einstellungen → Nutzung."
+        case .identityUnavailable: return "macOS konnte Claude Desktop nicht als Anthropic-App bestätigen."
+        case .unavailable: return "Öffne in der Claude-App Einstellungen → Nutzung und lass die Seite kurz geöffnet."
+        case .ready: return "Nutzungsdaten aus der Claude-App übernommen."
+        }
+    }
+
+    @ViewBuilder private var desktopUsageActions: some View {
+        Text(L(desktopUsageMessage)).font(.system(size: 12)).foregroundStyle(Ink.dim)
+            .fixedSize(horizontal: false, vertical: true)
+        HStack(spacing: 8) {
+            if state.desktopUsageStatus == .needsPermission {
+                Button(L("Zugriff erlauben …")) { state.requestDesktopUsageAccess() }
+                    .buttonStyle(PanelButton(accent: true))
+            } else if (state.desktopUsageStatus == .notRunning || state.desktopUsageStatus == .unavailable),
+                      let app = NSWorkspace.shared.urlForApplication(withBundleIdentifier: ClaudeDesktopUsageReader.bundleIdentifier) {
+                Button(L("Claude Desktop öffnen")) {
+                    NSWorkspace.shared.openApplication(at: app, configuration: .init())
+                }.buttonStyle(PanelButton())
+            }
+            Button(L("Jetzt einlesen")) { state.refreshDesktopUsage() }
+                .disabled(state.desktopUsageStatus == .checking).buttonStyle(PanelButton())
+        }
+    }
+
     @ViewBuilder private var connections: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            title("Claude Desktop")
+            ControlRow(title: "Kontingent aus der Claude-App", detail: "Liest die angezeigten Limits unter Einstellungen → Nutzung.") {
+                Toggle(L("Verbindung mit Claude Desktop aktivieren"), isOn: $state.desktopUsageEnabled)
+                    .labelsHidden().toggleStyle(.switch)
+            }
+            if state.desktopUsageEnabled { desktopUsageActions }
+        }
+        Rectangle().fill(Ink.line).frame(height: 1)
         VStack(alignment: .leading, spacing: 8) {
             title(L("Claude.ai verbinden"))
             Text(L("Claw’d reagiert auf Antworten und Hinweise im gekoppelten Browser. Öffne die Nutzungsseite, um das Kontingent zu übernehmen."))

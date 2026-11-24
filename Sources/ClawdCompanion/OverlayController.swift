@@ -41,10 +41,12 @@ final class OverlayController: NSObject {
     private var graveTimer: Timer?
     private var displaysAsleep = false
     private var sessionInactive = false
+    private var panelArenaReserved = false
     var onArcadeStatus: ((ArcadeStatus) -> Void)? {
         didSet { onArcadeStatus?(arcade.status) }
     }
     var onArcadeGraveChanged: ((Date?) -> Void)?
+    var onArenaEnvironmentPause: (() -> Void)?
     var onArcadeMusic: ((ArcadeMusicPhase?) -> Void)?
     var onArcadeRoundFinished: ((UUID, VirusArcade.RunStats) -> Void)?
     private let freePlay = PetPlayController()
@@ -291,6 +293,21 @@ final class OverlayController: NSObject {
 
     func clearSpeech() { speechBubble.dismissAll() }
 
+    var hasAmbientArenaRound: Bool { arcade.hasRound }
+
+    func takeArenaForPanel() -> (UUID, VirusArcade)? {
+        let existing = arcade.takeForPanel()
+        clearArena()
+        return existing
+    }
+
+    func setPanelArenaReserved(_ reserved: Bool) {
+        guard reserved != panelArenaReserved else { return }
+        panelArenaReserved = reserved
+        if reserved { pauseArcade() }
+        tick()
+    }
+
     func configureArcade(enabled: Bool, allowWhileActive: Bool) {
         guard enabled != arcade.enabled || allowWhileActive != arcade.allowWhileActive else { return }
         arcade.configure(enabled: enabled, allowWhileActive: allowWhileActive)
@@ -327,6 +344,7 @@ final class OverlayController: NSObject {
 
     @discardableResult
     func requestArcade() -> Bool {
+        guard !panelArenaReserved else { return false }
         guard visible, !reduced, arcade.request() else { return false }
         tick()
         return true
@@ -340,12 +358,12 @@ final class OverlayController: NSObject {
         case NSWorkspace.sessionDidBecomeActiveNotification: sessionInactive = false
         default: return
         }
-        if displaysAsleep || sessionInactive { pauseArcade() }
+        if displaysAsleep || sessionInactive { pauseArcade(); onArenaEnvironmentPause?() }
         tick()
     }
 
     private var canPresentBattle: Bool {
-        visible && !reduced && !displaysAsleep && !sessionInactive && !isDragging && !input.hasPress &&
+        !panelArenaReserved && visible && !reduced && !displaysAsleep && !sessionInactive && !isDragging && !input.hasPress &&
         pin == nil && !selectingPin && !menuTracking && !speechVisible && approval.pose == nil &&
         !resumeAfterApproval && agentCount == 0 && (activity == .idle || activity == .sleeping) &&
         !explicitTrip && !explicitPerch && !freePlay.bowInProgress && temporaryUntil == 0
@@ -401,16 +419,7 @@ final class OverlayController: NSObject {
         let frame = arcade.tick(now: now, date: Date(), available: available, idleSeconds: idle)
         if let frame, available {
             if arcade.running { displayBattle(frame) }
-            for cue in frame.cues {
-                switch cue {
-                case .fire: onSound?(.arcadeFire)
-                case .enemyHit, .enemyDefeated, .heroHurt: onSound?(.arcadeHit)
-                case .powerup: onSound?(.arcadePickup)
-                case .boss: onSound?(.arcadeBoss)
-                case .victory: onSound?(.arcadeVictory)
-                case .death: onSound?(.arcadeDefeat)
-                }
-            }
+            for cue in frame.cues { onSound?(cue.petSound) }
         }
         if !arcade.running { clearArena() }
         let pose = arcadePose

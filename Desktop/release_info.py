@@ -34,7 +34,7 @@ def _installed_version() -> str:
         version_key(version)
         return version
     except (OSError, ValueError):
-        return "0.6.0"
+        return "0.6.1"
 
 
 VERSION = _installed_version()

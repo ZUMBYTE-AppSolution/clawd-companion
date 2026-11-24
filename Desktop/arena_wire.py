@@ -3,13 +3,15 @@ import json
 import math
 import re
 import ssl
+import threading
+from urllib.parse import urlsplit
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, HTTPSHandler, Request, build_opener
 
 from arcade import Arcade, Enemy, Pickup, Shot
+from desktop_core import ROOT
 
 
-BASE_URL = "https://zumbyte.de/api/clawd/v1"
 USER = re.compile(r"[A-Za-z0-9._-]{3,24}")
 RUN_ID = re.compile(r"[A-Za-z0-9_-]{1,128}")
 LIMIT = 256 * 1024
@@ -26,9 +28,81 @@ class _NoRedirect(HTTPRedirectHandler):
         return None
 
 
+def _validated_endpoint(value, host):
+    if not isinstance(value, str) or len(value) > 2048:
+        return None
+    value = value.strip(" \t\r\n")
+    if not re.fullmatch(r"[!-~]+", value) or any(c in value for c in "?#"):
+        return None
+    try:
+        url = urlsplit(value)
+    except ValueError:
+        return None
+    if url.scheme != "https" or url.netloc.lower() != host:
+        return None
+    parts = url.path.split("/")[1:]
+    if parts and not parts[-1]:
+        parts.pop()
+    if any(p in (".", "..") or not re.fullmatch(r"[A-Za-z0-9._~-]+", p) for p in parts):
+        return None
+    return "https://" + host + ("/" + "/".join(parts) if parts else "")
+
+
+def _read_configuration(root):
+    try:
+        with (root / "Resources" / "ArenaEndpoint.txt").open("rb") as settings:
+            return settings.read(2049).decode("ascii")
+    except FileNotFoundError:
+        return None
+    except (OSError, UnicodeError):
+        return ""
+
+
+def _transport():
+    return build_opener(_NoRedirect(), HTTPSHandler(context=ssl.create_default_context()))
+
+
 class ArenaClient:
-    def __init__(self, opener=None):
-        self._opener = opener or build_opener(_NoRedirect(), HTTPSHandler(context=ssl.create_default_context()))
+    def __init__(self, opener=None, *, fixture_endpoint=None, discovery_opener=None):
+        if opener is None:
+            self._host = "zumbyte.de"
+            configured = _read_configuration(ROOT)
+        else:
+            self._host = "arena.invalid"
+            configured = fixture_endpoint
+        self._base = _validated_endpoint(configured, self._host)
+        self._discover = configured is None
+        self._lock = threading.Lock()
+        self._opener = opener
+        self._discovery_opener = (discovery_opener or opener) if opener is not None else None
+
+    def _endpoint(self):
+        with self._lock:
+            if self._base:
+                return self._base
+            if not self._discover:
+                raise ArenaError("network")
+            url = "https://" + self._host + "/.well-known/clawd-companion.json"
+            request = Request(url, headers={"Accept": "application/json"}, method="GET")
+            try:
+                opener = self._discovery_opener or _transport()
+                with opener.open(request, timeout=6) as response:
+                    if response.status != 200 or response.geturl() != url or response.headers.get_content_type() != "application/json":
+                        raise ArenaError("network")
+                    raw = response.read(2049)
+                if len(raw) > 2048:
+                    raise ArenaError("network")
+                data = json.loads(raw)
+                base = _validated_endpoint(data.get("arena"), self._host) if isinstance(data, dict) else None
+            except HTTPError as error:
+                error.close()
+                raise ArenaError("network") from None
+            except (URLError, OSError, ValueError, RecursionError):
+                raise ArenaError("network") from None
+            if base is None:
+                raise ArenaError("network")
+            self._base = base
+            return base
 
     def request(self, method, path, data=None, token=""):
         # A run id can only address one route underneath this fixed HTTPS origin.
@@ -47,9 +121,13 @@ class ArenaClient:
         if data is not None:
             headers["Content-Type"] = "application/json"
             body = json.dumps(data, ensure_ascii=False, allow_nan=False).encode("utf-8")
-        request = Request(BASE_URL + path, data=body, headers=headers, method=method)
+        request = Request(self._endpoint() + path, data=body, headers=headers, method=method)
         try:
-            with self._opener.open(request, timeout=6) as response:
+            with self._lock:
+                if self._opener is None:
+                    self._opener = _transport()
+                opener = self._opener
+            with opener.open(request, timeout=6) as response:
                 raw = response.read(LIMIT + 1)
         except HTTPError as error:
             try:
@@ -60,8 +138,8 @@ class ArenaClient:
             finally:
                 error.close()
             raise ArenaError(code if isinstance(code, str) else "server_error", error.code) from None
-        except (URLError, OSError, ValueError) as error:
-            raise ArenaError("network") from error
+        except (URLError, OSError, ValueError):
+            raise ArenaError("network") from None
         if len(raw) > LIMIT:
             raise ArenaError("invalid_response")
         if not raw and path == "/logout":

@@ -6,7 +6,9 @@ Claw’d lebt als animierte Pixel-Figur auf deinem Schreibtisch. Während Claude
 
 ## Die Virenarena
 
-Nach mindestens 90 Sekunden ohne Maus- oder Tastatureingabe kann Claw’d eine Runde beginnen. Er startet mit **100 Lebenspunkten**. In zwei Wellen treten Pixelviren in zufälliger Anzahl, Größe und Stärke an. Jeder hat einen eigenen Lebensbalken. Danach kommt der Endboss mit eigenem Angriffsmuster und Musikmotiv.
+Du kannst die Virenarena auf Mac, Windows und Linux direkt unter **Highscores → Lokale Runde starten** spielen. Die lokale Runde läuft auch offline und ohne Konto. Du startest sie jederzeit selbst, unabhängig vom Leerlauf. Deine Einstellungen für das automatische Spiel bleiben erhalten. Für deine lokale Statistik zählen nur abgeschlossene Runden, in denen du selbst einen Gegner getroffen oder ein wirksames Power-up eingesammelt hast. Die Online-Rangliste wertet ausschließlich angemeldete Serverrunden.
+
+Die automatische Desktop-Runde kann nach mindestens 90 Sekunden ohne Maus- oder Tastatureingabe beginnen. Er startet mit **100 Lebenspunkten**. In zwei Wellen treten Pixelviren in zufälliger Anzahl, Größe und Stärke an. Jeder hat einen eigenen Lebensbalken. Danach kommt der Endboss mit eigenem Angriffsmuster und Musikmotiv.
 
 Claude-Aktionen und Freigaben haben Vorrang. Für eine Runde braucht Claw’d sein sichtbares Overlay, freie Bewegung und einen gelösten Fenster-Pin. Nach einer Unterbrechung setzt er die Runde mit denselben Lebenspunkten fort.
 
@@ -68,6 +70,20 @@ Beende die laufende ältere Version per Rechtsklick auf das Menüleistensymbol, 
 
 Lokal gebaute Testversionen können mit einer Ad-hoc-Signatur versehen sein. Wie macOS mit lokal signierten Apps umgeht, beschreibt [Apple Support](https://support.apple.com/de-de/102445). Mit Xcode kannst du die mitgelieferten Quellen auch direkt selbst bauen.
 
+## Claude Desktop verbinden (macOS)
+
+1. Öffne in Claw’d **Verbindungen** und schalte die Verbindung zu **Claude Desktop** ein.
+2. Klicke auf **Zugriff erlauben …**. Aktiviere **Claw’d Companion** in den macOS-Systemeinstellungen unter **Datenschutz & Sicherheit → Bedienungshilfen**.
+3. Öffne in der **Claude-App** auf dem Mac **Einstellungen → Nutzung** und lass die Seite kurz geöffnet. Mit **Jetzt einlesen** kannst du die Ansicht erneut prüfen lassen.
+
+Alternativ öffnest du in Claude neben dem Eingabefeld das Menü **Nutzung**. Im geöffneten Menü kann Claw’d die angezeigten Zeitfenster lesen. Bei geschlossenem Menü liefert die Schaltfläche nur den ausdrücklich bezeichneten Zeitraum, etwa das Wochenlimit.
+
+Claw’d liest die verbleibenden Prozente für das Sitzungs- oder Wochenlimit und die Rücksetzzeit, soweit Claude diese Werte in einer unterstützten Form anzeigt. Öffne die Nutzungsansicht erneut, wenn du einen aktuellen Stand brauchst.
+
+Beim Einschalten wählt Claw’d automatisch **Claude Desktop** als Kontingentquelle. Die letzte gültige Messung behält ihren ursprünglichen Zeitstempel. Eine später unter **Begleiter → Kontingent** getroffene Quellenwahl bleibt beim nächsten Start erhalten.
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
+
 ## Claude.ai verbinden
 
 Öffne in der App **Verbindungen** und schalte **Browser-Verbindung** ein. Wähle den Browser, in dem du Claude.ai bereits nutzt.
@@ -106,7 +122,7 @@ Die Nutzung wird beim erneuten Öffnen oder bei sichtbaren Änderungen dieser Se
 | Rechtsklick auf die Figur | Weitere Bewegungen zum Ausprobieren. |
 | Rechtsklick auf das Menüleistensymbol | Figur ein- oder ausblenden und App beenden. |
 
-Die Browser-Verbindung benötigt einen geöffneten, aktiven oder im Hintergrund weiterlaufenden Claude.ai-Tab. Die Erweiterung erkennt neu eingeblendete Meldungen der Website. Hat Claude.ai im Browser bereits Mitteilungsrechte, kann sie außerdem neue, noch aktive Mitteilungen des eigenen Website-Service-Workers übernehmen, sofern der Browser diese dem Tab bereitstellt. Sehr kurze Meldungen und Meldungen bei geschlossenem oder angehaltenem Tab können entfallen. Die native Claude-Desktop-App ist eine separate Anwendung.
+Die Browser-Verbindung benötigt einen geöffneten, aktiven oder im Hintergrund weiterlaufenden Claude.ai-Tab. Die Erweiterung erkennt neu eingeblendete Meldungen der Website. Hat Claude.ai im Browser bereits Mitteilungsrechte, kann sie außerdem neue, noch aktive Mitteilungen des eigenen Website-Service-Workers übernehmen, sofern der Browser diese dem Tab bereitstellt. Sehr kurze Meldungen und Meldungen bei geschlossenem oder angehaltenem Tab können entfallen.
 
 **Overlay → Sprechblasen** schaltet die Anzeige ein oder aus. **Bewegung reduzieren** zeigt den Zustand als ruhige Pose. Das Bedienfenster lässt sich schließen, während Figur und Browser-Verbindung weiterlaufen.
 
@@ -117,7 +133,7 @@ Für Claude im Terminal stehen in **Verbindungen → Claude Code** zwei unabhän
 - **Aktivität** ergänzt Claude-Code-Hooks für laufende Werkzeuge, Freigabeanfragen, Fehler und abgeschlossene Antworten. Für die Agentenzahl ordnet Claw’d Start und Ende über gehashte Sitzungs- und Agentenkennungen zu. Reguläre Aktivität erneuert den Zeitstempel bekannter Agenten. Verwaiste Einträge laufen nach 30 Minuten ohne beobachtetes Ereignis ab.
 - **Kontingent** übernimmt die dokumentierten Felder der Claude-Code-Statuszeile. Nach der ersten Antwort können je nach Abo das Fünf-Stunden-Fenster und das Wochenlimit vorliegen. Eine vorhandene kompatible Statuszeile wird verkettet und beim Entfernen wiederhergestellt.
 
-Starte nach der Einrichtung eine neue Claude-Code-Sitzung. Unter **Begleiter → Kontingent** kannst du die Quelle auswählen. Browser und Terminal behalten jeweils ihre eigene Messung, auch wenn du unterschiedliche Konten verwendest. [Claude-Code-Statuszeile](https://code.claude.com/docs/en/statusline) · [Claude-Code-Hooks](https://code.claude.com/docs/en/hooks)
+Starte nach der Einrichtung eine neue Claude-Code-Sitzung. Unter **Begleiter → Kontingent** kannst du die Quelle auswählen. Für Claude Desktop, Browser und Terminal werden getrennte Messwerte geführt, auch wenn du unterschiedliche Konten verwendest. [Claude-Code-Statuszeile](https://code.claude.com/docs/en/statusline) · [Claude-Code-Hooks](https://code.claude.com/docs/en/hooks)
 
 ## Lokale Verarbeitung und Entfernung
 

@@ -10,6 +10,7 @@ private final class MemoryArenaVault: ArenaSessionVault {
 
 private final class ArenaFixtureTransport: URLProtocol {
     static let runID = "0123456789abcdef0123456789abcdef"
+    static let origin = "https://arena.invalid/fixture/site"
 
     override class func canInit(with request: URLRequest) -> Bool { true }
     override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
@@ -18,9 +19,9 @@ private final class ArenaFixtureTransport: URLProtocol {
     override func startLoading() {
         guard let url = request.url else { return }
         XCTAssertEqual(url.scheme, "https")
-        XCTAssertEqual(url.host, "zumbyte.de")
-        XCTAssertTrue(url.path.hasPrefix("/api/clawd/v1/"))
-        let route = String(url.path.dropFirst("/api/clawd/v1/".count))
+        XCTAssertEqual(url.host, "arena.invalid")
+        XCTAssertTrue(url.path.hasPrefix("/fixture/site/"))
+        let route = String(url.path.dropFirst("/fixture/site/".count))
         let me: [String:Any] = ["username":"demo","score":30,"wins":1,"kd":2.0,"kills":2,"deaths":1]
         var body: [String: Any] = [:]
         if let stream = request.httpBodyStream {
@@ -77,11 +78,138 @@ private final class ArenaFixtureTransport: URLProtocol {
     }
 }
 
+private final class DiscoveryFixtureTransport: URLProtocol {
+    private static let lock = NSLock()
+    private static var reply = Data()
+    private static var status = 200
+    private static var responseURL: URL?
+    private static var count = 0
+
+    static var requests: Int { lock.withLock { count } }
+
+    static func configure(_ bytes: Data, status: Int = 200, responseURL: URL? = nil) {
+        lock.withLock {
+            reply = bytes
+            self.status = status
+            self.responseURL = responseURL
+            count = 0
+        }
+    }
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+    override func stopLoading() {}
+
+    override func startLoading() {
+        let (data, code, redirected) = Self.lock.withLock {
+            Self.count += 1
+            return (Self.reply, Self.status, Self.responseURL)
+        }
+        guard let url = request.url else { return XCTFail("Missing discovery URL") }
+        XCTAssertEqual(url.absoluteString, "https://arena.invalid/.well-known/clawd-companion.json")
+        XCTAssertEqual(request.httpMethod, "GET")
+        XCTAssertFalse(request.httpShouldHandleCookies)
+        XCTAssertNil(request.value(forHTTPHeaderField: "Authorization"))
+        XCTAssertNil(request.value(forHTTPHeaderField: "Cookie"))
+        XCTAssertNil(request.httpBody)
+        XCTAssertNil(request.httpBodyStream)
+        let response = HTTPURLResponse(url: redirected ?? url, statusCode: code, httpVersion: "HTTP/1.1",
+                                       headerFields: ["Content-Type": "application/json"])!
+        client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+        client?.urlProtocol(self, didLoad: data)
+        client?.urlProtocolDidFinishLoading(self)
+    }
+}
+
 @MainActor final class ArenaAccountTests: XCTestCase {
-    private func account(_ vault: MemoryArenaVault) -> ArenaAccountModel {
+    private func transport(_ kind: URLProtocol.Type) -> URLSession {
         let config = URLSessionConfiguration.ephemeral
-        config.protocolClasses = [ArenaFixtureTransport.self]
-        return ArenaAccountModel(client:ArenaAccountClient(session: URLSession(configuration:config)),vault:vault)
+        config.protocolClasses = [kind]
+        return URLSession(configuration: config)
+    }
+
+    private func fixture(_ configured: String?) -> ArenaAccountClient {
+        ArenaAccountClient(session: transport(ArenaFixtureTransport.self), fixtureEndpoint: configured,
+                           discoverySession: transport(DiscoveryFixtureTransport.self))
+    }
+
+    private func account(_ vault: MemoryArenaVault) -> ArenaAccountModel {
+        ArenaAccountModel(client: fixture(ArenaFixtureTransport.origin), vault: vault)
+    }
+
+    func testEmbeddedConfigurationTakesPriorityAndRejectsMalformedOriginsWithoutDiscovery() async throws {
+        DiscoveryFixtureTransport.configure(Data())
+        let client = fixture(ArenaFixtureTransport.origin + "/\r\n")
+        let me = try await client.me("sample-token")
+        XCTAssertEqual(me.username, "demo")
+        for invalid in ["", "http://arena.invalid", "https://elsewhere.invalid",
+                        "https://arena.invalid.evil.invalid/a", "https://a@arena.invalid/z", "https://arena.invalid:443/z",
+                        "https://arena.invalid/../z", "https://arena.invalid/%2e%2e/z", "https://arena.invalid/%2F",
+                        "https://arena.invalid//z", "https://arena.invalid?x=1", "https://arena.invalid/#"] {
+            do {
+                _ = try await fixture(invalid).authenticate(name: "demo", email: nil, password: "fixture-password")
+                XCTFail("Invalid configured endpoint was accepted")
+            } catch let error as ArenaAccountFailure {
+                XCTAssertEqual(error, .unavailable)
+            }
+        }
+        XCTAssertEqual(DiscoveryFixtureTransport.requests, 0)
+    }
+
+    func testNoConfigurationDiscoversOnceBeforeParallelAuthenticatedRequests() async throws {
+        let config = try JSONSerialization.data(withJSONObject: ["arena": ArenaFixtureTransport.origin + "/"])
+        DiscoveryFixtureTransport.configure(config)
+        let client = fixture(nil)
+        XCTAssertEqual(DiscoveryFixtureTransport.requests, 0)
+        async let me = client.me("sample-token")
+        async let board = client.leaderboard("sample-token")
+        let (player, leaders) = try await (me, board)
+        XCTAssertEqual(player.username, "demo")
+        XCTAssertEqual(leaders.count, 2)
+        XCTAssertEqual(DiscoveryFixtureTransport.requests, 1)
+        _ = try await client.me("sample-token")
+        XCTAssertEqual(DiscoveryFixtureTransport.requests, 1)
+    }
+
+    func testOfflineOrUnsafeDiscoveryDoesNotCacheAPathOrSendTheOriginalRequest() async throws {
+        let good = try JSONSerialization.data(withJSONObject: ["arena": ArenaFixtureTransport.origin])
+        let untrusted = URL(string: "https://elsewhere.invalid/redirect")!
+        let responses: [(Data, Int, URL?)] = [
+            (Data("{}".utf8), 200, nil), (Data(repeating: 65, count: 2049), 200, nil),
+            (Data(#"{"arena":"https://elsewhere.invalid/one"}"#.utf8), 200, nil),
+            (Data(#"{"arena":"https://arena.invalid/../other"}"#.utf8), 200, nil),
+            (Data(#"{"arena":"https://arena.invalid:443/"}"#.utf8), 200, nil),
+            (good, 302, nil), (good, 200, untrusted), (Data(), 503, nil)
+        ]
+        for (data, status, redirected) in responses {
+            DiscoveryFixtureTransport.configure(data, status: status, responseURL: redirected)
+            let client = fixture(nil)
+            do {
+                _ = try await client.authenticate(name: "demo", email: nil, password: "fixture-password")
+                XCTFail("Malformed discovery response was accepted")
+            } catch let error as ArenaAccountFailure {
+                XCTAssertEqual(error, .unavailable)
+            }
+            XCTAssertEqual(DiscoveryFixtureTransport.requests, 1)
+            DiscoveryFixtureTransport.configure(good)
+            let me = try await client.me("sample-token")
+            XCTAssertEqual(me.username, "demo")
+            XCTAssertEqual(DiscoveryFixtureTransport.requests, 1)
+        }
+    }
+
+    func testInvalidRunRouteDoesNotTriggerDiscovery() async throws {
+        DiscoveryFixtureTransport.configure(Data())
+        let client = fixture(nil)
+        for id in ["../me", "//elsewhere.invalid", "/runs", "a?b", "a%2fb", "a#b", String(repeating: "f", count: 33)] {
+            do {
+                _ = try await client.frame(id, token: "sample-token")
+                XCTFail("Invalid run ID was accepted")
+            } catch let error as ArenaAccountFailure {
+                XCTAssertEqual(error, .unavailable)
+            }
+        }
+        XCTAssertEqual(DiscoveryFixtureTransport.requests, 0)
     }
 
     func testRegistrationRankedClickAndLogoutUseServerFrames() async {
@@ -120,6 +248,30 @@ private final class ArenaFixtureTransport: URLProtocol {
         await model.refresh()
         await model.logout()
         XCTAssertEqual(deaths, [ArenaFixtureTransport.runID])
+    }
+
+    func testLocalAndAuthorizedServerRoundsExcludeOneAnother() async {
+        let suite = "ArenaMutex-" + UUID().uuidString, defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        defaults.set(false, forKey: "soundEnabled")
+        let vault = MemoryArenaVault()
+        vault.login = ArenaLogin(token: "sample-token", username: "demo")
+        let online = account(vault)
+        let state = CompanionState(defaults: defaults, arenaAccount: online)
+        await online.appear()
+        state.startManualArena()
+        await online.startRound()
+        XCTAssertNil(online.round)
+        state.manualArena.end()
+        await online.startRound()
+        XCTAssertTrue(online.occupiesArena)
+        XCTAssertTrue(state.panelArenaReserved)
+        XCTAssertFalse(state.canStartManualArena)
+        state.startManualArena()
+        XCTAssertFalse(state.manualArena.playing)
+        await online.updateRound(tapping: CGPoint(x: 33, y: 47))
+        XCTAssertFalse(online.occupiesArena)
+        XCTAssertTrue(state.canStartManualArena)
     }
 
     func testExpiredRestoredTokenClearsProtectedState() async {

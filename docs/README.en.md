@@ -6,13 +6,13 @@
 
 A pixel crab for your desktop. Claw’d looks up from his notebook when Claude needs your attention, watches your cursor and finds a window ledge to rest on between replies.
 
-[**v0.6.0**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.0) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
+[**v0.6.1**](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/tag/v0.6.1) · macOS · Windows · Linux · [Zumbyte · AppSolution](https://zumbyte.de/)
 
-## What’s new in 0.6.0
+## What’s new in 0.6.1
 
-This release brings desktop packages for Windows and Linux alongside the Mac app. The About & updates view lets you check for a release, read its changes and choose a package.
+On Mac, Claw’d can now read your remaining allowance directly from the usage view in Claude Desktop. The Claude app has its own quota source alongside Claude.ai and Claude Code. On Mac, Windows and Linux, choose **High scores → Start local round** to play offline at any time.
 
-[What’s new in 0.6.0](releases/0.6.0/en.md)
+[What’s new in 0.6.1](releases/0.6.1/en.md)
 
 ## Inside the app
 
@@ -25,6 +25,8 @@ This release brings desktop packages for Windows and Linux alongside the Mac app
 | About & updates | High scores and arena accounts |
 | --- | --- |
 | ![About & updates](media/app-updates.png) | ![High scores and arena accounts](media/app-highscores.png) |
+
+![Local arena](media/app-local-arena.png)
 
 The update panel was captured without making a network request. The high scores image shows the native leaderboard with a local test session and sample scores.
 
@@ -40,11 +42,11 @@ Windows and Linux use Qt. On Windows and X11, Claw’d can read foreground windo
 
 | OS | Install |
 | --- | --- |
-| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-macOS-universal.zip) |
-| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Windows-x64-Portable.zip) |
-| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion_0.6.0_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/clawd-companion-0.6.0-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/Clawd-Companion-0.6.0-Linux-x86_64.tar.gz) |
+| macOS | [PKG](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.pkg) · [ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-macOS-universal.zip) |
+| Windows x64 | [Setup](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Setup.exe) · [Portable ZIP](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Windows-x64-Portable.zip) |
+| Linux x86-64 | [DEB](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion_0.6.1_amd64.deb) · [RPM](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/clawd-companion-0.6.1-1.x86_64.rpm) · [tar.gz](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/Clawd-Companion-0.6.1-Linux-x86_64.tar.gz) |
 
-[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.0/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
+[SHA256SUMS](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases/download/v0.6.1/SHA256SUMS) · [GitHub Releases](https://github.com/ZUMBYTE-AppSolution/clawd-companion/releases)
 
 **macOS · Homebrew**
 
@@ -56,13 +58,13 @@ brew install --cask zumbyte/clawd/clawd-companion
 **Debian / Ubuntu**
 
 ```sh
-sudo apt install ./clawd-companion_0.6.0_amd64.deb
+sudo apt install ./clawd-companion_0.6.1_amd64.deb
 ```
 
 **Fedora / RHEL**
 
 ```sh
-sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
+sudo dnf install ./clawd-companion-0.6.1-1.x86_64.rpm
 ```
 
 ## What Claude does on screen
@@ -75,6 +77,20 @@ sudo dnf install ./clawd-companion-0.6.0-1.x86_64.rpm
 | A tool asks for approval | Unrolls an “OK?” sign until the request clears. Answer the request in Claude. |
 | Claude Code reports subagents | Juggles agent figures. The status shows the actual count. |
 | A reply finishes or a warning appears | Rappels and celebrates a completed reply, or shows the warning text in a pixel speech bubble. |
+
+## Connect Claude Desktop (macOS)
+
+1. Open **Connections** in Claw’d and enable the **Claude Desktop** connection.
+2. Choose **Allow access…**. In macOS **System Settings → Privacy & Security → Accessibility**, turn on **Claw’d Companion**.
+3. In the **Claude app** on your Mac, open **Settings → Usage** and leave the page open for a moment. Choose **Read now** in Claw’d to check the view again.
+
+You can also open **Usage** beside the message box in Claude. With the menu open, Claw’d can read the usage windows it displays. When it is closed, the button supplies only the period named on its label, such as the weekly limit.
+
+Claw’d reads the remaining percentage for a session or weekly limit and the reset time when Claude displays those values in a supported form. Reopen the usage view whenever you need a fresh reading.
+
+Enabling the connection selects **Claude Desktop** as the quota source. The last valid reading keeps its original timestamp. If you later choose another source under **Companion → Usage limits**, Claw’d remembers that choice after a restart.
+
+[Apple](https://support.apple.com/guide/mac-help/allow-accessibility-apps-to-access-your-mac-mh43185/mac) · [Claude](https://support.claude.com/en/articles/17007452-what-is-a-limit-reset)
 
 ## Connect Claude.ai
 
@@ -116,9 +132,11 @@ In a paired Claude.ai tab, this snippet adds a temporary, visible alert to the p
 
 On Mac, drag Claw’d to a window, right-click and choose Pin to Window. He keeps his place as the window moves and can rappel from it. While roaming, he climbs to title bars, looks around, blinks and jumps down. His eyes track the pointer. The letter blaster retargets every shot of a random 3–42-shot burst. The counter records contact with a visible projectile.
 
-The Mac arena starts after at least 90 seconds without input. Claw’d has 100 HP. Two randomized waves lead to a boss. Watch the enemies’ health bars and collect healing, shields or rapid fire. Input pauses the game. Enable play during activity to help by clicking. After defeat, a GIT headstone marks his place for five real minutes before he digs himself out. Music and effects have separate switches.
+An automatic desktop round on Mac can start after at least 90 seconds without input. Claw’d has 100 HP. Two randomized waves lead to a boss. Watch the enemies’ health bars and collect healing, shields or rapid fire. Input pauses the game. Enable play during activity to help by clicking. After defeat, a GIT headstone marks his place for five real minutes before he digs himself out. Music and effects have separate switches.
 
 Choose a language, reduced motion and volume in the overlay settings. Each sound can be muted separately. Claude.ai notices keep their original wording.
+
+On Mac, Windows and Linux, open **High scores → Start local round** to play immediately. Local rounds work offline and do not require an account. You can start one at any time, independently of idle detection. Your automatic-play settings are preserved. A completed round counts toward your local statistics if you personally hit an enemy or collect a power-up that takes effect. The online leaderboard scores only signed-in server rounds.
 
 ## High scores and arena accounts
 
@@ -155,7 +173,7 @@ python3 Scripts/test-hooks.py
 
 [Swift](../Package.swift) · [Desktop](../Desktop/) · [Claude Code](https://code.claude.com/docs/en/hooks) · [Status line](https://code.claude.com/docs/en/statusline)
 
-[Arena API](../Server/README.md) · [Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
+[Windows](../Scripts/package-windows.ps1) · [Linux](../Scripts/package-linux.sh)
 
 ## Studio and community
 

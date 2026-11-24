@@ -5,11 +5,17 @@ import json
 import os
 from pathlib import Path
 import sys
+import tempfile
+from concurrent.futures import ThreadPoolExecutor
+from email.message import Message
 import unittest
 from urllib.error import HTTPError
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from arena_wire import ArenaClient, ArenaError, BASE_URL, RemoteFrame, _NoRedirect, leaderboard_rows, validate_account
+from arena_wire import ArenaClient, ArenaError, RemoteFrame, _NoRedirect, _read_configuration, leaderboard_rows, validate_account
+
+
+FIXTURE_ENDPOINT = "https://arena.invalid/fixture/site"
 
 
 RUN = {
@@ -33,15 +39,38 @@ class StubOpener:
         return io.BytesIO(self.answer)
 
 
+class DiscoveryReply(io.BytesIO):
+    def __init__(self, payload, url, status=200):
+        super().__init__(payload)
+        self.status, self.url = status, url
+        self.headers = Message()
+        self.headers["Content-Type"] = "application/json"
+
+    def geturl(self):
+        return self.url
+
+
+class StubDiscovery:
+    def __init__(self, payload):
+        self.payload = payload
+        self.requests = []
+        self.status = 200
+        self.response_url = None
+
+    def open(self, request, timeout):
+        self.requests.append(request)
+        return DiscoveryReply(self.payload, self.response_url or request.full_url, self.status)
+
+
 class OnlineArenaTests(unittest.TestCase):
     def test_fixed_https_route_bearer_and_click_payload_no_external_request(self):
         stub = StubOpener(json.dumps(RUN).encode())
-        client = ArenaClient(stub)
+        client = ArenaClient(stub, fixture_endpoint=FIXTURE_ENDPOINT)
         payload = {"x": 150, "y": 85, "seq": 3}
         path = "/runs/" + RUN["id"] + "/click"
         self.assertEqual(client.request("POST", path, payload, "test-token"), RUN)
         sent = stub.requests[0]
-        self.assertEqual(sent.full_url, BASE_URL + path)
+        self.assertEqual(sent.full_url, FIXTURE_ENDPOINT + path)
         self.assertEqual(sent.get_header("Authorization"), "Bearer test-token")
         self.assertEqual(json.loads(sent.data), payload)
         for invalid in ("https://elsewhere.invalid/login", "//elsewhere.invalid", "/runs/../me", "/login?x=1"):
@@ -52,13 +81,82 @@ class OnlineArenaTests(unittest.TestCase):
         self.assertEqual(len(stub.requests), 1)
         self.assertIsNone(_NoRedirect().redirect_request(sent, None, 307, "", {}, "https://elsewhere.invalid/"))
 
+    def test_resource_precedes_discovery_and_invalid_resources_never_send(self):
+        game = StubOpener(b"{}")
+        discovery = StubDiscovery(b"{}")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.assertIsNone(_read_configuration(root))
+            folder = root / "Resources"
+            folder.mkdir()
+            path = folder / "ArenaEndpoint.txt"
+            path.write_text(FIXTURE_ENDPOINT + "/\r\n", encoding="ascii")
+            configured = _read_configuration(root)
+            client = ArenaClient(game, fixture_endpoint=configured, discovery_opener=discovery)
+            self.assertEqual(game.requests, [])
+            self.assertEqual(client.request("GET","/me",token="fixture-token"), {})
+            self.assertEqual(game.requests[0].full_url, FIXTURE_ENDPOINT + "/me")
+            path.write_bytes(b"\xff")
+            self.assertEqual(_read_configuration(root), "")
+        game.requests.clear()
+        bad = ("", "http://arena.invalid/api", "https://evil.invalid/api", "https://arena.invalid.evil/api",
+               "https://user@arena.invalid/api", "https://arena.invalid:443/api", "https://arena.invalid/../z",
+               "https://arena.invalid/%2e%2e/z", "https://arena.invalid//other", FIXTURE_ENDPOINT+"?",
+               FIXTURE_ENDPOINT+"#hidden", "https://arena.invalid" + "/a"*1200)
+        for value in bad:
+            client=ArenaClient(game,fixture_endpoint=value,discovery_opener=discovery)
+            with self.subTest(value=value), self.assertRaises(ArenaError):
+                client.request("POST","/login",{"username":"fixture","password":"fixture-password"})
+        self.assertEqual(discovery.requests, [])
+        self.assertEqual(game.requests, [])
+
+    def test_discovery_is_lazy_anonymous_and_shared_across_concurrent_requests(self):
+        game = StubOpener(b"{}")
+        discovery = StubDiscovery(json.dumps({"arena": FIXTURE_ENDPOINT+"/"}).encode())
+        client = ArenaClient(game, discovery_opener=discovery)
+        self.assertFalse(discovery.requests)
+        with ThreadPoolExecutor(3) as pool:
+            values = list(pool.map(lambda i: client.request("GET","/me",token=f"fixture-{i}"),range(3)))
+        self.assertEqual(values,[{}, {}, {}])
+        self.assertEqual(len(discovery.requests),1)
+        probe = discovery.requests[0]
+        self.assertEqual(probe.full_url,"https://arena.invalid/.well-known/clawd-companion.json")
+        self.assertEqual(probe.get_method(),"GET")
+        self.assertIsNone(probe.data)
+        self.assertEqual({k.lower() for k,v in probe.header_items()},{"accept"})
+        self.assertTrue(all(r.full_url == FIXTURE_ENDPOINT+"/me" for r in game.requests))
+        self.assertEqual({r.get_header("Authorization") for r in game.requests},
+                         {"Bearer fixture-0","Bearer fixture-1","Bearer fixture-2"})
+
+    def test_bad_discovery_cannot_receive_credentials_or_poison_a_future_retry(self):
+        for payload,status,response_url in [
+            (b"{}",200,None), (b"x"*2049,200,None),
+            (b'{"arena":"https://elsewhere.invalid/z"}',200,None),
+            (b'{"arena":"https://arena.invalid/%2f"}',200,None),
+            (b'{"arena":"https://arena.invalid:443/"}',200,None),
+            (b'{"arena":"https://arena.invalid/a"}',302,None),
+            (b'{"arena":"https://arena.invalid/a"}',200,"https://elsewhere.invalid/redirect")
+        ]:
+            game = StubOpener(b"{}")
+            discovery = StubDiscovery(payload)
+            discovery.status,discovery.response_url = status,response_url
+            client=ArenaClient(game, discovery_opener=discovery)
+            with self.subTest(payload=payload[:45],status=status),self.assertRaises(ArenaError):
+                client.request("POST","/register",{"password":"fixture-password"})
+            self.assertFalse(game.requests)
+            self.assertEqual(discovery.requests[0].data,None)
+            discovery.status,discovery.response_url=200,None
+            discovery.payload=json.dumps({"arena": FIXTURE_ENDPOINT}).encode()
+            self.assertEqual(client.request("GET","/leaderboard"),{})
+            self.assertEqual(len(discovery.requests),2)
+
     def test_invalid_json_error_responses_and_size_are_bounded(self):
         for content in (b"[1]", b"not json", b"x" * (257 * 1024)):
             with self.assertRaises(ArenaError):
-                ArenaClient(StubOpener(content)).request("GET", "/leaderboard")
-        error = HTTPError(BASE_URL+"/login", 401, "", {}, io.BytesIO(b'{"error":"invalid_credentials"}'))
+                ArenaClient(StubOpener(content), fixture_endpoint=FIXTURE_ENDPOINT).request("GET", "/leaderboard")
+        error = HTTPError(FIXTURE_ENDPOINT+"/login", 401, "", {}, io.BytesIO(b'{"error":"invalid_credentials"}'))
         with self.assertRaises(ArenaError) as denied:
-            ArenaClient(StubOpener(error)).request("POST", "/login", {})
+            ArenaClient(StubOpener(error), fixture_endpoint=FIXTURE_ENDPOINT).request("POST", "/login", {})
         self.assertEqual((denied.exception.code, denied.exception.http), ("invalid_credentials", 401))
 
     def test_remote_frame_keeps_server_stats_and_only_supplied_sprites(self):
@@ -130,7 +228,7 @@ class OnlineArenaTests(unittest.TestCase):
         from online_arena import OnlineArenaWidget
         app = QApplication.instance() or QApplication([])
         stub = StubOpener(b"{}")
-        widget = OnlineArenaWidget(str, lambda: True, client=ArenaClient(stub))
+        widget = OnlineArenaWidget(str, lambda: True, client=ArenaClient(stub, fixture_endpoint=FIXTURE_ENDPOINT))
         try:
             self.assertEqual(stub.requests, [])
             widget._accept("login", {"token": "session-token", "username":"player7"})
