@@ -43,7 +43,7 @@ cleanup() {
 trap cleanup EXIT
 build_number="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' Resources/Info.plist)"
 verify_bundle() {
-    local path="$1" identifier="$2" executable="$3" plist requirement arch
+    local path="$1" identifier="$2" executable="$3" plist requirement architectures arch
     [[ -d "$path" && ! -L "$path" ]]
     plist="$path/Contents/Info.plist"
     [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$plist")" == "$identifier" ]]
@@ -52,12 +52,11 @@ verify_bundle() {
     [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$plist")" == "$executable" ]]
     requirement="anchor apple generic and identifier \"$identifier\" and certificate leaf[subject.OU] = \"$team\" and certificate leaf[field.1.2.840.113635.100.6.1.13] exists"
     codesign --verify --strict --all-architectures -R="$requirement" "$path"
-    for arch in arm64 x86_64; do
-        xcrun lipo -verify_arch "$arch" "$path/Contents/MacOS/$executable"
-    done
+    architectures=" $(xcrun lipo -archs "$path/Contents/MacOS/$executable") "
+    [[ "$architectures" == *" arm64 "* && "$architectures" == *" x86_64 "* ]]
 }
 verify_app() {
-    local app="$1" arch
+    local app="$1"
     verify_bundle "$app" "$bundle" ClawdCompanion
     verify_bundle "$app/Contents/PlugIns/ClawdSafari.appex" "$bundle.Safari" ClawdSafari
     codesign --verify --deep --strict "$app"

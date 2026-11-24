@@ -64,9 +64,8 @@ for bundle in "$exported" "$exported/Contents/PlugIns/ClawdSafari.appex"; do
     signature="$(codesign --display --verbose=4 "$bundle" 2>&1)"
     [[ "$signature" == *"(runtime)"* && "$signature" == *"Timestamp="* ]]
     executable="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "$bundle/Contents/Info.plist")"
-    for arch in arm64 x86_64; do
-        xcrun lipo -verify_arch "$arch" "$bundle/Contents/MacOS/$executable"
-    done
+    architectures=" $(xcrun lipo -archs "$bundle/Contents/MacOS/$executable") "
+    [[ "$architectures" == *" arm64 "* && "$architectures" == *" x86_64 "* ]]
 done
 [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$exported/Contents/Info.plist")" == "$version" ]]
 # Refuse to overlay an existing app; ditto would retain files removed between releases.
