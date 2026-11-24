@@ -8,6 +8,7 @@ Source0: payload.tar.gz
 BuildArch: x86_64
 AutoReqProv: no
 Requires: glibc >= 2.35
+Requires: pulseaudio-libs, speech-dispatcher-libs
 Requires: libglvnd-glx, libglvnd-egl, fontconfig, libxkbcommon-x11, xcb-util-cursor, xcb-util-wm, xcb-util-image, xcb-util-keysyms, xcb-util-renderutil, libxcb, libX11-xcb, dbus-libs
 %global debug_package %{nil}
 %global __os_install_post %{nil}
