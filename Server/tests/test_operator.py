@@ -100,15 +100,16 @@ class OperatorTests(unittest.TestCase):
         identity = self.root / "operator identity"
         identity.write_text("placeholder fixture, no private key")
         site = "/etc/nginx/sites-available/test site.conf"
-        subprocess.run([str(ROOT / "Scripts/deploy-arena.sh"), "--host", "fixture-user@fixture.invalid",
-                        "--port", "2222", "--identity", str(identity), "--archive", str(self.archive),
-                        "--nginx-site", site], env=dict(os.environ, PATH=str(tools_dir) + ":" + os.environ["PATH"],
-                                                       FIXTURE_CAPTURE=str(self.root)), check=True, capture_output=True)
-        argv = json.loads((self.root / "arguments").read_text())
+        env = dict(os.environ, PATH=str(tools_dir) + ":" + os.environ["PATH"], FIXTURE_CAPTURE=str(self.root))
+        command = [str(ROOT / "Scripts/deploy-arena.sh"), "--host", "fixture-user@fixture.invalid",
+                   "--identity", str(identity), "--archive", str(self.archive), "--nginx-site", site]
+        for options, expected_port in (([], "29"), (["--port", "2222"], "2222")):
+            subprocess.run(command + options, env=env, check=True, capture_output=True)
+            argv = json.loads((self.root / "arguments").read_text())
+            self.assertEqual(argv[argv.index("-p") + 1], expected_port)
         for value in ["StrictHostKeyChecking=yes", "BatchMode=yes", "ForwardAgent=no", "fixture-user@fixture.invalid"]:
             self.assertIn(value, argv)
         self.assertEqual(argv[argv.index("-i") + 1], str(identity))
-        self.assertEqual(argv[argv.index("-p") + 1], "2222")
         with tarfile.open(self.root / "payload.tar") as upload:
             self.assertEqual(set(upload.getnames()), {"deploy.py", "release.tar.gz", "options.json"})
             options = json.load(upload.extractfile("options.json"))

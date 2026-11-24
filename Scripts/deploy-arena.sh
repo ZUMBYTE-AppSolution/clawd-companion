@@ -4,14 +4,14 @@ set -euo pipefail
 usage() {
   cat <<'HELP'
 Usage: Scripts/deploy-arena.sh --host SSH_ALIAS --archive API.tar.gz [options]
-  --port PORT          Override the SSH port from the alias (1–65535)
+  --port PORT          Zumbyte SSH port (default 29, range 1–65535)
   --identity FILE      SSH identity; otherwise use your normal SSH configuration
   --nginx-site PATH    Select an active remote nginx configuration file
   --sha256 HEX         Compare the archive against its published SHA256SUMS entry
   --check-local        Inspect the archive locally without SSH or host changes
 HELP
 }
-host="" archive="" port="" identity="" site="" checksum="" local_only=0
+host="" archive="" port=29 identity="" site="" checksum="" local_only=0
 while (($#)); do
   case "$1" in
     --host|--archive|--port|--identity|--nginx-site|--sha256)
@@ -41,10 +41,8 @@ python3 "$stage/deploy.py" --inspect "$stage/release.tar.gz" "$checksum" "$site"
   echo "Supply an SSH host or user@host alias with --host." >&2; exit 2;
 }
 ssh_args=(-T -o BatchMode=yes -o StrictHostKeyChecking=yes -o ClearAllForwardings=yes -o ForwardAgent=no -o ConnectTimeout=12)
-if [[ -n "$port" ]]; then
-  [[ "$port" =~ ^[0-9]{1,5}$ ]] && ((10#$port >= 1 && 10#$port <= 65535)) || { echo "Invalid SSH port." >&2; exit 2; }
-  ssh_args+=(-p "$port")
-fi
+[[ "$port" =~ ^[0-9]{1,5}$ ]] && ((10#$port >= 1 && 10#$port <= 65535)) || { echo "Invalid SSH port." >&2; exit 2; }
+ssh_args+=(-p "$port")
 if [[ -n "$identity" ]]; then
   [[ -f "$identity" ]] || { echo "Identity file unavailable." >&2; exit 2; }
   ssh_args+=(-o IdentitiesOnly=yes -i "$identity")
